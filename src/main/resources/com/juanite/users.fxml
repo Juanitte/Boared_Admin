@@ -1,14 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet src/main/resources/com/juanite/style.css?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.juanite.controller.UsersController">
+    <ToolBar id="navbar" fx:id="tb_1" onMouseClicked="#tbClickValidate" onMouseDragged="#tbDragValidate" prefHeight="58.0" prefWidth="688.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="112.0">
+        <ImageView fx:id="img_icon" fitHeight="32.0" fitWidth="32.0" onMouseClicked="#lblTitleValidate" pickOnBounds="true" preserveRatio="true">
+            <Image url="@icon.png" />
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <Label fx:id="lbl_titlebar" onMouseClicked="#lblTitleValidate" prefHeight="39.0" prefWidth="146.0" text="BOARED" textFill="#e1e1e1">
+            <font>
+                <Font name="ROGFonts-Regular" size="27.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Label>
+        <Button id="btn_shop" fx:id="btn_games" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnGamesValidate" style="-fx-background-color: transparent;" text="GAMES" textFill="#e1e1e1">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+        <Button id="btn_library" fx:id="btn_users" alignment="CENTER" layoutX="196.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnUsersValidate" style="-fx-background-color: transparent;" text="USERS" textFill="#e1e1e1">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+        <Button id="btn_friends" fx:id="btn_logout" alignment="CENTER" layoutX="459.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#btnLogoutValidate" style="-fx-background-color: transparent;" text="LOG OUT" textFill="#e1e1e1">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+    </ToolBar>
+    <ToolBar id="navbar" fx:id="tb_2" layoutX="471.0" onMouseClicked="#tbClickValidate" onMouseDragged="#tbDragValidate" prefHeight="58.0" prefWidth="115.0" AnchorPane.rightAnchor="0.0">
+        <Button fx:id="btn_minimize" mnemonicParsing="false" onMouseClicked="#btnMinimizeValidate" prefHeight="26.0" prefWidth="23.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 13;" text="-">
+            <font>
+                <Font name="ROGFontsv1.6-Regular" size="13.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_maximize" layoutX="10.0" layoutY="15.0" maxHeight="40.0" maxWidth="46.0" mnemonicParsing="false" onMouseClicked="#btnMaximizeValidate" prefHeight="40.0" prefWidth="46.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 10;" text="❐">
+            <font>
+                <Font name="ROGFontsv1.6-Regular" size="10.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_close" layoutX="39.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#btnCloseValidate" prefHeight="26.0" prefWidth="23.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 12;" text="X" />
+    </ToolBar>
+    <ImageView fx:id="img_resize" fitHeight="32.0" fitWidth="32.0" layoutX="552.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <cursor>
+            <Cursor fx:constant="SE_RESIZE" />
+        </cursor>
+        <Image url="@resize.png" />
+    </ImageView>
+    <ListView fx:id="lv_users" fixedCellSize="10.0" layoutX="39.0" layoutY="112.0" prefHeight="400.0" prefWidth="722.0" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="112.0" />
+    <TextField fx:id="txtfld_search" layoutX="535.0" layoutY="67.0" prefHeight="25.0" prefWidth="225.0" AnchorPane.rightAnchor="39.39999999999998">
+        <font>
+            <Font size="13.0" />
+        </font>
+    </TextField>
+    <Button fx:id="btn_search" alignment="CENTER" layoutX="464.0" layoutY="67.0" mnemonicParsing="false" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="SEARCH" textFill="#c1c1c1" AnchorPane.rightAnchor="274.4">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor></Button>
+    <Button fx:id="btn_add" alignment="CENTER" layoutX="254.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="ADD" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="254.0">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
+    <Button fx:id="btn_edit" alignment="CENTER" layoutX="361.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="EDIT" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="361.0">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
+    <Button fx:id="btn_remove" alignment="CENTER" layoutX="470.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="REMOVE" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="470.0">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
 </AnchorPane>

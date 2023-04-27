@@ -1,2 +1,4 @@
-package com.juanite.interfaces;public interface iGame {
+package com.juanite.interfaces;
+
+public interface iGame {
 }

@@ -1,2 +1,4 @@
-package com.juanite.interfaces;public interface iReview {
+package com.juanite.interfaces;
+
+public interface iReview {
 }

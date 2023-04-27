@@ -4,4 +4,7 @@ module com.juanite {
 
     opens com.juanite to javafx.fxml;
     exports com.juanite;
+    exports com.juanite.model.domain;
+    exports com.juanite.controller;
+    exports com.juanite.interfaces;
 }

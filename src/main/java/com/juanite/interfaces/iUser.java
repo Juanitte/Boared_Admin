@@ -1,2 +1,4 @@
-package com.juanite.interfaces;public interface iUser {
+package com.juanite.interfaces;
+
+public interface iUser {
 }

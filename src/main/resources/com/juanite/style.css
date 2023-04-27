@@ -1,0 +1,66 @@
+@font-face {
+    src: url('ROGFonts.ttf');
+}
+
+ToolBar{
+    -fx-background-color: linear-gradient(
+            #262626,
+            #4a4a4a
+    );
+}
+
+AnchorPane{
+    -fx-background-color: #565656;
+}
+
+Button{
+    -fx-font-family: "ROG Fonts v1.6";
+}
+
+Label{
+    -fx-font-family: "ROG Fonts v1.6";
+}
+
+TextField{
+    -fx-background-color: #c1c1c1;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #515151;
+    -fx-font-family: "ROG Fonts v1.6";
+    -fx-font-size: 13;
+}
+
+PasswordField{
+    -fx-background-color: #c1c1c1;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #515151;
+    -fx-font-family: "ROG Fonts v1.6";
+    -fx-font-size: 13;
+}
+
+#btn_shop, #btn_library, #btn_profile, #btn_friends{
+    -fx-font-family: "ROG Fonts v1.6";
+    -fx-font-size: 18;
+}
+
+#lbl_news{
+    -fx-font-size: 28;
+}
+
+#lbl_newsContent1{
+    -fx-font-family: "Agency FB";
+    -fx-font-size: 22;
+}
+
+#btn_search{
+    -fx-font-size: 13;
+}
+
+ListView{
+    -fx-background-color: #414141;
+}

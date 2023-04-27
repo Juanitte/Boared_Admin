@@ -1,2 +1,4 @@
-package com.juanite.interfaces;public interface iDeveloper {
+package com.juanite.interfaces;
+
+public interface iDeveloper {
 }
