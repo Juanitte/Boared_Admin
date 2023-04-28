@@ -1,6 +1,6 @@
 package com.juanite.model.domain;
 
-import com.juanite.interfaces.iUser;
+import com.juanite.model.interfaces.iUser;
 
 import java.util.HashSet;
 import java.util.Objects;
