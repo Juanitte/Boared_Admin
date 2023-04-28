@@ -1,6 +1,6 @@
 package com.juanite.model.domain;
 
-import com.juanite.model.interfaces.iEntity;
+import com.juanite.model.domain.interfaces.iEntity;
 
 import java.util.Set;
 
