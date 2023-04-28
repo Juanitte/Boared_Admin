@@ -2,9 +2,7 @@ package com.juanite.model.domain;
 
 import com.juanite.model.domain.interfaces.iUser;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class User extends Entity implements iUser {
     private String username;
@@ -17,6 +15,7 @@ public class User extends Entity implements iUser {
     private String avatar;
     private Set<Developer> following;
     private Set<User> friends;
+    private Map<User,Boolean> pendingFriends;
 
     public User() {
         this.username = "";
@@ -33,6 +32,7 @@ public class User extends Entity implements iUser {
         this.games = new HashSet<Game>();
         this.following = new HashSet<Developer>();
         this.friends = new HashSet<User>();
+        this.pendingFriends = new HashMap<User,Boolean>();
     }
     public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber) {
         this.username = username;
@@ -49,8 +49,9 @@ public class User extends Entity implements iUser {
         this.games = new HashSet<Game>();
         this.following = new HashSet<Developer>();
         this.friends = new HashSet<User>();
+        this.pendingFriends = new HashMap<User,Boolean>();
     }
-    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<Developer> following, Set<User> friends) {
+    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<Developer> following, Set<User> friends, Map<User,Boolean> pendingFriends) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -65,6 +66,7 @@ public class User extends Entity implements iUser {
         this.games = games;
         this.country = country;
         this.birthDate = birthDate;
+        this.pendingFriends = pendingFriends;
     }
 
     @Override
@@ -185,6 +187,14 @@ public class User extends Entity implements iUser {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Map<User,Boolean> getPendingFriends() {
+        return pendingFriends;
+    }
+
+    public void setPendingFriends(Map<User,Boolean> pendingFriends) {
+        this.pendingFriends = pendingFriends;
     }
 
     @Override
