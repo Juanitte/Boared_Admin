@@ -1,6 +1,6 @@
 package com.juanite.model.domain;
 
-import com.juanite.model.interfaces.iReview;
+import com.juanite.model.domain.interfaces.iReview;
 
 import java.util.Objects;
 

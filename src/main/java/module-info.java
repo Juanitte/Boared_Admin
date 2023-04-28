@@ -8,5 +8,5 @@ module com.juanite {
     exports com.juanite;
     exports com.juanite.model.domain;
     exports com.juanite.controller;
-    exports com.juanite.model.interfaces;
+    exports com.juanite.model.domain.interfaces;
 }

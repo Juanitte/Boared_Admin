@@ -1,6 +1,6 @@
 package com.juanite.model.domain;
 
-import com.juanite.model.interfaces.iGame;
+import com.juanite.model.domain.interfaces.iGame;
 
 import java.util.*;
 
