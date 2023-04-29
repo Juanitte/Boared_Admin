@@ -3,14 +3,14 @@ package com.juanite.model.DTO;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GamesDTO {
+public class RepoGamesDTO {
 
     private Set<GameDTO> games;
 
-    public GamesDTO(){
+    public RepoGamesDTO(){
         this(new HashSet<GameDTO>());
     }
-    public GamesDTO(Set<GameDTO> games) {
+    public RepoGamesDTO(Set<GameDTO> games) {
         this.games = games;
     }
 

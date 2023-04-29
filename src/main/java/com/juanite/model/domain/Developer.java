@@ -2,6 +2,7 @@ package com.juanite.model.domain;
 
 import com.juanite.model.domain.interfaces.iDeveloper;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,11 +15,11 @@ public class Developer extends Entity implements iDeveloper {
         this.name = "";
         this.description = "";
         this.country = Countries.NONE;
-        this.birthDate = "";
+        this.birthDate = null;
         this.logo = "";
         this.games = new HashSet<Game>();
     }
-    public Developer(String name, String description, Countries country , String birthdate, String logo) {
+    public Developer(String name, String description, Countries country , Date birthdate, String logo) {
         this.name = name;
         this.description = description;
         this.country = country;
@@ -26,7 +27,7 @@ public class Developer extends Entity implements iDeveloper {
         this.logo = logo;
         this.games = new HashSet<Game>();
     }
-    public Developer(String name, String description, Countries country , String birthdate, String logo, HashSet<Game> games) {
+    public Developer(String name, String description, Countries country , Date birthdate, String logo, HashSet<Game> games) {
         this.name = name;
         this.description = description;
         this.country = country;
@@ -46,12 +47,12 @@ public class Developer extends Entity implements iDeveloper {
     }
 
     @Override
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return this.birthDate;
     }
 
     @Override
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -112,7 +113,7 @@ public class Developer extends Entity implements iDeveloper {
     }
 
     @Override
-    public Developer update(String name, String description, String birthDate, Countries country, String logo) {
+    public Developer update(String name, String description, Date birthDate, Countries country, String logo) {
         this.name = name;
         this.description = description;
         this.birthDate = birthDate;

@@ -9,7 +9,7 @@ public class Game implements iGame {
     private String title;
     private String description;
     private Set<Tags> tags;
-    private String releaseDate;
+    private Date releaseDate;
     private double price;
     private String logo;
     private double score;
@@ -18,14 +18,14 @@ public class Game implements iGame {
     private Set<User> players;
 
     public Game() {
-        this("", "", new HashSet<Tags>(), "", 0, "", 0, new ArrayList<String>(), null, new HashSet<User>());
+        this("", "", new HashSet<Tags>(), null, 0, "", 0, new ArrayList<String>(), null, new HashSet<User>());
     }
 
-    public Game(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, Developer developer) {
+    public Game(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, Developer developer) {
         this(title, description, tags, releaseDate, price, logo, 0, new ArrayList<String>(), developer, new HashSet<User>());
     }
 
-    public Game(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, double score, List<String> images, Developer developer, Set<User> players) {
+    public Game(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, double score, List<String> images, Developer developer, Set<User> players) {
         this.title = title;
         this.description = description;
         this.tags = tags;
@@ -62,11 +62,11 @@ public class Game implements iGame {
         this.tags = tags;
     }
 
-    public String getReleaseDate() {
+    public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -141,7 +141,7 @@ public class Game implements iGame {
     }
 
     @Override
-    public Game update(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, Developer developer) {
+    public Game update(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, Developer developer) {
         this.title = title;
         this.description = description;
         this.tags = tags;
