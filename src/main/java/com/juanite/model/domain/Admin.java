@@ -1,8 +1,10 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.domain.interfaces.iAdmin;
+
 import java.util.Objects;
 
-public class Admin {
+public class Admin implements iAdmin {
 
     private String email;
     private String name;
@@ -53,5 +55,31 @@ public class Admin {
     @Override
     public int hashCode() {
         return Objects.hash(email);
+    }
+
+
+    @Override
+    public Admin create(String email, String name, String password) {
+        Admin admin = new Admin(email, name, password);
+
+
+        return admin;
+    }
+
+    @Override
+    public Admin update(Admin admin, String email, String name, String password) {
+        if(admin != null) {
+            admin.setEmail(email);
+            admin.setName(name);
+            admin.setPassword(password);
+
+        }
+
+        return admin;
+    }
+
+    @Override
+    public Admin remove(Admin admin) {
+        return admin;
     }
 }

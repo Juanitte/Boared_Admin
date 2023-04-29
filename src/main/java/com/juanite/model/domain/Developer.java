@@ -13,7 +13,7 @@ public class Developer extends Entity implements iDeveloper {
     public Developer() {
         this.name = "";
         this.description = "";
-        this.country = null;
+        this.country = Countries.NONE;
         this.birthDate = "";
         this.logo = "";
         this.games = new HashSet<Game>();
@@ -103,4 +103,38 @@ public class Developer extends Entity implements iDeveloper {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+
+
+    @Override
+    public Developer create() {
+        return this;
+    }
+
+    @Override
+    public Developer update(String name, String description, String birthDate, Countries country, String logo) {
+        this.name = name;
+        this.description = description;
+        this.birthDate = birthDate;
+        this.country = country;
+        this.logo = logo;
+
+        return this;
+    }
+
+    @Override
+    public Developer remove() {
+        return this;
+    }
+
+    @Override
+    public boolean addGame(Game game) {
+        return this.games.add(game);
+    }
+
+    @Override
+    public boolean removeGame(Game game) {
+        return this.games.remove(game);
+    }
+
 }

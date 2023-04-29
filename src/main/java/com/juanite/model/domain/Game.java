@@ -8,31 +8,34 @@ public class Game implements iGame {
 
     private String title;
     private String description;
-    private Set<Genres> genres;
-    private int releaseYear;
+    private Set<Tags> tags;
+    private String releaseDate;
     private double price;
     private String logo;
     private double score;
     private List<String> images;
     private Developer developer;
+    private Set<User> players;
 
     public Game() {
-        this("", "", new HashSet<Genres>(), 0, 0, "", 0, new ArrayList<String>(), null);
+        this("", "", new HashSet<Tags>(), "", 0, "", 0, new ArrayList<String>(), null, new HashSet<User>());
     }
 
-    public Game(String title, String description, Set<Genres> genres, int releaseYear, double price, String logo, Developer developer) {
-        this(title, description, genres, releaseYear, price, logo, 0, new ArrayList<String>(), developer);
+    public Game(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, Developer developer) {
+        this(title, description, tags, releaseDate, price, logo, 0, new ArrayList<String>(), developer, new HashSet<User>());
     }
 
-    public Game(String title, String description, Set<Genres> genres, int releaseYear, double price, String logo, double score, List<String> images, Developer developer) {
+    public Game(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, double score, List<String> images, Developer developer, Set<User> players) {
         this.title = title;
         this.description = description;
-        this.genres = genres;
-        this.releaseYear = releaseYear;
+        this.tags = tags;
+        this.releaseDate = releaseDate;
         this.price = price;
         this.logo = logo;
+        this.score = score;
         this.images = images;
         this.developer = developer;
+        this.players = players;
     }
 
     public String getTitle() {
@@ -51,20 +54,20 @@ public class Game implements iGame {
         this.description = description;
     }
 
-    public Set<Genres> getGenres() {
-        return genres;
+    public Set<Tags> getTags() {
+        return tags;
     }
 
-    public void setGenres(Set<Genres> genres) {
-        this.genres = genres;
+    public void setTags(Set<Tags> tags) {
+        this.tags = tags;
     }
 
-    public int getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public double getPrice() {
@@ -107,6 +110,14 @@ public class Game implements iGame {
         this.developer = developer;
     }
 
+    public Set<User> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<User> players) {
+        this.players = players;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,5 +129,66 @@ public class Game implements iGame {
     @Override
     public int hashCode() {
         return Objects.hash(title);
+    }
+
+    @Override
+    public Game create(){
+        if (this.developer != null) {
+            this.developer.getGames().add(this);
+        }
+
+        return this;
+    }
+
+    @Override
+    public Game update(String title, String description, Set<Tags> tags, String releaseDate, double price, String logo, Developer developer) {
+        this.title = title;
+        this.description = description;
+        this.tags = tags;
+        this.releaseDate = releaseDate;
+        this.price = price;
+        this.logo = logo;
+        this.developer = developer;
+
+        return this;
+    }
+
+    @Override
+    public Game remove() {
+        if(this.developer != null){
+            this.developer.getGames().remove(this);
+        }
+
+        return this;
+    }
+
+    @Override
+    public boolean addTag(Tags tag) {
+        return this.tags.add(tag);
+    }
+
+    @Override
+    public boolean removeTag(Tags tag) {
+        return this.tags.remove(tag);
+    }
+
+    @Override
+    public boolean addImage(String image) {
+        return this.images.add(image);
+    }
+
+    @Override
+    public boolean removeImage(String image) {
+        return this.images.remove(image);
+    }
+
+    @Override
+    public boolean addPlayer(User user) {
+        return this.players.add(user);
+    }
+
+    @Override
+    public boolean removePlayer(User user) {
+        return this.players.remove(user);
     }
 }

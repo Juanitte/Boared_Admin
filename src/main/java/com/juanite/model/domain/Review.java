@@ -12,11 +12,11 @@ public class Review implements iReview {
     private double score;
 
     public Review() {
-        this(null, null, "", 0);
+        this(null, null, "", -1);
     }
 
     public Review(User user, Game game) {
-        this(user, game, "", 0);
+        this(user, game, "", -1);
     }
 
     public Review(User user, Game game, String review, double score) {
