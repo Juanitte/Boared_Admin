@@ -174,7 +174,10 @@ public class Game implements iGame {
 
     @Override
     public boolean addImage(String image) {
-        return this.images.add(image);
+        if(!this.images.contains(image)) {
+            return this.images.add(image);
+        }
+        return false;
     }
 
     @Override

@@ -17,4 +17,6 @@ public abstract class Entity {
     public abstract void setGames(Set<Game> games);
     public abstract Countries getCountry();
     public abstract void setCountry(Countries country);
+    public abstract Entity create();
+    public abstract Entity remove();
 }
