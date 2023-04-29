@@ -3,14 +3,14 @@ package com.juanite.model.DTO;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UsersDTO {
+public class RepoUsersDTO {
 
     private Set<UserDTO> users;
 
-    public UsersDTO(){
+    public RepoUsersDTO(){
         this(new HashSet<UserDTO>());
     }
-    public UsersDTO(Set<UserDTO> users) {
+    public RepoUsersDTO(Set<UserDTO> users) {
         this.users = users;
     }
 

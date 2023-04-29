@@ -24,7 +24,7 @@ public class User extends Entity implements iUser {
         this.email = "";
         this.name = "";
         this.surname = "";
-        this.birthDate = "";
+        this.birthDate = null;
         this.country = Countries.NONE;
         this.town = "";
         this.address = "";
@@ -34,7 +34,7 @@ public class User extends Entity implements iUser {
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
     }
-    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber) {
+    public User(String username, String password, String email, String name, String surname, Date birthDate, Countries country, String town, String address, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -50,7 +50,7 @@ public class User extends Entity implements iUser {
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
     }
-    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<User> friends, Map<User,Boolean> pendingFriends) {
+    public User(String username, String password, String email, String name, String surname, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<User> friends, Map<User,Boolean> pendingFriends) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -78,12 +78,12 @@ public class User extends Entity implements iUser {
     }
 
     @Override
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return this.birthDate;
     }
 
     @Override
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -209,7 +209,7 @@ public class User extends Entity implements iUser {
     }
 
     @Override
-    public User update(String username, String password, String name, String surname, String email, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar) {
+    public User update(String username, String password, String name, String surname, String email, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar) {
         this.username = username;
         this.password = password;
         this.name = name;
