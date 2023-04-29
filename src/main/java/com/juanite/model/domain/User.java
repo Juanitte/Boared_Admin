@@ -13,9 +13,10 @@ public class User extends Entity implements iUser {
     private String address;
     private String phoneNumber;
     private String avatar;
-    private Set<Developer> following;
     private Set<User> friends;
     private Map<User,Boolean> pendingFriends;
+    //  User    = The other user involved in the request.
+    //  Boolean = (True = You sent the request) || (False = You got the request and have to accept/decline it)
 
     public User() {
         this.username = "";
@@ -24,13 +25,12 @@ public class User extends Entity implements iUser {
         this.name = "";
         this.surname = "";
         this.birthDate = "";
-        this.country = null;
+        this.country = Countries.NONE;
         this.town = "";
         this.address = "";
         this.phoneNumber = "";
-        this.avatar = "src/main/resources/com/juanite/basic_avatar.png";
+        this.avatar = "basic_avatar.png";
         this.games = new HashSet<Game>();
-        this.following = new HashSet<Developer>();
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
     }
@@ -45,13 +45,12 @@ public class User extends Entity implements iUser {
         this.name = name;
         this.country = country;
         this.birthDate = birthDate;
-        this.avatar = "src/main/resources/com/juanite/basic_avatar.png";
+        this.avatar = "basic_avatar.png";
         this.games = new HashSet<Game>();
-        this.following = new HashSet<Developer>();
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
     }
-    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<Developer> following, Set<User> friends, Map<User,Boolean> pendingFriends) {
+    public User(String username, String password, String email, String name, String surname, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<User> friends, Map<User,Boolean> pendingFriends) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -59,7 +58,6 @@ public class User extends Entity implements iUser {
         this.town = town;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.following = following;
         this.friends = friends;
         this.name = name;
         this.avatar = avatar;
@@ -165,14 +163,6 @@ public class User extends Entity implements iUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<Developer> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(Set<Developer> following) {
-        this.following = following;
-    }
-
     public Set<User> getFriends() {
         return friends;
     }
@@ -208,5 +198,65 @@ public class User extends Entity implements iUser {
     @Override
     public int hashCode() {
         return Objects.hash(email);
+    }
+
+
+    @Override
+    public User create() {
+
+
+        return this;
+    }
+
+    @Override
+    public User update(String username, String password, String name, String surname, String email, String birthDate, Countries country, String town, String address, String phoneNumber, String avatar) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.country = country;
+        this.town = town;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.avatar = avatar;
+        return this;
+    }
+
+    @Override
+    public User remove() {
+        return this;
+    }
+
+    @Override
+    public boolean addGame(Game game) {
+        return this.games.add(game);
+    }
+
+
+    @Override
+    public boolean removeGame(Game game) {
+        return this.games.remove(game);
+    }
+
+    @Override
+    public boolean addFriend(User user) {
+        return this.friends.add(user);
+    }
+
+    @Override
+    public boolean removeFriend(User user) {
+        return this.friends.remove(user);
+    }
+
+    @Override
+    public boolean addFriendRequest(User user, boolean isSender) {
+        return Boolean.TRUE.equals(this.pendingFriends.put(user, isSender));
+    }
+
+    @Override
+    public boolean removeFriendRequest(User user) {
+        return this.pendingFriends.remove(user);
     }
 }

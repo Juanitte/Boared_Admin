@@ -70,11 +70,7 @@ public class UsersController {
     @FXML
     public void btnMaximizeValidate(){
         Stage stage = App.getStage();
-        if(!stage.isMaximized()) {
-            stage.setMaximized(true);
-        }else{
-            stage.setMaximized(false);
-        }
+        stage.setMaximized(!stage.isMaximized());
     }
     @FXML
     public void tbClickValidate(MouseEvent event) {
