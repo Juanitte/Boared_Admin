@@ -4,6 +4,7 @@ import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.connections.ConnectionMySQL;
 import com.juanite.model.domain.Countries;
 import com.juanite.model.domain.Developer;
+import com.juanite.model.domain.User;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -144,12 +145,12 @@ public class DeveloperDAO implements DAO {
                 pst.setString(3, ((Developer)entity).getCountry().name());
                 pst.setDate(4, (Date) ((Developer)entity).getBirthDate());
                 pst.setString(5, ((Developer)entity).getLogo());
-                pst.setInt(6, getId((Developer)entity));
+                pst.setInt(6, getId((Developer) entity));
                 pst.executeUpdate();
             }
         }
 
-        return (Developer)entity;
+        return (Developer) entity;
     }
 
     @Override
@@ -158,7 +159,7 @@ public class DeveloperDAO implements DAO {
 
         if(!d.getName().equals("")){
             try(PreparedStatement pst = this.conn.prepareStatement(DELETE)){
-                pst.setInt(1, getId((Developer)entity));
+                pst.setInt(1, getId((Developer) entity));
                 pst.executeUpdate();
             }
         }

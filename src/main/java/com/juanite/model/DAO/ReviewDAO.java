@@ -1,7 +1,6 @@
 package com.juanite.model.DAO;
 
 import com.juanite.model.connections.ConnectionMySQL;
-import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Review;
 import com.juanite.model.domain.User;
 
