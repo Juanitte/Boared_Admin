@@ -1,6 +1,8 @@
 package com.juanite.util;
 
+import com.juanite.App;
 import com.juanite.model.domain.Admin;
+import javafx.stage.Stage;
 
 public class AppData {
 
@@ -9,6 +11,7 @@ public class AppData {
     private static double height = 800;
     private static String errorMsg;
     private static String previousScene;
+    private static Stage stage = App.getStage();
 
     public static Admin getAdmin() {
         return admin;
@@ -48,5 +51,13 @@ public class AppData {
 
     public static void setPreviousScene(String previousScene) {
         AppData.previousScene = previousScene;
+    }
+
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static void setStage(Stage stage) {
+        AppData.stage = stage;
     }
 }

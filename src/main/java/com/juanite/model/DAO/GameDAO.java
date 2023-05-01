@@ -2,8 +2,10 @@ package com.juanite.model.DAO;
 
 import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.connections.ConnectionMySQL;
+import com.juanite.model.domain.Developer;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
+import com.juanite.model.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,8 +17,11 @@ import java.util.stream.Collectors;
 public class GameDAO implements DAO {
 
     private final static String FINDALL = "SELECT * FROM game";
+    private final static String FINDALLDTO = "SELECT title, tags, price, logo, dev_id FROM game";
     private final static String FINDBYTITLE = "SELECT * FROM game WHERE title=?";
     private final static String FINDBYCODE = "SELECT * FROM game WHERE code=?";
+    private final static String FINDBYTITLEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE title=?";
+    private final static String FINDBYCODEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE code=?";
     private final static String INSERT = "INSERT INTO game (title,description,tags,release_date,price,logo,score,images,dev_id) VALUES (?,?,?,?,?)";
     private final static String UPDATE = "UPDATE game SET title=?, description=?, tags=?, release_date=?, price=?, logo=?, score=?, images=?, dev_id=? WHERE code=?";
     private final static String DELETE = "DELETE FROM game WHERE code=?";
@@ -31,128 +36,156 @@ public class GameDAO implements DAO {
         this.conn = ConnectionMySQL.getConnect();
     }
 
+    /**
+     * Method that finds all games stored at the database.
+     * @return a Set of all Games stored at the database.
+     */
     @Override
     public Set<Game> findAll() throws Exception {
         Set<Game> result = new HashSet<Game>();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDALL)) {
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
-                    Game g = new Game();
-                    g.setTitle(res.getString("title"));
-                    g.setDescription(res.getString("description"));
-                    g.setTags(convertTags(res));
-                    g.setReleaseDate(res.getDate("release_date"));
-                    g.setPrice(res.getDouble("price"));
-                    g.setLogo(res.getString("logo"));
-                    g.setScore(res.getDouble("score"));
-                    g.setImages(convertImages(res));
-
                     try (DeveloperDAO dDao = new DeveloperDAO()) {
+                        Game g = new Game();
+                        g.setTitle(res.getString("title"));
+                        g.setDescription(res.getString("description"));
+                        g.setTags(convertTags(res));
+                        g.setReleaseDate(res.getDate("release_date"));
+                        g.setPrice(res.getDouble("price"));
+                        g.setLogo(res.getString("logo"));
+                        g.setScore(res.getDouble("score"));
+                        g.setImages(convertImages(res));
                         g.setDeveloper(dDao.find(res.getInt("id")));
+                        result.add(g);
                     }
-                    result.add(g);
                 }
             }
         }
         return result;
     }
 
+    /**
+     * Method that finds all games stored at the database.
+     * @return a Set of all GameDTOs stored at the database.
+     */
     public Set<GameDTO> findAllDTO() throws Exception {
         Set<GameDTO> result = new HashSet<GameDTO>();
-        try(PreparedStatement pst = this.conn.prepareStatement(FINDALL)) {
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDALLDTO)) {
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
-                    GameDTO g = new GameDTO();
-                    g.setTitle(res.getString("title"));
-                    g.setTags(convertTags(res));
-                    g.setPrice(res.getDouble("price"));
-                    g.setLogo(res.getString("logo"));
-                    result.add(g);
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        GameDTO g = new GameDTO();
+                        g.setTitle(res.getString("title"));
+                        g.setTags(convertTags(res));
+                        g.setPrice(res.getDouble("price"));
+                        g.setLogo(res.getString("logo"));
+                        g.setDeveloper(ddao.findDTO(res.getInt("dev_id")));
+                        result.add(g);
+                    }
                 }
             }
         }
         return result;
     }
 
+    /**
+     * Method that finds a game stored at the database.
+     * @param param , the title to find.
+     * @return the Game found/null if not found.
+     */
     @Override
-    public Game find(String param) throws SQLException {
-        Game result = new Game();
+    public Game find(String param) throws Exception {
         try (PreparedStatement pst = this.conn.prepareStatement(FINDBYTITLE)) {
             pst.setString(1, param);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setTitle(res.getString("title"));
-                    result.setDescription(res.getString("description"));
-                    result.setTags(convertTags(res));
-                    result.setReleaseDate(res.getDate("release_date"));
-                    result.setPrice(res.getDouble("price"));
-                    result.setLogo(res.getString("logo"));
-                    result.setScore(res.getDouble("score"));
-                    result.setImages(convertImages(res));
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        return new Game(res.getString("title"), res.getString("description"),
+                                        convertTags(res), res.getDate("release_date"),
+                                        res.getDouble("price"), res.getString("logo"),
+                                        res.getDouble("score"), convertImages(res),
+                                        ddao.find(res.getInt("dev_id")), new HashSet<User>());
+                    }
+
                 }
             }
         }
-        return result;
+        return null;
     }
 
-    public GameDTO findDTO(String param) throws SQLException {
-        GameDTO result = new GameDTO();
-        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYTITLE)) {
+    /**
+     * Method that finds a game stored at the database.
+     * @param param , the title to find.
+     * @return the GameDTO found/null if not found.
+     */
+    public GameDTO findDTO(String param) throws Exception {
+        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYTITLEDTO)) {
             pst.setString(1, param);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setTitle(res.getString("title"));
-                    result.setTags(convertTags(res));
-                    result.setPrice(res.getDouble("price"));
-                    result.setLogo(res.getString("logo"));
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")));
+                    }
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds a game stored at the database.
+     * @param id , the id to find.
+     * @return the Game found/null if not found.
+     */
     @Override
     public Game find(int id) throws Exception {
-        Game result = new Game();
         try (PreparedStatement pst = this.conn.prepareStatement(FINDBYCODE)) {
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setTitle(res.getString("title"));
-                    result.setDescription(res.getString("description"));
-                    result.setTags(convertTags(res));
-                    result.setReleaseDate(res.getDate("release_date"));
-                    result.setPrice(res.getDouble("price"));
-                    result.setLogo(res.getString("logo"));
-                    result.setScore(res.getDouble("score"));
-                    result.setImages(convertImages(res));
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        return new Game(res.getString("title"), res.getString("description"),
+                                convertTags(res), res.getDate("release_date"),
+                                res.getDouble("price"), res.getString("logo"),
+                                res.getDouble("score"), convertImages(res),
+                                ddao.find(res.getInt("dev_id")), new HashSet<User>());
+                    }
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds a game stored at the database.
+     * @param id , the id to find.
+     * @return the GameDTO found/null if not found.
+     */
     public GameDTO findDTO(int id) throws Exception {
-        GameDTO result = new GameDTO();
-        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYCODE)) {
+        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYCODEDTO)) {
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setTitle(res.getString("title"));
-                    result.setTags(convertTags(res));
-                    result.setPrice(res.getDouble("price"));
-                    result.setLogo(res.getString("logo"));
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")));
+                    }
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that stores/updates a Game at the database.
+     * @param entity , the Game to save.
+     * @return the stored/updated Game.
+     */
     @Override
     public Game save(Object entity) throws Exception {
         Game g = find(((Game)entity).getTitle());
 
-        if(g.getTitle().equals("")){
+        if(g == null){
             try(PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
                 pst.setString(1, ((Game)entity).getTitle());
                 pst.setString(2, ((Game)entity).getDescription());
@@ -185,9 +218,13 @@ public class GameDAO implements DAO {
             }
         }
 
-        return g;
+        return (Game) entity;
     }
 
+    /**
+     * Method that removes a game stored at the database.
+     * @param entity , the Game to remove.
+     */
     @Override
     public void delete(Object entity) throws Exception {
         Game g = find(((Game)entity).getTitle());
@@ -205,6 +242,11 @@ public class GameDAO implements DAO {
 
     }
 
+    /**
+     * Method that gets the code from a Game stored at the database.
+     * @param game , the Game to find.
+     * @return the code of that Game if found/-1 if not found.
+     */
     public int getCode(Game game) throws SQLException {
         if(game != null){
             if(!game.getTitle().equals("")){
@@ -221,6 +263,11 @@ public class GameDAO implements DAO {
         return -1;
     }
 
+    /**
+     * Method that makes the conversion from a String to a Set, separating it by the commas.
+     * @param res , the ResultSet to work with.
+     * @return a Set of Tags built using the string provided.
+     */
     public Set<Tags> convertTags(ResultSet res) throws SQLException {
         Set<Tags> tags = new HashSet<Tags>();
         Set<String> strings = Arrays.stream(res.getString("tags").split(",")).collect(Collectors.toSet());
@@ -230,6 +277,11 @@ public class GameDAO implements DAO {
         return tags;
     }
 
+    /**
+     * Method that makes the conversion from a Set to a String, separating it by commas.
+     * @param tags , the Set of Tags to work with.
+     * @return a String built using the Set of Tags provided.
+     */
     public String convertTags(Set<Tags> tags) {
         StringBuilder result = new StringBuilder();
         for(Tags tag : tags){
@@ -238,12 +290,22 @@ public class GameDAO implements DAO {
         return result.toString();
     }
 
+    /**
+     * Method that makes the conversion from a String to a List, separating it by the commas.
+     * @param res , the ResultSet to work with.
+     * @return a List of String built using the string provided.
+     */
     public List<String> convertImages(ResultSet res) throws SQLException {
         List<String> strings = new ArrayList<String>();
         strings = Arrays.stream(res.getString("tags").split(",")).collect(Collectors.toList());
         return strings;
     }
 
+    /**
+     * Method that makes the conversion from a List to a String, separating it by commas.
+     * @param images , the Set of String to work with.
+     * @return a String built using the List of String provided.
+     */
     public String convertImages(List<String> images) {
         StringBuilder result = new StringBuilder();
         for(String image : images){

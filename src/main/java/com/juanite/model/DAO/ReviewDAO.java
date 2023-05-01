@@ -28,6 +28,10 @@ public class ReviewDAO implements AutoCloseable{
         this.conn = ConnectionMySQL.getConnect();
     }
 
+    /**
+     * Method that finds all reviews stored at the database.
+     * @return a Set of all Reviews stored at the database.
+     */
     public Set<Review> findAll() throws Exception {
         Set<Review> result = new HashSet<Review>();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDALL)) {
@@ -49,6 +53,12 @@ public class ReviewDAO implements AutoCloseable{
         return result;
     }
 
+    /**
+     * Method that finds a review stored at the database.
+     * @param userId , the user_id to find.
+     * @param gameCode , the game_code to find.
+     * @return the Review found/null if not found.
+     */
     public Review find(int userId, int gameCode) throws Exception {
         Review r = new Review();
         try (PreparedStatement pst = this.conn.prepareStatement(FIND)) {
@@ -70,6 +80,11 @@ public class ReviewDAO implements AutoCloseable{
         return r;
     }
 
+    /**
+     * Method that finds all reviews from a user stored at the database.
+     * @param userId , the user_id to find.
+     * @return the Set of Review found/null if not found.
+     */
     public Set<Review> findByUser(int userId) throws Exception {
         Set<Review> result = new HashSet<Review>();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDBYUSER)) {
@@ -92,6 +107,11 @@ public class ReviewDAO implements AutoCloseable{
         return result;
     }
 
+    /**
+     * Method that finds a review stored at the database.
+     * @param gameCode , the game_code to find.
+     * @return the Review found/null if not found.
+     */
     public Set<Review> findByGame(int gameCode) throws Exception {
         Set<Review> result = new HashSet<Review>();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDBYGAME)) {
@@ -114,6 +134,11 @@ public class ReviewDAO implements AutoCloseable{
         return result;
     }
 
+    /**
+     * Method that stores/updates a Review at the database.
+     * @param entity , the Review to save.
+     * @return the stored/updated Review.
+     */
     public Review save(Object entity) throws Exception {
         try (UserDAO udao = new UserDAO()) {
             try(GameDAO gdao = new GameDAO()) {
@@ -130,6 +155,10 @@ public class ReviewDAO implements AutoCloseable{
         return (Review)entity;
     }
 
+    /**
+     * Method that removes a review stored at the database.
+     * @param entity , the Review to remove.
+     */
     public void delete(Object entity) throws Exception {
         try (UserDAO udao = new UserDAO()) {
             try (GameDAO gdao = new GameDAO()) {

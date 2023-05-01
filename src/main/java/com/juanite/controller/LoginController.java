@@ -5,18 +5,12 @@ import com.juanite.model.DAO.AdminDAO;
 import com.juanite.model.domain.Admin;
 import com.juanite.util.AppData;
 import com.juanite.util.Validator;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.stage.Stage;
 
-import java.util.Optional;
+import java.io.IOException;
 
 public class LoginController {
 
@@ -65,46 +59,40 @@ public class LoginController {
 
     @FXML
     public void btnCloseValidate(){
-        Stage stage = App.getStage();
-        stage.close();
+        AppData.getStage().close();
     }
     @FXML
     public void btnMinimizeValidate(){
-        Stage stage = App.getStage();
-        stage.setIconified(true);
+        AppData.getStage().setIconified(true);
     }
     @FXML
     public void btnMaximizeValidate(){
-        Stage stage = App.getStage();
-        stage.setMaximized(!stage.isMaximized());
+        AppData.getStage().setMaximized(!AppData.getStage().isMaximized());
     }
     @FXML
     public void tbClickValidate(MouseEvent event) {
-        Stage stage = App.getStage();
-        xOffset = stage.getX() - event.getScreenX();
-        yOffset = stage.getY() - event.getScreenY();
+        xOffset = AppData.getStage().getX() - event.getScreenX();
+        yOffset = AppData.getStage().getY() - event.getScreenY();
     }
 
     @FXML
     public void tbDragValidate(MouseEvent event) {
-        Stage stage = App.getStage();
-        stage.setX(event.getScreenX() + xOffset);
-        stage.setY(event.getScreenY() + yOffset);
+        AppData.getStage().setX(event.getScreenX() + xOffset);
+        AppData.getStage().setY(event.getScreenY() + yOffset);
     }
 
     @FXML
     public void resizeWindow(MouseEvent event) {
-        Stage stage = App.getStage();
         double offsetX = event.getSceneX();
         double offsetY = event.getSceneY();
-        double width = stage.getWidth();
-        double height = stage.getHeight();
+        double width = AppData.getStage().getWidth();
+        double height = AppData.getStage().getHeight();
 
         img_resize.setOnMouseDragged(e -> {
             double newWidth = width + (e.getSceneX() - offsetX);
             double newHeight = height + (e.getSceneY() - offsetY);
-            stage.setWidth(newWidth);
-            stage.setHeight(newHeight);
+            AppData.getStage().setWidth(newWidth);
+            AppData.getStage().setHeight(newHeight);
         });
     }
 
@@ -112,26 +100,41 @@ public class LoginController {
     public void btnLoginValidate() throws Exception {
         AppData.setPreviousScene("login");
         try (AdminDAO adao = new AdminDAO()) {
-            if(!Validator.validateCompanyEmail(txtfld_email.getText()) || !Validator.validateUsername(txtfld_email.getText())) {
-                if(!Validator.validatePassword(txtfld_password.getText())) {
+            if(Validator.validateCompanyEmail(txtfld_email.getText()) || Validator.validateUsername(txtfld_email.getText())) {
+                if(Validator.validatePassword(txtfld_password.getText())) {
                     Admin admin = adao.find(txtfld_email.getText());
-                    if(txtfld_password.getText().equals(admin.getPassword())) {
-                        AppData.setAdmin(admin);
-                        if (AppData.getAdmin() != null) {
-                            Stage stage = App.getStage();
-                            stage.setWidth(800);
-                            stage.setHeight(600);
-                            App.setRoot("main");
-                            stage.setTitle("BOARED - Main");
+                    if(admin != null) {
+                        if (txtfld_password.getText().equals(admin.getPassword())) {
+                            AppData.setAdmin(admin);
+                            if (AppData.getAdmin() != null) {
+                                AppData.getStage().setWidth(800);
+                                AppData.getStage().setHeight(600);
+                                App.setRoot("main");
+                                AppData.getStage().setTitle("BOARED - Main");
+                            }
+                        }else{
+                            AppData.setErrorMsg("Wrong password.");
+                            switchToErrorScreen();
                         }
+                    }else{
+                        AppData.setErrorMsg("Wrong email/username.");
+                        switchToErrorScreen();
                     }
                 }else{
-
+                    AppData.setErrorMsg("Password must include a lowercase letter,\nan uppercase letter and a number,\nand have 8 characters at least.");
+                    switchToErrorScreen();
                 }
             }else{
-
+                AppData.setErrorMsg("Email must be from our company (@boared.com)\nUsername can include letters and numbers only,\nand must have between 3 and 25 characters.");
+                switchToErrorScreen();
             }
         }
 
+    }
+
+    public void switchToErrorScreen() throws IOException {
+        AppData.getStage().setWidth(350);
+        AppData.getStage().setHeight(180);
+        App.setRoot("error");
     }
 }
