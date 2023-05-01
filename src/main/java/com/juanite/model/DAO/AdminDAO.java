@@ -3,6 +3,9 @@ package com.juanite.model.DAO;
 import com.juanite.model.DTO.AdminDTO;
 import com.juanite.model.connections.ConnectionMySQL;
 import com.juanite.model.domain.Admin;
+import com.juanite.model.domain.CompanyEmails;
+import com.juanite.util.AppData;
+import com.juanite.util.PasswordAuthentication;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -175,25 +178,23 @@ public class AdminDAO implements DAO {
     @Override
     public Admin save(Object entity) throws SQLException {
         Admin a = find(((Admin)entity).getName());
-
         if(a == null){
-            try(PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
-                pst.setString(1, ((Admin)entity).getEmail());
-                pst.setString(2, ((Admin)entity).getName());
-                pst.setString(3, ((Admin)entity).getPassword());
+            try (PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
+                pst.setString(1, ((Admin) entity).getEmail());
+                pst.setString(2, ((Admin) entity).getName());
+                pst.setString(3, AppData.getPa().hash(((Admin) entity).getPassword()));
                 pst.executeUpdate();
             }
         }else{
-            try(PreparedStatement pst = this.conn.prepareStatement(UPDATE)){
-                pst.setString(1, ((Admin)entity).getEmail());
-                pst.setString(2, ((Admin)entity).getName());
-                pst.setString(3, ((Admin)entity).getPassword());
-                pst.setInt(4, getId((Admin)entity));
+            try (PreparedStatement pst = this.conn.prepareStatement(UPDATE)) {
+                pst.setString(1, ((Admin) entity).getEmail());
+                pst.setString(2, ((Admin) entity).getName());
+                pst.setString(3, AppData.getPa().hash(((Admin) entity).getPassword()));
+                pst.setInt(4, getId((Admin) entity));
                 pst.executeUpdate();
             }
         }
-
-        return (Admin)entity;
+        return (Admin) entity;
     }
 
     /**

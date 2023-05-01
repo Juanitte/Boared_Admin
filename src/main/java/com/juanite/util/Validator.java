@@ -1,5 +1,7 @@
 package com.juanite.util;
 
+import com.juanite.model.domain.CompanyEmails;
+
 public class Validator {
 
     /**
@@ -35,7 +37,14 @@ public class Validator {
      * @return true if it matches the regex or false if it doesn't.
      */
     public static boolean validateCompanyEmail(String email){
-        return email.matches("^[a-zA-Z0-9_]{3,25}@boared\\.com$");
+        if(email.matches("^[a-zA-Z0-9_]{3,25}@boared\\.com$")){
+            for(CompanyEmails ce : CompanyEmails.values()){
+                if(email.equals(ce.name() + "@boared.com")){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

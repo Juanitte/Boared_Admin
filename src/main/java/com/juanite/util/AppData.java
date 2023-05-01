@@ -12,6 +12,7 @@ public class AppData {
     private static String errorMsg;
     private static String previousScene;
     private static Stage stage = App.getStage();
+    private static PasswordAuthentication pa = new PasswordAuthentication();
 
     public static Admin getAdmin() {
         return admin;
@@ -59,5 +60,13 @@ public class AppData {
 
     public static void setStage(Stage stage) {
         AppData.stage = stage;
+    }
+
+    public static PasswordAuthentication getPa() {
+        return pa;
+    }
+
+    public static void setPa(PasswordAuthentication pa) {
+        AppData.pa = pa;
     }
 }
