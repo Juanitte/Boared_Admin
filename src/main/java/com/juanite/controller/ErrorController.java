@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -38,20 +37,31 @@ public class ErrorController {
     }
     @FXML
     public void tbClickValidate(MouseEvent event) {
-        Stage stage = App.getStage();
-        xOffset = stage.getX() - event.getScreenX();
-        yOffset = stage.getY() - event.getScreenY();
+        xOffset = AppData.getStage().getX() - event.getScreenX();
+        yOffset = AppData.getStage().getY() - event.getScreenY();
     }
 
     @FXML
     public void tbDragValidate(MouseEvent event) {
-        Stage stage = App.getStage();
-        stage.setX(event.getScreenX() + xOffset);
-        stage.setY(event.getScreenY() + yOffset);
+        AppData.getStage().setX(event.getScreenX() + xOffset);
+        AppData.getStage().setY(event.getScreenY() + yOffset);
     }
 
     @FXML
-    public void btnOkValidate() {
-
+    public void btnOkValidate() throws IOException {
+        if(AppData.getPreviousScene().equals("login")){
+            AppData.getStage().setWidth(350);
+            AppData.getStage().setHeight(400);
+            App.setRoot(AppData.getPreviousScene());
+        }else {
+            boolean maximize = AppData.getStage().isMaximized();
+            App.setRoot(AppData.getPreviousScene());
+            if (maximize) {
+                AppData.getStage().setMaximized(true);
+            } else {
+                AppData.getStage().setWidth(AppData.getWidth());
+                AppData.getStage().setHeight(AppData.getHeight());
+            }
+        }
     }
 }

@@ -13,8 +13,11 @@ import java.util.Set;
 public class DeveloperDAO implements DAO {
 
     private final static String FINDALL = "SELECT * FROM developer";
+    private final static String FINDALLDTO = "SELECT name FROM developer";
     private final static String FINDBYNAME = "SELECT * FROM developer WHERE name=?";
     private final static String FINDBYID = "SELECT * FROM developer WHERE id=?";
+    private final static String FINDBYNAMEDTO = "SELECT name FROM developer WHERE name=?";
+    private final static String FINDBYIDDTO = "SELECT name FROM developer WHERE id=?";
     private final static String INSERT = "INSERT INTO developer (name,description,country,birth_date,logo) VALUES (?,?,?,?,?)";
     private final static String UPDATE = "UPDATE developer SET name=?, description=?, country=?, birth_date=?, logo=? WHERE id=?";
     private final static String DELETE = "DELETE FROM developer WHERE id=?";
@@ -29,6 +32,10 @@ public class DeveloperDAO implements DAO {
         this.conn = ConnectionMySQL.getConnect();
     }
 
+    /**
+     * Method that finds all developers stored at the database.
+     * @return a Set of all Developers stored at the database.
+     */
     @Override
     public Set<Developer> findAll() throws SQLException {
         Set<Developer> result = new HashSet<Developer>();
@@ -48,9 +55,13 @@ public class DeveloperDAO implements DAO {
         return result;
     }
 
+    /**
+     * Method that finds all developers stored at the database.
+     * @return a Set of all DeveloperDTOs stored at the database.
+     */
     public Set<DeveloperDTO> findAllDTO() throws SQLException {
         Set<DeveloperDTO> result = new HashSet<DeveloperDTO>();
-        try(PreparedStatement pst = this.conn.prepareStatement(FINDALL)) {
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDALLDTO)) {
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
                     DeveloperDTO d = new DeveloperDTO();
@@ -62,74 +73,88 @@ public class DeveloperDAO implements DAO {
         return result;
     }
 
+    /**
+     * Method that finds a developer stored at the database.
+     * @param param , the name to find.
+     * @return the Developer found/null if not found.
+     */
     @Override
     public Developer find(String param) throws SQLException {
-        Developer result = new Developer();
         try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAME)) {
             pst.setString(1, param);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setName(res.getString("name"));
-                    result.setDescription(res.getString("description"));
-                    result.setCountry(Countries.valueOf(res.getString("country")));
-                    result.setBirthDate(res.getDate("birth_date"));
-                    result.setLogo(res.getString("logo"));
+                    return new Developer(res.getString("name"), res.getString("description"), Countries.valueOf(res.getString("country")), res.getDate("birth_date"), res.getString("logo"));
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds a developer stored at the database.
+     * @param param , the name to find.
+     * @return the DeveloperDTO found/null if not found.
+     */
     public DeveloperDTO findDTO(String param) throws SQLException {
-        DeveloperDTO result = new DeveloperDTO();
-        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAME)) {
+        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAMEDTO)) {
             pst.setString(1, param);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setName(res.getString("name"));
+                    return new DeveloperDTO(res.getString("name"));
                 }
             }
         }
-        return result;
+        return null;
     }
+
+    /**
+     * Method that finds a developer stored at the database.
+     * @param id , the id to find.
+     * @return the Developer found/null if not found.
+     */
     @Override
     public Developer find(int id) throws SQLException {
-        Developer result = new Developer();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDBYID)){
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()){
                 if(res.next()){
-                    result.setName(res.getString("name"));
-                    result.setDescription(res.getString("description"));
-                    result.setCountry(Countries.valueOf(res.getString("country")));
-                    result.setBirthDate(res.getDate("birth_date"));
-                    result.setLogo(res.getString("logo"));
+                    return new Developer(res.getString("name"), res.getString("description"), Countries.valueOf(res.getString("country")), res.getDate("birth_date"), res.getString("logo"));
                 }
             }
         }
 
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds a developer stored at the database.
+     * @param id , the id to find.
+     * @return the DeveloperDTO found/null if not found.
+     */
     public DeveloperDTO findDTO(int id) throws SQLException {
-        DeveloperDTO result = new DeveloperDTO();
-        try(PreparedStatement pst = this.conn.prepareStatement(FINDBYID)){
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDBYIDDTO)){
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()){
                 if(res.next()){
-                    result.setName(res.getString("name"));
+                    return new DeveloperDTO(res.getString("name"));
                 }
             }
         }
 
-        return result;
+        return null;
     }
 
+    /**
+     * Method that stores/updates a Developer at the database.
+     * @param entity , the Developer to save.
+     * @return the stored/updated Developer.
+     */
     @Override
     public Developer save(Object entity) throws SQLException {
         Developer d = find(((Developer)entity).getName());
 
-        if(d.getName().equals("")){
+        if(d == null){
             try(PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
                 pst.setString(1, ((Developer)entity).getName());
                 pst.setString(2, ((Developer)entity).getDescription());
@@ -149,10 +174,13 @@ public class DeveloperDAO implements DAO {
                 pst.executeUpdate();
             }
         }
-
         return (Developer) entity;
     }
 
+    /**
+     * Method that removes a developer stored at the database.
+     * @param entity , the Developer to remove.
+     */
     @Override
     public void delete(Object entity) throws SQLException {
         Developer d = find(((Developer)entity).getName());
@@ -165,6 +193,11 @@ public class DeveloperDAO implements DAO {
         }
     }
 
+    /**
+     * Method that gets the id from a Developer stored at the database.
+     * @param developer , the Developer to find.
+     * @return the id of that Developer if found/-1 if not found.
+     */
     public int getId(Developer developer) throws SQLException {
         if(developer != null){
             if(!developer.getName().equals("")){

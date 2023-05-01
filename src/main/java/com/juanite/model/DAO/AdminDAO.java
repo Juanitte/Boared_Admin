@@ -14,9 +14,13 @@ import java.util.Set;
 public class AdminDAO implements DAO {
 
     private final static String FINDALL = "SELECT * FROM admin";
+    private final static String FINDALLDTO = "SELECT name, email FROM admin";
     private final static String FINDBYNAME = "SELECT * FROM admin WHERE name=?";
     private final static String FINDBYEMAIL = "SELECT * FROM admin WHERE email=?";
     private final static String FINDBYID = "SELECT * FROM admin WHERE id=?";
+    private final static String FINDBYNAMEDTO = "SELECT name, email FROM admin WHERE name=?";
+    private final static String FINDBYEMAILDTO = "SELECT name, email FROM admin WHERE email=?";
+    private final static String FINDBYIDDTO = "SELECT name, email FROM admin WHERE id=?";
     private final static String INSERT = "INSERT INTO admin (email,name,password) VALUES (?,?,?)";
     private final static String UPDATE = "UPDATE admin SET email=?, name=?, password=? WHERE id=?";
     private final static String DELETE = "DELETE FROM admin WHERE id=?";
@@ -31,6 +35,10 @@ public class AdminDAO implements DAO {
         this.conn = ConnectionMySQL.getConnect();
     }
 
+    /**
+     * Method that finds all admins stored at the database.
+     * @return a Set of all Admins stored at the database.
+     */
     @Override
     public Set<Admin> findAll() throws SQLException {
         Set<Admin> result = new HashSet<Admin>();
@@ -48,9 +56,13 @@ public class AdminDAO implements DAO {
         return result;
     }
 
+    /**
+     * Method that finds all admins stored at the database.
+     * @return a Set of all AdminDTOs stored at the database.
+     */
     public Set<AdminDTO> findAllDTO() throws SQLException {
         Set<AdminDTO> result = new HashSet<AdminDTO>();
-        try(PreparedStatement pst = this.conn.prepareStatement(FINDALL)) {
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDALLDTO)) {
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
                     AdminDTO a = new AdminDTO();
@@ -63,17 +75,19 @@ public class AdminDAO implements DAO {
         return result;
     }
 
+    /**
+     * Method that finds an admin stored at the database.
+     * @param param , the email/username to find.
+     * @return the Admin found/null if not found.
+     */
     @Override
     public Admin find(String param) throws SQLException {
-        Admin result = new Admin();
         if(!param.contains("@boared.com")) {
             try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAME)) {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        result.setEmail(res.getString("email"));
-                        result.setName(res.getString("name"));
-                        result.setPassword(res.getString("password"));
+                        return new Admin(res.getString("email"), res.getString("name"), res.getString("password"));
                     }
                 }
             }
@@ -82,77 +96,87 @@ public class AdminDAO implements DAO {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        result.setEmail(res.getString("email"));
-                        result.setName(res.getString("name"));
-                        result.setPassword(res.getString("password"));
+                        return new Admin(res.getString("email"), res.getString("name"), res.getString("password"));
                     }
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds an admin stored at the database.
+     * @param param , the email/username to find.
+     * @return the AdminDTO found/null if not found.
+     */
     public AdminDTO findDTO(String param) throws SQLException {
-        AdminDTO result = new AdminDTO();
         if(!param.contains("@boared.com")) {
-            try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAME)) {
+            try (PreparedStatement pst = this.conn.prepareStatement(FINDBYNAMEDTO)) {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        result.setEmail(res.getString("email"));
-                        result.setName(res.getString("name"));
+                        return new AdminDTO(res.getString("email"), res.getString("name"));
                     }
                 }
             }
         }else{
-            try (PreparedStatement pst = this.conn.prepareStatement(FINDBYEMAIL)) {
+            try (PreparedStatement pst = this.conn.prepareStatement(FINDBYEMAILDTO)) {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        result.setEmail(res.getString("email"));
-                        result.setName(res.getString("name"));
+                        return new AdminDTO(res.getString("email"), res.getString("name"));
                     }
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds an admin stored at the database.
+     * @param id , the id to find.
+     * @return the Admin found/null if not found.
+     */
     @Override
     public Admin find(int id) throws Exception {
-        Admin result = new Admin();
             try (PreparedStatement pst = this.conn.prepareStatement(FINDBYID)) {
                 pst.setInt(1, id);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        result.setEmail(res.getString("email"));
-                        result.setName(res.getString("name"));
-                        result.setPassword(res.getString("password"));
+                        return new Admin(res.getString("email"), res.getString("name"), res.getString("password"));
                     }
                 }
             }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that finds an admin stored at the database.
+     * @param id , the id to find.
+     * @return the AdminDTO found/null if not found.
+     */
     public AdminDTO findDTO(int id) throws Exception {
-        AdminDTO result = new AdminDTO();
-        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYID)) {
+        try (PreparedStatement pst = this.conn.prepareStatement(FINDBYIDDTO)) {
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    result.setEmail(res.getString("email"));
-                    result.setName(res.getString("name"));
+                    return new AdminDTO(res.getString("email"), res.getString("name"));
                 }
             }
         }
-        return result;
+        return null;
     }
 
+    /**
+     * Method that stores/updates an Admin at the database.
+     * @param entity , the Admin to save.
+     * @return the stored/updated Admin.
+     */
     @Override
     public Admin save(Object entity) throws SQLException {
         Admin a = find(((Admin)entity).getName());
 
-        if(a.getEmail().equals("")){
+        if(a == null){
             try(PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
                 pst.setString(1, ((Admin)entity).getEmail());
                 pst.setString(2, ((Admin)entity).getName());
@@ -172,11 +196,15 @@ public class AdminDAO implements DAO {
         return (Admin)entity;
     }
 
+    /**
+     * Method that removes an admin stored at the database.
+     * @param entity , the Admin to remove.
+     */
     @Override
     public void delete(Object entity) throws SQLException {
         Admin a = find(((Admin)entity).getName());
 
-        if(!a.getEmail().equals("")){
+        if(a != null){
             try(PreparedStatement pst = this.conn.prepareStatement(DELETE)){
                 pst.setInt(1, getId((Admin)entity));
                 pst.executeUpdate();
@@ -189,6 +217,11 @@ public class AdminDAO implements DAO {
 
     }
 
+    /**
+     * Method that gets the id from an Admin stored at the database.
+     * @param admin , the Admin to find.
+     * @return the id of that Admin if found/-1 if not found.
+     */
     public int getId(Admin admin) throws SQLException {
         if(admin != null){
             if(!admin.getName().equals("")){
