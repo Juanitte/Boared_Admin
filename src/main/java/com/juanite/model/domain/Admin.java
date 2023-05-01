@@ -1,5 +1,6 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.DAO.AdminDAO;
 import com.juanite.model.domain.interfaces.iAdmin;
 
 import java.util.Objects;
@@ -59,27 +60,61 @@ public class Admin implements iAdmin {
 
 
     @Override
-    public Admin create(String email, String name, String password) {
+    public Admin create(String email, String name, String password) throws Exception {
         Admin admin = new Admin(email, name, password);
+            try (AdminDAO adao = new AdminDAO()) {
+                if(!admin.getEmail().equals("") && !admin.getName().equals("") && !admin.getPassword().equals("")) {
+                    adao.save(admin);
+                    return admin;
+                }
+            }
 
-
-        return admin;
+            return null;
     }
 
     @Override
-    public Admin update(Admin admin, String email, String name, String password) {
-        if(admin != null) {
-            admin.setEmail(email);
-            admin.setName(name);
-            admin.setPassword(password);
-
+    public Admin update(String email, String name, String password) throws Exception {
+        try (AdminDAO adao = new AdminDAO()) {
+            if (this != null) {
+                if(!email.equals("") || !name.equals("") || !password.equals("")) {
+                    if (!email.equals("")) {
+                        this.email = email;
+                    }
+                    if (!name.equals("")) {
+                        this.name = name;
+                    }
+                    if (!password.equals("")) {
+                        this.password = password;
+                    }
+                    adao.save(this);
+                    return this;
+                }
+            }
         }
 
-        return admin;
+        return null;
     }
 
     @Override
-    public Admin remove(Admin admin) {
-        return admin;
+    public Admin remove() throws Exception {
+        try (AdminDAO adao = new AdminDAO()) {
+            if(this.equals(adao.find(adao.getId(this)))) {
+                adao.delete(this);
+                return this;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Admin save() throws Exception {
+        try (AdminDAO adao = new AdminDAO()) {
+            if(adao.save(this) != null) {
+                return this;
+            }
+        }
+
+        return null;
     }
 }

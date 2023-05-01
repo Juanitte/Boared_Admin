@@ -1,7 +1,9 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.DAO.AdminDAO;
 import com.juanite.model.domain.interfaces.iRepo;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,10 +12,10 @@ public class RepoAdmin implements iRepo {
     private Set<Admin> admins;
     private static RepoAdmin _newInstance;
 
-    private RepoAdmin(){
+    private RepoAdmin() {
         this.admins = new HashSet<Admin>();
     }
-    public RepoAdmin getInstance(){
+    public static RepoAdmin getInstance() {
         if(_newInstance==null) {
             _newInstance = new RepoAdmin();
         }

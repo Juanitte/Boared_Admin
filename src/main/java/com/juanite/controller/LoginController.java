@@ -1,13 +1,22 @@
 package com.juanite.controller;
 
 import com.juanite.App;
+import com.juanite.model.DAO.AdminDAO;
+import com.juanite.model.domain.Admin;
+import com.juanite.util.AppData;
+import com.juanite.util.Validator;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.util.Optional;
 
 public class LoginController {
 
@@ -31,11 +40,11 @@ public class LoginController {
     @FXML
     public ImageView img_resize;
     @FXML
-    public Label lbl_username;
+    public Label lbl_email;
     @FXML
     public Label lbl_password;
     @FXML
-    public TextField txtfld_username;
+    public TextField txtfld_email;
     @FXML
     public PasswordField txtfld_password;
     @FXML
@@ -100,11 +109,29 @@ public class LoginController {
     }
 
     @FXML
-    public void btnLoginValidate() throws IOException {
-        Stage stage = App.getStage();
-        stage.setWidth(800);
-        stage.setHeight(600);
-        App.setRoot("main");
-        stage.setTitle("BOARED - Main");
+    public void btnLoginValidate() throws Exception {
+        AppData.setPreviousScene("login");
+        try (AdminDAO adao = new AdminDAO()) {
+            if(!Validator.validateCompanyEmail(txtfld_email.getText()) || !Validator.validateUsername(txtfld_email.getText())) {
+                if(!Validator.validatePassword(txtfld_password.getText())) {
+                    Admin admin = adao.find(txtfld_email.getText());
+                    if(txtfld_password.getText().equals(admin.getPassword())) {
+                        AppData.setAdmin(admin);
+                        if (AppData.getAdmin() != null) {
+                            Stage stage = App.getStage();
+                            stage.setWidth(800);
+                            stage.setHeight(600);
+                            App.setRoot("main");
+                            stage.setTitle("BOARED - Main");
+                        }
+                    }
+                }else{
+
+                }
+            }else{
+
+            }
+        }
+
     }
 }
