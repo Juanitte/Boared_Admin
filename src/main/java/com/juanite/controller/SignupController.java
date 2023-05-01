@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-public class LoginController {
+public class SignupController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -42,8 +42,6 @@ public class LoginController {
     @FXML
     public PasswordField txtfld_password;
     @FXML
-    public Button btn_login;
-    @FXML
     public Button btn_signup;
     @FXML
     public Label lbl_slogan1;
@@ -51,6 +49,10 @@ public class LoginController {
     public Label lbl_slogan2;
     @FXML
     public Label lbl_slogan3;
+    @FXML
+    public Label lbl_name;
+    @FXML
+    public TextField txtfld_name;
 
     @FXML
     public void initialize(){
@@ -97,8 +99,8 @@ public class LoginController {
     }
 
     @FXML
-    public void btnLoginValidate() throws Exception {
-        AppData.setPreviousScene("login");
+    public void btnSignupValidate() throws Exception {
+        AppData.setPreviousScene("signup");
         try (AdminDAO adao = new AdminDAO()) {
             if(Validator.validateCompanyEmail(txtfld_email.getText()) || Validator.validateUsername(txtfld_email.getText())) {
                 if(Validator.validatePassword(txtfld_password.getText())) {

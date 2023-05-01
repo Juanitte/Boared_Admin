@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet src/main/resources/com/juanite/style.css?>
+
+<AnchorPane prefHeight="400.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.juanite.controller.SignupController">
+    <ToolBar id="navbar" fx:id="tb_1" onMouseClicked="#tbClickValidate" onMouseDragged="#tbDragValidate" prefHeight="50.0" prefWidth="480.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="112.0">
+        <ImageView fx:id="img_icon" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@icon.png" />
+        </ImageView>
+        <Label fx:id="lbl_titlebar" prefHeight="39.0" prefWidth="146.0" text="BOARED" textFill="#e1e1e1">
+            <font>
+                <Font name="ROGFonts-Regular" size="27.0" />
+            </font>
+        </Label>
+    </ToolBar>
+    <ToolBar id="navbar" fx:id="tb_2" layoutX="471.0" onMouseClicked="#tbClickValidate" onMouseDragged="#tbDragValidate" prefHeight="50.0" prefWidth="113.0" AnchorPane.rightAnchor="0.0">
+        <Button fx:id="btn_minimize" mnemonicParsing="false" onMouseClicked="#btnMinimizeValidate" prefHeight="26.0" prefWidth="23.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 13;" text="-">
+            <font>
+                <Font name="ROGFontsv1.6-Regular" size="13.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_maximize" layoutX="10.0" layoutY="15.0" maxHeight="40.0" maxWidth="46.0" mnemonicParsing="false" onMouseClicked="#btnMaximizeValidate" prefHeight="40.0" prefWidth="46.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 10;" text="❐">
+            <font>
+                <Font name="ROGFontsv1.6-Regular" size="10.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_close" layoutX="39.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#btnCloseValidate" prefHeight="26.0" prefWidth="23.0" style="-fx-max-height: 23; -fx-min-height: 23; -fx-max-width: 24; -fx-min-width: 24; -fx-background-color: #b3b3b3; -fx-font-size: 12;" text="X" />
+    </ToolBar>
+    <ImageView fx:id="img_resize" fitHeight="32.0" fitWidth="32.0" layoutX="552.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <cursor>
+            <Cursor fx:constant="SE_RESIZE" />
+        </cursor>
+        <Image url="@resize.png" />
+    </ImageView>
+    <Label fx:id="lbl_email" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="162.0" prefHeight="32.0" prefWidth="88.0" text="Email" textFill="#e1e1e1" AnchorPane.leftAnchor="26.0">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Label>
+    <Label fx:id="lbl_password" alignment="CENTER_RIGHT" layoutX="22.0" layoutY="268.0" prefHeight="32.0" prefWidth="88.0" text="Password" textFill="#e1e1e1" AnchorPane.leftAnchor="22.0">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Label>
+   <Label fx:id="lbl_name" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="215.0" prefHeight="32.0" prefWidth="88.0" text="Name" textFill="#e1e1e1">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+    <TextField fx:id="txtfld_email" alignment="CENTER" layoutX="123.0" layoutY="159.0" prefHeight="39.0" prefWidth="206.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="21.0">
+        <font>
+            <Font size="13.0" />
+        </font>
+    </TextField>
+   <TextField fx:id="txtfld_name" alignment="CENTER" layoutX="123.0" layoutY="212.0" prefHeight="39.0" prefWidth="206.0">
+      <font>
+         <Font size="13.0" />
+      </font>
+   </TextField>
+    <PasswordField fx:id="txtfld_password" alignment="CENTER" layoutX="123.0" layoutY="265.0" prefHeight="39.0" prefWidth="206.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="21.0">
+        <font>
+            <Font size="13.0" />
+        </font>
+    </PasswordField>
+    <Button fx:id="btn_signup" alignment="CENTER" layoutX="131.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Sign up" AnchorPane.leftAnchor="131.0" />
+    <Label fx:id="lbl_slogan1" alignment="CENTER" layoutY="61.0" prefHeight="30.0" prefWidth="350.0" text="IF YOU ARE BORED," textFill="#c1c1c1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <font>
+            <Font size="20.0" />
+        </font></Label>
+    <Label fx:id="lbl_slogan2" alignment="CENTER" layoutY="82.0" prefHeight="30.0" prefWidth="350.0" text="JUMP ONBOARD" textFill="#c1c1c1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <font>
+            <Font size="20.0" />
+        </font>
+    </Label>
+    <Label fx:id="lbl_slogan3" alignment="CENTER" layoutY="104.0" prefHeight="30.0" prefWidth="350.0" text="AND USE BOARED." textFill="#c1c1c1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <font>
+            <Font size="20.0" />
+        </font>
+    </Label>
+</AnchorPane>
