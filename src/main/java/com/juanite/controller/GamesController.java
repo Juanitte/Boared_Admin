@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.model.domain.Game;
+import com.juanite.util.AppData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -100,13 +101,14 @@ public class GamesController {
             double newHeight = height + (e.getSceneY() - offsetY);
             stage.setWidth(newWidth);
             stage.setHeight(newHeight);
-            MainController.setWidth(newWidth);
-            MainController.setHeight(newHeight);
+            AppData.setWidth(newWidth);
+            AppData.setHeight(newHeight);
         });
     }
 
     @FXML
     public void lblTitleValidate() throws IOException {
+        AppData.setPreviousScene("games");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("main");
@@ -114,13 +116,14 @@ public class GamesController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.getWidth());
-            stage.setHeight(MainController.getHeight());
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
+        AppData.setPreviousScene("games");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("games");
@@ -128,13 +131,14 @@ public class GamesController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.getWidth());
-            stage.setHeight(MainController.getHeight());
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
+        AppData.setPreviousScene("games");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("users");
@@ -142,13 +146,14 @@ public class GamesController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.getWidth());
-            stage.setHeight(MainController.getHeight());
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnLogoutValidate() throws IOException {
+        AppData.setPreviousScene("games");
         Stage stage = App.getStage();
         App.setRoot("login");
         stage.setTitle("BOARED - Log in");

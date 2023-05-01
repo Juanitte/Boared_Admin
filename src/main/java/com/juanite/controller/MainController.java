@@ -1,8 +1,12 @@
 package com.juanite.controller;
 
 import com.juanite.App;
+import com.juanite.util.AppData;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -13,21 +17,6 @@ public class MainController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
-    private static double width = 800;
-    private static double height = 600;
-
-    public static double getWidth(){
-        return MainController.width;
-    }
-    public static void setWidth(double width){
-        MainController.width = width;
-    }
-    public static double getHeight(){
-        return MainController.height;
-    }
-    public static void setHeight(double height){
-        MainController.height = height;
-    }
 
     @FXML
     public Label lbl_titlebar;
@@ -75,8 +64,9 @@ public class MainController {
     @FXML
     public void initialize(){
         img_resize.setOnMousePressed(this::resizeWindow);
-        width = App.getStage().getWidth();
-        height = App.getStage().getHeight();
+        AppData.setWidth(App.getStage().getWidth());
+        AppData.setHeight(App.getStage().getHeight());
+        btn_profile.setText(AppData.getAdmin().getName());
     }
 
     @FXML
@@ -121,13 +111,14 @@ public class MainController {
             double newHeight = height + (e.getSceneY() - offsetY);
             stage.setWidth(newWidth);
             stage.setHeight(newHeight);
-            MainController.width = newWidth;
-            MainController.height = newHeight;
+            AppData.setWidth(newWidth);
+            AppData.setHeight(newHeight);
         });
     }
 
     @FXML
     public void lblTitleValidate() throws IOException {
+        AppData.setPreviousScene("main");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("main");
@@ -135,13 +126,14 @@ public class MainController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.width);
-            stage.setHeight(MainController.height);
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
+        AppData.setPreviousScene("main");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("games");
@@ -149,13 +141,14 @@ public class MainController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.width);
-            stage.setHeight(MainController.height);
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
+        AppData.setPreviousScene("main");
         Stage stage = App.getStage();
         boolean maximize = stage.isMaximized();
         App.setRoot("users");
@@ -163,13 +156,14 @@ public class MainController {
         if(maximize){
             stage.setMaximized(true);
         }else {
-            stage.setWidth(MainController.getWidth());
-            stage.setHeight(MainController.getHeight());
+            stage.setWidth(AppData.getWidth());
+            stage.setHeight(AppData.getHeight());
         }
     }
 
     @FXML
     public void btnLogoutValidate() throws IOException {
+        AppData.setPreviousScene("main");
         Stage stage = App.getStage();
         App.setRoot("login");
         stage.setTitle("BOARED - Log in");

@@ -37,17 +37,17 @@
         </cursor>
         <Image url="@resize.png" />
     </ImageView>
-    <Label fx:id="lbl_username" layoutX="20.0" layoutY="170.0" prefHeight="32.0" prefWidth="88.0" text="Username" textFill="#e1e1e1" AnchorPane.leftAnchor="20.0">
+    <Label fx:id="lbl_email" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="170.0" prefHeight="32.0" prefWidth="88.0" text="Email" textFill="#e1e1e1" AnchorPane.leftAnchor="20.0">
         <font>
             <Font size="18.0" />
         </font>
     </Label>
-    <Label fx:id="lbl_password" layoutX="20.0" layoutY="243.0" prefHeight="32.0" prefWidth="88.0" text="Password" textFill="#e1e1e1" AnchorPane.leftAnchor="20.0">
+    <Label fx:id="lbl_password" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="243.0" prefHeight="32.0" prefWidth="88.0" text="Password" textFill="#e1e1e1" AnchorPane.leftAnchor="20.0">
         <font>
             <Font size="18.0" />
         </font>
     </Label>
-    <TextField fx:id="txtfld_username" alignment="CENTER" layoutX="117.0" layoutY="167.0" prefHeight="39.0" prefWidth="206.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="27.0">
+    <TextField fx:id="txtfld_email" alignment="CENTER" layoutX="117.0" layoutY="167.0" prefHeight="39.0" prefWidth="206.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="27.0">
         <font>
             <Font size="13.0" />
         </font>
