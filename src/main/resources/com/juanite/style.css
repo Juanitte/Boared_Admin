@@ -69,13 +69,14 @@ TableColumn{
     -fx-background-color: #919191;
 }
 
-.table-cell:filled {
-    -fx-background-color: #919191;
-}
-
 .table-cell {
     -fx-border-style: solid;
     -fx-border-color: #c1c1c1;
+    -fx-background-color: #515151;
+}
+
+.table-cell:filled {
+    -fx-background-color: #919191;
 }
 
 .table-cell:empty {

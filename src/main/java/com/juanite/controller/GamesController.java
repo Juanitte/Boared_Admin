@@ -76,7 +76,9 @@ public class GamesController {
         tc_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         tc_developer.setCellValueFactory(new PropertyValueFactory<>("developer"));
         try (GameDAO gdao = new GameDAO()) {
-            AppData.getGames().addAll(gdao.findAllDTO());
+            if(AppData.getGames().isEmpty()) {
+                AppData.getGames().addAll(gdao.findAllDTO());
+            }
             tv_games.setItems(AppData.getGames());
         }
     }
