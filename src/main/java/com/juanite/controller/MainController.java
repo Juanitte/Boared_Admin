@@ -163,7 +163,16 @@ public class MainController {
     }
 
     @FXML
-    public void btnDevsValidate(){
-
+    public void btnDevsValidate() throws IOException {
+        AppData.setPreviousScene("main");
+        boolean maximize = AppData.getStage().isMaximized();
+        App.setRoot("devs");
+        AppData.getStage().setTitle("BOARED - Devs");
+        if(maximize){
+            AppData.getStage().setMaximized(true);
+        }else {
+            AppData.getStage().setWidth(AppData.getWidth());
+            AppData.getStage().setHeight(AppData.getHeight());
+        }
     }
 }

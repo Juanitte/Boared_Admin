@@ -1,8 +1,10 @@
 package com.juanite.util;
 
 import com.juanite.App;
+import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.domain.Admin;
+import com.juanite.model.domain.Developer;
 import com.juanite.model.domain.Game;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,8 @@ public class AppData {
     private static PasswordAuthentication pa = new PasswordAuthentication();
     private static ObservableList<GameDTO> games = FXCollections.observableArrayList();
     private static Game game;
+    private static ObservableList<DeveloperDTO> developers = FXCollections.observableArrayList();
+    private static Developer developer;
 
     public static Admin getAdmin() {
         return admin;
@@ -99,5 +103,21 @@ public class AppData {
 
     public static void setConfirmationType(String confirmationType) {
         AppData.confirmationType = confirmationType;
+    }
+
+    public static Developer getDeveloper() {
+        return developer;
+    }
+
+    public static void setDeveloper(Developer developer) {
+        AppData.developer = developer;
+    }
+
+    public static ObservableList<DeveloperDTO> getDevelopers() {
+        return developers;
+    }
+
+    public static void setDevelopers(ObservableList<DeveloperDTO> developers) {
+        AppData.developers = developers;
     }
 }

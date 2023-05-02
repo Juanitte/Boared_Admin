@@ -1,10 +1,13 @@
 package com.juanite.model.DAO;
 
 import com.juanite.model.DTO.DeveloperDTO;
+import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.connections.ConnectionMySQL;
 import com.juanite.model.domain.Countries;
 import com.juanite.model.domain.Developer;
 import com.juanite.model.domain.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -18,10 +21,12 @@ public class DeveloperDAO implements DAO {
     private final static String FINDBYID = "SELECT * FROM developer WHERE id=?";
     private final static String FINDBYNAMEDTO = "SELECT name FROM developer WHERE name=?";
     private final static String FINDBYIDDTO = "SELECT name FROM developer WHERE id=?";
+    private final static String FINDCONTAININGNAMESDTO = "SELECT name FROM developer WHERE name LIKE ?";
     private final static String INSERT = "INSERT INTO developer (name,description,country,birth_date,logo) VALUES (?,?,?,?,?)";
     private final static String UPDATE = "UPDATE developer SET name=?, description=?, country=?, birth_date=?, logo=? WHERE id=?";
     private final static String DELETE = "DELETE FROM developer WHERE id=?";
     private final static String GETID = "SELECT id FROM developer WHERE name=?";
+    private final static String GETDEVGAMES = "SELECT code FROM games WHERE dev_id=?";
 
     private Connection conn;
 
@@ -67,6 +72,26 @@ public class DeveloperDAO implements DAO {
                     DeveloperDTO d = new DeveloperDTO();
                     d.setName(res.getString("name"));
                     result.add(d);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Method that finds all coincidences in dev names stored at the database.
+     * @param searchInput , a String provided by the user at the searchbar.
+     * @return an ObservableList of DeveloperDTOs containing all games whose name contains the provided String.
+     */
+    public ObservableList<DeveloperDTO> findContainingNames(String searchInput) throws Exception {
+        ObservableList<DeveloperDTO> result = FXCollections.observableArrayList();
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDCONTAININGNAMESDTO)) {
+            pst.setString(1, "%" + searchInput + "%");
+            try (ResultSet res = pst.executeQuery()) {
+                while (res.next()) {
+                        DeveloperDTO d = new DeveloperDTO();
+                        d.setName(res.getString("name"));
+                        result.add(d);
                 }
             }
         }
@@ -212,6 +237,22 @@ public class DeveloperDAO implements DAO {
             }
         }
         return -1;
+    }
+
+    public boolean hasGames(Developer developer) throws SQLException {
+
+        if(!developer.getName().equals("")){
+            try(PreparedStatement pst = this.conn.prepareStatement(GETDEVGAMES)){
+                pst.setInt(1, getId(developer));
+                try(ResultSet res = pst.executeQuery()) {
+                    if (res.next()) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 
     @Override
