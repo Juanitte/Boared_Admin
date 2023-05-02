@@ -47,7 +47,7 @@
             <Font size="18.0" />
         </font>
     </Label>
-   <Label fx:id="lbl_name" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="215.0" prefHeight="32.0" prefWidth="88.0" text="Name" textFill="#e1e1e1">
+   <Label fx:id="lbl_name" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="215.0" prefHeight="32.0" prefWidth="88.0" text="Name" textFill="#e1e1e1" AnchorPane.leftAnchor="26.0">
       <font>
          <Font size="18.0" />
       </font>
@@ -57,7 +57,7 @@
             <Font size="13.0" />
         </font>
     </TextField>
-   <TextField fx:id="txtfld_name" alignment="CENTER" layoutX="123.0" layoutY="212.0" prefHeight="39.0" prefWidth="206.0">
+   <TextField fx:id="txtfld_name" alignment="CENTER" layoutX="123.0" layoutY="212.0" prefHeight="39.0" prefWidth="206.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="21.0">
       <font>
          <Font size="13.0" />
       </font>
@@ -67,7 +67,8 @@
             <Font size="13.0" />
         </font>
     </PasswordField>
-    <Button fx:id="btn_signup" alignment="CENTER" layoutX="131.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Sign up" AnchorPane.leftAnchor="131.0" />
+    <Button fx:id="btn_signup" alignment="CENTER" layoutX="131.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#btnSignupValidate" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Sign up" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="131.0" />
+   <Button fx:id="btn_back" alignment="CENTER" layoutX="226.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#btnBackValidate" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Back" AnchorPane.rightAnchor="36.0" />
     <Label fx:id="lbl_slogan1" alignment="CENTER" layoutY="61.0" prefHeight="30.0" prefWidth="350.0" text="IF YOU ARE BORED," textFill="#c1c1c1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <font>
             <Font size="20.0" />

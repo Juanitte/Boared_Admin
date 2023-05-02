@@ -99,39 +99,44 @@ public class SignupController {
     }
 
     @FXML
+    public void btnBackValidate() throws IOException {
+        App.setRoot("login");
+    }
+
+    @FXML
     public void btnSignupValidate() throws Exception {
-        AppData.setPreviousScene("signup");
         try (AdminDAO adao = new AdminDAO()) {
-            if(Validator.validateCompanyEmail(txtfld_email.getText()) || Validator.validateUsername(txtfld_email.getText())) {
-                if(Validator.validatePassword(txtfld_password.getText())) {
-                    Admin admin = adao.find(txtfld_email.getText());
-                    if(admin != null) {
-                        if (AppData.getPa().authenticate(txtfld_password.getText(), admin.getPassword())) {
-                            AppData.setAdmin(admin);
-                            if (AppData.getAdmin() != null) {
-                                AppData.getStage().setWidth(800);
-                                AppData.getStage().setHeight(600);
-                                App.setRoot("main");
-                                AppData.getStage().setTitle("BOARED - Main");
+            if(Validator.validateCompanyEmail(txtfld_email.getText())) {
+                if(Validator.validateUsername(txtfld_name.getText())) {
+                    if (Validator.validatePassword(txtfld_password.getText())) {
+                        if(adao.find(txtfld_name.getText()) == null) {
+                            if (adao.find(txtfld_email.getText()) == null) {
+                                adao.save(new Admin(txtfld_email.getText(), txtfld_name.getText(), txtfld_password.getText()));
+                                AppData.setPreviousScene("signup");
+                                AppData.getStage().setWidth(350);
+                                AppData.getStage().setHeight(400);
+                                App.setRoot("login");
+                            } else {
+                                AppData.setErrorMsg("This email is already in use.");
+                                switchToErrorScreen();
                             }
                         }else{
-                            AppData.setErrorMsg("Wrong password.");
+                            AppData.setErrorMsg("This name is already in use.");
                             switchToErrorScreen();
                         }
-                    }else{
-                        AppData.setErrorMsg("Wrong email/username.");
+                    } else {
+                        AppData.setErrorMsg("Password must include a lowercase letter,\nan uppercase letter and a number,\nand have 8 characters at least.");
                         switchToErrorScreen();
                     }
                 }else{
-                    AppData.setErrorMsg("Password must include a lowercase letter,\nan uppercase letter and a number,\nand have 8 characters at least.");
+                    AppData.setErrorMsg("Name must be between 3 and 25 characters long,\nincluding only letters.");
                     switchToErrorScreen();
                 }
             }else{
-                AppData.setErrorMsg("Email must be from our company (@boared.com)\nUsername can include letters and numbers only,\nand must have between 3 and 25 characters.");
+                AppData.setErrorMsg("Email must be from our company (@boared.com).");
                 switchToErrorScreen();
             }
         }
-
     }
 
     public void switchToErrorScreen() throws IOException {

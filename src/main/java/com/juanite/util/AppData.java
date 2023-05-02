@@ -1,7 +1,11 @@
 package com.juanite.util;
 
 import com.juanite.App;
+import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.domain.Admin;
+import com.juanite.model.domain.Game;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 public class AppData {
@@ -13,6 +17,7 @@ public class AppData {
     private static String previousScene;
     private static Stage stage = App.getStage();
     private static PasswordAuthentication pa = new PasswordAuthentication();
+    private static ObservableList<GameDTO> games = FXCollections.observableArrayList();
 
     public static Admin getAdmin() {
         return admin;
@@ -68,5 +73,13 @@ public class AppData {
 
     public static void setPa(PasswordAuthentication pa) {
         AppData.pa = pa;
+    }
+
+    public static ObservableList<GameDTO> getGames() {
+        return games;
+    }
+
+    public static void setGames(ObservableList<GameDTO> games) {
+        AppData.games = games;
     }
 }

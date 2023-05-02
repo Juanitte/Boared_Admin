@@ -58,7 +58,7 @@
         </font>
     </PasswordField>
     <Button fx:id="btn_login" alignment="CENTER" layoutX="117.0" layoutY="312.0" mnemonicParsing="false" onMouseClicked="#btnLoginValidate" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Log in" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="145.0" />
-    <Button fx:id="btn_signup" alignment="CENTER" layoutX="235.0" layoutY="312.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Sign up" AnchorPane.rightAnchor="27.0" />
+    <Button fx:id="btn_signup" alignment="CENTER" layoutX="235.0" layoutY="312.0" mnemonicParsing="false" onMouseClicked="#btnSignupValidate" prefHeight="27.0" prefWidth="88.0" style="-fx-background-color: #c1c1c1; -fx-border-color: #3e3e3e; -fx-background-radius: 7; -fx-border-radius: 7;" text="Sign up" AnchorPane.rightAnchor="27.0" />
     <Label fx:id="lbl_slogan1" alignment="CENTER" layoutY="61.0" prefHeight="30.0" prefWidth="350.0" text="IF YOU ARE BORED," textFill="#c1c1c1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <font>
             <Font size="20.0" />

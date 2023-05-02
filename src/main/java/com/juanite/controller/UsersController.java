@@ -55,6 +55,7 @@ public class UsersController {
     @FXML
     public void initialize(){
         img_resize.setOnMousePressed(this::resizeWindow);
+        btn_profile.setText(AppData.getAdmin().getName());
     }
 
     @FXML

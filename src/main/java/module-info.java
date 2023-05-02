@@ -9,5 +9,6 @@ module com.juanite {
     exports com.juanite.model.domain;
     exports com.juanite.controller;
     exports com.juanite.model.domain.interfaces;
+    exports com.juanite.model.DTO;
     opens com.juanite.model.connections to java.xml.bind;
 }

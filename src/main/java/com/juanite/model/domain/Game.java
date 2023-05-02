@@ -1,10 +1,14 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.domain.interfaces.iGame;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 import java.util.*;
+import java.sql.Date;
 
-public class Game implements iGame {
+public class Game implements iGame, Observable {
 
     private String title;
     private String description;
@@ -132,9 +136,12 @@ public class Game implements iGame {
     }
 
     @Override
-    public Game create(){
+    public Game create() throws Exception {
         if (this.developer != null) {
             this.developer.getGames().add(this);
+        }
+        try (GameDAO gdao = new GameDAO()) {
+            gdao.save(this);
         }
 
         return this;
@@ -193,5 +200,15 @@ public class Game implements iGame {
     @Override
     public boolean removePlayer(User user) {
         return this.players.remove(user);
+    }
+
+    @Override
+    public void addListener(InvalidationListener invalidationListener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener invalidationListener) {
+
     }
 }

@@ -129,7 +129,15 @@ public class LoginController {
                 switchToErrorScreen();
             }
         }
+    }
 
+    @FXML
+    public void btnSignupValidate() throws IOException {
+        AppData.setPreviousScene("login");
+        App.setRoot("signup");
+        AppData.getStage().setTitle("BOARED - Sign up");
+        AppData.getStage().setWidth(350);
+        AppData.getStage().setHeight(400);
     }
 
     public void switchToErrorScreen() throws IOException {
