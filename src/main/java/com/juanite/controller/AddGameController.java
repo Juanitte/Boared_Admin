@@ -1,13 +1,14 @@
 package com.juanite.controller;
 
 import com.juanite.App;
+import com.juanite.model.DAO.DeveloperDAO;
 import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
 import com.juanite.util.AppData;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
+import com.juanite.util.Utils;
+import com.juanite.util.Validator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,8 +16,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class GamesController {
+public class AddGameController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -44,41 +50,49 @@ public class GamesController {
     @FXML
     public Button btn_profile;
     @FXML
-    public TableView<GameDTO> tv_games;
-    @FXML
-    public TextField txtfld_search;
-    @FXML
-    public Button btn_search;
-    @FXML
     public Button btn_logout;
     @FXML
     public Button btn_add;
     @FXML
-    public Button btn_edit;
+    public Label lbl_title;
     @FXML
-    public Button btn_remove;
+    public Label lbl_description;
     @FXML
-    public TableColumn<GameDTO, String> tc_title;
+    public Button btn_cancel;
     @FXML
-    public TableColumn<GameDTO, String> tc_tags;
+    public Label lbl_tags;
     @FXML
-    public TableColumn<GameDTO, Double> tc_price;
+    public Label lbl_releaseDate;
     @FXML
-    public TableColumn<GameDTO, String> tc_developer;
+    public Label lbl_price;
+    @FXML
+    public Label lbl_logo;
+    @FXML
+    public Label lbl_images;
+    @FXML
+    public Label lbl_developer;
+    @FXML
+    public TextField txtfld_title;
+    @FXML
+    public TextArea txtfld_description;
+    @FXML
+    public TextField txtfld_tags;
+    @FXML
+    public TextField txtfld_releaseDate;
+    @FXML
+    public TextField txtfld_price;
+    @FXML
+    public TextField txtfld_logo;
+    @FXML
+    public TextField txtfld_images;
+    @FXML
+    public TextField txtfld_developer;
 
 
     @FXML
-    public void initialize() throws Exception {
+    public void initialize() {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
-        tc_title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        tc_tags.setCellValueFactory(new PropertyValueFactory<>("tags"));
-        tc_price.setCellValueFactory(new PropertyValueFactory<>("price"));
-        tc_developer.setCellValueFactory(new PropertyValueFactory<>("developer"));
-        try (GameDAO gdao = new GameDAO()) {
-            AppData.getGames().addAll(gdao.findAllDTO());
-            tv_games.setItems(AppData.getGames());
-        }
     }
 
     @FXML
@@ -174,15 +188,62 @@ public class GamesController {
     }
 
     @FXML
-    public void btnAddValidate() throws IOException {
+    public void btnAddValidate() throws Exception {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("addgame");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
+        if(!txtfld_title.getText().equals("") && !txtfld_description.getText().equals("") &&
+        !txtfld_tags.getText().equals("") && !txtfld_releaseDate.getText().equals("") &&
+        !txtfld_price.getText().equals("") && !txtfld_images.getText().equals("") &&
+        !txtfld_developer.getText().equals("")){
+            if(validTags(txtfld_tags.getText())){
+                if(Validator.validateDate(txtfld_releaseDate.getText())){
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        if(ddao.find(txtfld_developer.getText()) != null){
+                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(txtfld_releaseDate.getText()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), ddao.find(txtfld_developer.getText()));
+                            game.create();
+                        }
+                    }
+                }else{
+                    AppData.setErrorMsg("Invalid Date.");
+                    switchToErrorScreen();
+                }
+            }else{
+                AppData.setErrorMsg("Invalid Tag/s.");
+                switchToErrorScreen();
+            }
+        }else{
+            AppData.setErrorMsg("All fields required.");
+            switchToErrorScreen();
         }
+    }
+
+    @FXML
+    public void btnCancelValidate() throws IOException {
+        btnGamesValidate();
+    }
+
+    public void switchToErrorScreen() throws IOException {
+        AppData.getStage().setWidth(350);
+        AppData.getStage().setHeight(180);
+        App.setRoot("error");
+    }
+
+    public boolean validTags(String tags){
+        boolean isValid = false;
+        Set<String> strings = Arrays.stream(tags.split(",")).collect(Collectors.toSet());
+        for(String tag : strings){
+            boolean isDone = false;
+            for(Tags t : Tags.values()){
+                if(!isDone) {
+                    if (tag.equals(t.name())) {
+                        isValid = true;
+                        isDone = true;
+                    }
+                }
+            }
+            if(!isDone){
+                return false;
+            }
+        }
+        return isValid;
     }
 }

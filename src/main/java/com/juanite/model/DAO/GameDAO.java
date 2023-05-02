@@ -22,7 +22,7 @@ public class GameDAO implements DAO {
     private final static String FINDBYCODE = "SELECT * FROM game WHERE code=?";
     private final static String FINDBYTITLEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE title=?";
     private final static String FINDBYCODEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE code=?";
-    private final static String INSERT = "INSERT INTO game (title,description,tags,release_date,price,logo,score,images,dev_id) VALUES (?,?,?,?,?)";
+    private final static String INSERT = "INSERT INTO game (title,description,tags,release_date,price,logo,score,images,dev_id) VALUES (?,?,?,?,?,?,?,?,?)";
     private final static String UPDATE = "UPDATE game SET title=?, description=?, tags=?, release_date=?, price=?, logo=?, score=?, images=?, dev_id=? WHERE code=?";
     private final static String DELETE = "DELETE FROM game WHERE code=?";
     private final static String GETCODE = "SELECT code FROM game WHERE title=?";
@@ -80,7 +80,7 @@ public class GameDAO implements DAO {
                         g.setTags(convertTags(res));
                         g.setPrice(res.getDouble("price"));
                         g.setLogo(res.getString("logo"));
-                        g.setDeveloper(ddao.findDTO(res.getInt("dev_id")));
+                        g.setDeveloper(ddao.findDTO(res.getInt("dev_id")).toString());
                         result.add(g);
                     }
                 }
@@ -125,7 +125,7 @@ public class GameDAO implements DAO {
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
                     try (DeveloperDAO ddao = new DeveloperDAO()) {
-                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")));
+                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")).toString());
                     }
                 }
             }
@@ -168,7 +168,7 @@ public class GameDAO implements DAO {
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
                     try (DeveloperDAO ddao = new DeveloperDAO()) {
-                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")));
+                        return new GameDTO(res.getString("title"), res.getString("logo"), convertTags(res), res.getDouble("price"), ddao.findDTO(res.getInt("dev_id")).toString());
                     }
                 }
             }
@@ -190,7 +190,7 @@ public class GameDAO implements DAO {
                 pst.setString(1, ((Game)entity).getTitle());
                 pst.setString(2, ((Game)entity).getDescription());
                 pst.setString(3, convertTags(((Game)entity).getTags()));
-                pst.setDate(4, (java.sql.Date) ((Game)entity).getReleaseDate());
+                pst.setDate(4, ((Game)entity).getReleaseDate());
                 pst.setDouble(5, ((Game)entity).getPrice());
                 pst.setString(6, ((Game)entity).getLogo());
                 pst.setDouble(7, ((Game)entity).getScore());
@@ -205,7 +205,7 @@ public class GameDAO implements DAO {
                 pst.setString(1, ((Game)entity).getTitle());
                 pst.setString(2, ((Game)entity).getDescription());
                 pst.setString(3, convertTags(((Game)entity).getTags()));
-                pst.setDate(4, (java.sql.Date) ((Game)entity).getReleaseDate());
+                pst.setDate(4, ((Game)entity).getReleaseDate());
                 pst.setDouble(5, ((Game)entity).getPrice());
                 pst.setString(6, ((Game)entity).getLogo());
                 pst.setDouble(7, ((Game)entity).getScore());

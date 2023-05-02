@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet src/main/resources/com/juanite/style.css?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.juanite.controller.GamesController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.juanite.controller.AddGameController">
     <ToolBar id="navbar" fx:id="tb_1" onMouseClicked="#tbClickValidate" onMouseDragged="#tbDragValidate" prefHeight="58.0" prefWidth="688.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="112.0">
         <ImageView fx:id="img_icon" fitHeight="32.0" fitWidth="32.0" onMouseClicked="#lblTitleValidate" pickOnBounds="true" preserveRatio="true">
             <Image url="@icon.png" />
@@ -75,36 +75,34 @@
         </cursor>
         <Image url="@resize.png" />
     </ImageView>
-    <TextField fx:id="txtfld_search" layoutX="535.0" layoutY="67.0" prefHeight="25.0" prefWidth="225.0" AnchorPane.rightAnchor="39.39999999999998">
-        <font>
-            <Font size="13.0" />
-        </font>
-    </TextField>
-    <Button fx:id="btn_search" alignment="CENTER" layoutX="464.0" layoutY="67.0" mnemonicParsing="false" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="SEARCH" textFill="#c1c1c1" AnchorPane.rightAnchor="274.4">
-        <cursor>
-            <Cursor fx:constant="HAND" />
-        </cursor></Button>
-    <Button fx:id="btn_add" alignment="CENTER" layoutX="254.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#btnAddValidate" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="ADD" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="254.0">
+    <Button fx:id="btn_add" alignment="CENTER" layoutX="294.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#btnAddValidate" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="ADD" textFill="#c1c1c1" AnchorPane.leftAnchor="267.0">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
     </Button>
-    <Button fx:id="btn_edit" alignment="CENTER" layoutX="361.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="EDIT" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="361.0">
+    <Button fx:id="btn_cancel" alignment="CENTER" layoutX="457.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#btnCancelValidate" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="CANCEL" textFill="#c1c1c1" AnchorPane.rightAnchor="267.0">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
     </Button>
-    <Button fx:id="btn_remove" alignment="CENTER" layoutX="470.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="REMOVE" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="470.0">
-        <cursor>
-            <Cursor fx:constant="HAND" />
-        </cursor>
-    </Button>
-   <TableView fx:id="tv_games" layoutX="39.0" layoutY="112.0" prefHeight="400.0" prefWidth="722.0">
-     <columns>
-       <TableColumn fx:id="tc_title" editable="false" prefWidth="233.0" text="TITLE" />
-         <TableColumn fx:id="tc_tags" editable="false" minWidth="0.0" prefWidth="251.0" text="TAGS" />
-         <TableColumn fx:id="tc_price" editable="false" prefWidth="64.0" text="PRICE" />
-         <TableColumn fx:id="tc_developer" editable="false" prefWidth="173.0" text="DEVELOPER" />
-     </columns>
-   </TableView>
+    <ScrollPane layoutX="67.0" layoutY="107.0" prefHeight="409.0" prefWidth="674.0" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="107.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="407.0" prefWidth="664.0">
+            <Label fx:id="lbl_title" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="32.0" prefWidth="270.0" text="TITLE" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_description" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="62.0" prefHeight="32.0" prefWidth="270.0" text="DESCRIPTION" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_tags" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="204.0" prefHeight="32.0" prefWidth="270.0" text="( SEPARATED BY COMMAS ',' ) TAGS" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_releaseDate" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="237.0" prefHeight="32.0" prefWidth="270.0" text="RELEASE DATE" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_price" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="269.0" prefHeight="32.0" prefWidth="270.0" text="PRICE" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_logo" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="301.0" prefHeight="32.0" prefWidth="270.0" text="LOGO" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_images" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="330.0" prefHeight="32.0" prefWidth="270.0" text="( SEPARATED BY COMMAS ',' ) IMAGES" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="lbl_developer" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="361.0" prefHeight="32.0" prefWidth="270.0" text="DEVELOPER" AnchorPane.leftAnchor="14.0" />
+            <TextField fx:id="txtfld_title" layoutX="298.0" layoutY="18.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+            <TextArea fx:id="txtfld_description" layoutX="298.0" layoutY="54.0" prefHeight="144.0" prefWidth="248.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="118.0" />
+            <TextField fx:id="txtfld_tags" layoutX="298.0" layoutY="208.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+            <TextField fx:id="txtfld_releaseDate" layoutX="298.0" layoutY="241.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+            <TextField fx:id="txtfld_price" layoutX="298.0" layoutY="273.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+            <TextField fx:id="txtfld_logo" layoutX="298.0" layoutY="305.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+            <TextField fx:id="txtfld_images" layoutX="298.0" layoutY="334.0" prefHeight="25.0" prefWidth="249.0" />
+            <TextField fx:id="txtfld_developer" layoutX="298.0" layoutY="365.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="117.0" />
+        </AnchorPane>
+    </ScrollPane>
 </AnchorPane>

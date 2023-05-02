@@ -61,6 +61,10 @@ PasswordField{
     -fx-font-size: 13;
 }
 
-ListView{
+TableView{
     -fx-background-color: #414141;
+}
+
+TableColumn{
+    -fx-background-color: #919191;
 }
