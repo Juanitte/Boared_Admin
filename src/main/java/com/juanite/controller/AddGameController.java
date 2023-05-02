@@ -200,6 +200,7 @@ public class AddGameController {
                         if(ddao.find(txtfld_developer.getText()) != null){
                             Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(txtfld_releaseDate.getText()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), ddao.find(txtfld_developer.getText()));
                             game.create();
+                            btnGamesValidate();
                         }
                     }
                 }else{
