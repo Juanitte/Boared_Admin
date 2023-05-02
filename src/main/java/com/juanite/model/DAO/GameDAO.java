@@ -251,6 +251,31 @@ public class GameDAO implements DAO {
     }
 
     /**
+     * Method that stores/updates a Game at the database.
+     * @param entity , the Game to save.
+     * @param oldTitle , the title to find at the database.
+     * @return the updated Game.
+     */
+    public Game save(Object entity, String oldTitle) throws Exception {
+            try(PreparedStatement pst = this.conn.prepareStatement(UPDATE)){
+                pst.setString(1, ((Game)entity).getTitle());
+                pst.setString(2, ((Game)entity).getDescription());
+                pst.setString(3, convertTags(((Game)entity).getTags()));
+                pst.setDate(4, ((Game)entity).getReleaseDate());
+                pst.setDouble(5, ((Game)entity).getPrice());
+                pst.setString(6, ((Game)entity).getLogo());
+                pst.setDouble(7, ((Game)entity).getScore());
+                pst.setString(8, convertImages(((Game)entity).getImages()));
+                try (DeveloperDAO dDao = new DeveloperDAO()) {
+                    pst.setInt(9, dDao.getId(((Game)entity).getDeveloper()));
+                }
+                pst.setInt(10, getCode(find(oldTitle)));
+                pst.executeUpdate();
+            }
+        return (Game) entity;
+    }
+
+    /**
      * Method that removes a game stored at the database.
      * @param entity , the Game to remove.
      */
@@ -326,7 +351,7 @@ public class GameDAO implements DAO {
      */
     public List<String> convertImages(ResultSet res) throws SQLException {
         List<String> strings = new ArrayList<String>();
-        strings = Arrays.stream(res.getString("tags").split(",")).collect(Collectors.toList());
+        strings = Arrays.stream(res.getString("images").split(",")).collect(Collectors.toList());
         return strings;
     }
 

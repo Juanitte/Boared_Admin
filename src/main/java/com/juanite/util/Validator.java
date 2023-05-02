@@ -56,8 +56,22 @@ public class Validator {
         return name.matches("^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])[a-zA-ZñÑáéíóúÁÉÍÓÚ ]{3,25}$");
     }
 
+    /**
+     * Method that validates a date.
+     * @param date , the string to validate.
+     * @return true if it matches the regex or false if it doesn't.
+     */
     public static boolean validateDate(String date){
         return date.matches("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$");
+    }
+
+    /**
+     * Method that validates a price.
+     * @param price , the string to validate.
+     * @return true if it matches the regex or false if it doesn't.
+     */
+    public static boolean validatePrice(String price){
+        return price.matches("^\\d{1,4}(\\.\\d{2})?$");
     }
 
 }

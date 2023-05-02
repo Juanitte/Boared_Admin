@@ -11,8 +11,8 @@ import java.util.Set;
 public interface iGame {
 
     Game create() throws Exception;
-    Game update(String title, String description, Set<Tags> genres, Date releaseDate, double price, String logo, Developer developer);
-    Game remove();
+    Game update(Game game) throws Exception;
+    void remove() throws Exception;
     boolean addTag(Tags tag);
     boolean removeTag(Tags tag);
     boolean addImage(String image);

@@ -59,6 +59,8 @@ public class MainController {
     public Label lbl_newsContent1;
     @FXML
     public Button btn_logout;
+    @FXML
+    public Button btn_devs;
 
     @FXML
     public void initialize(){
@@ -158,5 +160,10 @@ public class MainController {
         AppData.getStage().setTitle("BOARED - Log in");
         AppData.getStage().setWidth(350);
         AppData.getStage().setHeight(400);
+    }
+
+    @FXML
+    public void btnDevsValidate(){
+
     }
 }

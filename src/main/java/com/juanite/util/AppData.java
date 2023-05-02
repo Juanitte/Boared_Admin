@@ -14,10 +14,12 @@ public class AppData {
     private static double width = 600;
     private static double height = 800;
     private static String errorMsg;
+    private static String confirmationType;
     private static String previousScene;
     private static Stage stage = App.getStage();
     private static PasswordAuthentication pa = new PasswordAuthentication();
     private static ObservableList<GameDTO> games = FXCollections.observableArrayList();
+    private static Game game;
 
     public static Admin getAdmin() {
         return admin;
@@ -81,5 +83,21 @@ public class AppData {
 
     public static void setGames(ObservableList<GameDTO> games) {
         AppData.games = games;
+    }
+
+    public static Game getGame() {
+        return game;
+    }
+
+    public static void setGame(Game game) {
+        AppData.game = game;
+    }
+
+    public static String getConfirmationType() {
+        return confirmationType;
+    }
+
+    public static void setConfirmationType(String confirmationType) {
+        AppData.confirmationType = confirmationType;
     }
 }
