@@ -68,3 +68,24 @@ TableView{
 TableColumn{
     -fx-background-color: #919191;
 }
+
+.table-cell:filled {
+    -fx-background-color: #919191;
+}
+
+.table-cell {
+    -fx-border-style: solid;
+    -fx-border-color: #c1c1c1;
+}
+
+.table-cell:empty {
+    -fx-background-color: #515151;
+}
+
+.table-view:row-selection .table-row-cell:selected .table-cell {
+    -fx-background-color: #919191;
+}
+
+.table-view:cell-selection .table-cell:selected {
+    -fx-background-color: #c1c1c1, -fx-background;
+}
