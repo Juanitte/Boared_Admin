@@ -6,6 +6,8 @@ import com.juanite.model.domain.Developer;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
 import com.juanite.model.domain.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,6 +24,7 @@ public class GameDAO implements DAO {
     private final static String FINDBYCODE = "SELECT * FROM game WHERE code=?";
     private final static String FINDBYTITLEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE title=?";
     private final static String FINDBYCODEDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE code=?";
+    private final static String FINDCONTAININGTITLESDTO = "SELECT title, tags, price, logo, dev_id FROM game WHERE title LIKE ?";
     private final static String INSERT = "INSERT INTO game (title,description,tags,release_date,price,logo,score,images,dev_id) VALUES (?,?,?,?,?,?,?,?,?)";
     private final static String UPDATE = "UPDATE game SET title=?, description=?, tags=?, release_date=?, price=?, logo=?, score=?, images=?, dev_id=? WHERE code=?";
     private final static String DELETE = "DELETE FROM game WHERE code=?";
@@ -72,6 +75,32 @@ public class GameDAO implements DAO {
     public Set<GameDTO> findAllDTO() throws Exception {
         Set<GameDTO> result = new HashSet<GameDTO>();
         try(PreparedStatement pst = this.conn.prepareStatement(FINDALLDTO)) {
+            try (ResultSet res = pst.executeQuery()) {
+                while (res.next()) {
+                    try (DeveloperDAO ddao = new DeveloperDAO()) {
+                        GameDTO g = new GameDTO();
+                        g.setTitle(res.getString("title"));
+                        g.setTags(convertTags(res));
+                        g.setPrice(res.getDouble("price"));
+                        g.setLogo(res.getString("logo"));
+                        g.setDeveloper(ddao.findDTO(res.getInt("dev_id")).toString());
+                        result.add(g);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Method that finds all coincidences in game titles stored at the database.
+     * @param searchInput , a String provided by the user at the searchbar.
+     * @return an ObservableList of GameDTOs containing all games whose title contains the provided String.
+     */
+    public ObservableList<GameDTO> findContainingTitles(String searchInput) throws Exception {
+        ObservableList<GameDTO> result = FXCollections.observableArrayList();
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDCONTAININGTITLESDTO)) {
+            pst.setString(1, "%" + searchInput + "%");
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
                     try (DeveloperDAO ddao = new DeveloperDAO()) {

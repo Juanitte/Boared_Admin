@@ -3,11 +3,7 @@ package com.juanite.controller;
 import com.juanite.App;
 import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.DTO.GameDTO;
-import com.juanite.model.domain.Game;
-import com.juanite.model.domain.Tags;
 import com.juanite.util.AppData;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -185,6 +181,17 @@ public class GamesController {
         }else {
             AppData.getStage().setWidth(AppData.getWidth());
             AppData.getStage().setHeight(AppData.getHeight());
+        }
+    }
+
+    @FXML
+    public void btnSearchValidate() throws Exception {
+        if(!txtfld_search.getText().equals("")) {
+            AppData.setPreviousScene("games");
+            try (GameDAO gdao = new GameDAO()) {
+                AppData.setGames(gdao.findContainingTitles(txtfld_search.getText()));
+                tv_games.setItems(AppData.getGames());
+            }
         }
     }
 }
