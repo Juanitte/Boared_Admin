@@ -2,22 +2,19 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.model.DAO.DeveloperDAO;
-import com.juanite.model.domain.Game;
-import com.juanite.model.domain.Tags;
+import com.juanite.model.DAO.GameDAO;
+import com.juanite.model.DTO.DeveloperDTO;
+import com.juanite.model.DTO.GameDTO;
 import com.juanite.util.AppData;
-import com.juanite.util.Utils;
-import com.juanite.util.Validator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class AddGameController {
+public class DevsController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -45,51 +42,39 @@ public class AddGameController {
     @FXML
     public Button btn_profile;
     @FXML
+    public TableView<DeveloperDTO> tv_devs;
+    @FXML
+    public TextField txtfld_search;
+    @FXML
+    public Button btn_search;
+    @FXML
     public Button btn_logout;
     @FXML
     public Button btn_add;
     @FXML
-    public Label lbl_title;
+    public Button btn_edit;
     @FXML
-    public Label lbl_description;
+    public Button btn_remove;
     @FXML
-    public Button btn_cancel;
-    @FXML
-    public Label lbl_tags;
-    @FXML
-    public Label lbl_releaseDate;
-    @FXML
-    public Label lbl_price;
-    @FXML
-    public Label lbl_logo;
-    @FXML
-    public Label lbl_images;
-    @FXML
-    public Label lbl_developer;
-    @FXML
-    public TextField txtfld_title;
-    @FXML
-    public TextArea txtfld_description;
-    @FXML
-    public TextField txtfld_tags;
-    @FXML
-    public TextField txtfld_releaseDate;
-    @FXML
-    public TextField txtfld_price;
-    @FXML
-    public TextField txtfld_logo;
-    @FXML
-    public TextField txtfld_images;
-    @FXML
-    public TextField txtfld_developer;
+    public TableColumn<DeveloperDTO, String> tc_name;
     @FXML
     public Button btn_devs;
 
 
     @FXML
-    public void initialize() {
+    public void initialize() throws Exception {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
+        tc_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(AppData.getDevelopers().isEmpty()) {
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }else{
+                AppData.getDevelopers().clear();
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }
+            refresh();
+        }
     }
 
     @FXML
@@ -135,7 +120,7 @@ public class AddGameController {
 
     @FXML
     public void lblTitleValidate() throws IOException {
-        AppData.setPreviousScene("games");
+        AppData.setPreviousScene("devs");
         boolean maximize = AppData.getStage().isMaximized();
         App.setRoot("main");
         AppData.getStage().setTitle("BOARED - Main");
@@ -149,7 +134,7 @@ public class AddGameController {
 
     @FXML
     public void btnGamesValidate() throws IOException {
-        AppData.setPreviousScene("games");
+        AppData.setPreviousScene("devs");
         boolean maximize = AppData.getStage().isMaximized();
         App.setRoot("games");
         AppData.getStage().setTitle("BOARED - Games");
@@ -163,7 +148,7 @@ public class AddGameController {
 
     @FXML
     public void btnUsersValidate() throws IOException {
-        AppData.setPreviousScene("games");
+        AppData.setPreviousScene("devs");
         boolean maximize = AppData.getStage().isMaximized();
         App.setRoot("users");
         AppData.getStage().setTitle("BOARED - Users");
@@ -177,7 +162,7 @@ public class AddGameController {
 
     @FXML
     public void btnLogoutValidate() throws IOException {
-        AppData.setPreviousScene("games");
+        AppData.setPreviousScene("devs");
         App.setRoot("login");
         AppData.getStage().setTitle("BOARED - Log in");
         AppData.getStage().setWidth(350);
@@ -185,73 +170,54 @@ public class AddGameController {
     }
 
     @FXML
-    public void btnAddValidate() throws Exception {
-        AppData.setPreviousScene("games");
-        if(!txtfld_title.getText().equals("") && !txtfld_description.getText().equals("") &&
-        !txtfld_tags.getText().equals("") && !txtfld_releaseDate.getText().equals("") &&
-        !txtfld_price.getText().equals("") && !txtfld_images.getText().equals("") &&
-        !txtfld_developer.getText().equals("")){
-            if(validTags(txtfld_tags.getText())){
-                if(Validator.validateDate(txtfld_releaseDate.getText())){
-                    if(Validator.validatePrice(txtfld_price.getText())) {
-                        try (DeveloperDAO ddao = new DeveloperDAO()) {
-                            if (ddao.find(txtfld_developer.getText()) != null) {
-                                Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(txtfld_releaseDate.getText()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
-                                game.create();
-                                btnGamesValidate();
-                            } else {
-                                switchToErrorScreen("Developer not found.");
-                            }
-                        }
-                    }else{
-                        switchToErrorScreen("Invalid Price.");
-                    }
-                }else{
-                    switchToErrorScreen("Invalid Date.");
-                }
-            }else{
-                switchToErrorScreen("Invalid Tag/s.");
-            }
-        }else{
-            switchToErrorScreen("All fields required.");
+    public void btnAddValidate() throws IOException {
+        AppData.setPreviousScene("devs");
+        boolean maximize = AppData.getStage().isMaximized();
+        App.setRoot("adddev");
+        if(maximize){
+            AppData.getStage().setMaximized(true);
+        }else {
+            AppData.getStage().setWidth(AppData.getWidth());
+            AppData.getStage().setHeight(AppData.getHeight());
         }
     }
 
     @FXML
-    public void btnCancelValidate() throws IOException {
-        btnGamesValidate();
-    }
-
-    public void switchToErrorScreen(String errorMsg) throws IOException {
-        AppData.setErrorMsg(errorMsg);
-        AppData.getStage().setWidth(350);
-        AppData.getStage().setHeight(180);
-        App.setRoot("error");
-    }
-
-    public boolean validTags(String tags){
-        boolean isValid = false;
-        Set<String> strings = Arrays.stream(tags.split(",")).collect(Collectors.toSet());
-        for(String tag : strings){
-            boolean isDone = false;
-            for(Tags t : Tags.values()){
-                if(!isDone) {
-                    if (tag.equals(t.name())) {
-                        isValid = true;
-                        isDone = true;
-                    }
-                }
-            }
-            if(!isDone){
-                return false;
+    public void btnSearchValidate() throws Exception {
+        if(!txtfld_search.getText().equals("")) {
+            AppData.setPreviousScene("devs");
+            try (DeveloperDAO ddao = new DeveloperDAO()) {
+                AppData.setDevelopers(ddao.findContainingNames(txtfld_search.getText()));
+                tv_devs.setItems(AppData.getDevelopers());
             }
         }
-        return isValid;
+    }
+
+    @FXML
+    public void btnEditValidate() throws Exception {
+        if(tv_devs.getSelectionModel().getSelectedItem() != null) {
+            AppData.setPreviousScene("devs");
+            boolean maximize = AppData.getStage().isMaximized();
+            try (DeveloperDAO ddao = new DeveloperDAO()) {
+                AppData.setDeveloper(ddao.find(tv_devs.getSelectionModel().getSelectedItem().getName()));
+                App.setRoot("editdev");
+                if (maximize) {
+                    AppData.getStage().setMaximized(true);
+                } else {
+                    AppData.getStage().setWidth(AppData.getWidth());
+                    AppData.getStage().setHeight(AppData.getHeight());
+                }
+            }
+        }
+    }
+
+    public void refresh(){
+        tv_devs.setItems(AppData.getDevelopers());
     }
 
     @FXML
     public void btnDevsValidate() throws IOException {
-        AppData.setPreviousScene("games");
+        AppData.setPreviousScene("devs");
         boolean maximize = AppData.getStage().isMaximized();
         App.setRoot("devs");
         AppData.getStage().setTitle("BOARED - Devs");
@@ -261,5 +227,28 @@ public class AddGameController {
             AppData.getStage().setWidth(AppData.getWidth());
             AppData.getStage().setHeight(AppData.getHeight());
         }
+    }
+
+    @FXML
+    public void btnRemoveValidate() throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            AppData.setDeveloper(ddao.find(tv_devs.getSelectionModel().getSelectedItem().getName()));
+            if(!ddao.hasGames(AppData.getDeveloper())) {
+                AppData.setPreviousScene("devs");
+                AppData.setConfirmationType("delete");
+                AppData.getStage().setWidth(350);
+                AppData.getStage().setHeight(180);
+                App.setRoot("confirmation");
+            }else{
+                switchToErrorScreen("Developer must have no games\nbefore removing.");
+            }
+        }
+    }
+
+    public void switchToErrorScreen(String errorMsg) throws IOException {
+        AppData.setErrorMsg(errorMsg);
+        AppData.getStage().setWidth(350);
+        AppData.getStage().setHeight(180);
+        App.setRoot("error");
     }
 }
