@@ -25,8 +25,8 @@ public class Game implements iGame, Observable {
         this("", "", new HashSet<Tags>(), null, 0, "", 0, new ArrayList<String>(), null, new HashSet<User>());
     }
 
-    public Game(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, Developer developer) {
-        this(title, description, tags, releaseDate, price, logo, 0, new ArrayList<String>(), developer, new HashSet<User>());
+    public Game(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, List<String> images, Developer developer) {
+        this(title, description, tags, releaseDate, price, logo, 0, images, developer, new HashSet<User>());
     }
 
     public Game(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, double score, List<String> images, Developer developer, Set<User> players) {
@@ -148,25 +148,23 @@ public class Game implements iGame, Observable {
     }
 
     @Override
-    public Game update(String title, String description, Set<Tags> tags, Date releaseDate, double price, String logo, Developer developer) {
-        this.title = title;
-        this.description = description;
-        this.tags = tags;
-        this.releaseDate = releaseDate;
-        this.price = price;
-        this.logo = logo;
-        this.developer = developer;
+    public Game update(Game game) throws Exception {
+        try (GameDAO gdao = new GameDAO()) {
+            if(gdao.find(game.getTitle()) != null){
+                gdao.save(game);
+            }else{
+                gdao.save(game, this.getTitle());
+            }
+        }
 
-        return this;
+        return game;
     }
 
     @Override
-    public Game remove() {
-        if(this.developer != null){
-            this.developer.getGames().remove(this);
+    public void remove() throws Exception {
+        try (GameDAO gdao = new GameDAO()) {
+            gdao.delete(this);
         }
-
-        return this;
     }
 
     @Override

@@ -61,6 +61,8 @@ public class GamesController {
     public TableColumn<GameDTO, Double> tc_price;
     @FXML
     public TableColumn<GameDTO, String> tc_developer;
+    @FXML
+    public Button btn_devs;
 
 
     @FXML
@@ -74,8 +76,11 @@ public class GamesController {
         try (GameDAO gdao = new GameDAO()) {
             if(AppData.getGames().isEmpty()) {
                 AppData.getGames().addAll(gdao.findAllDTO());
+            }else{
+                AppData.getGames().clear();
+                AppData.getGames().addAll(gdao.findAllDTO());
             }
-            tv_games.setItems(AppData.getGames());
+            refresh();
         }
     }
 
@@ -192,6 +197,45 @@ public class GamesController {
                 AppData.setGames(gdao.findContainingTitles(txtfld_search.getText()));
                 tv_games.setItems(AppData.getGames());
             }
+        }
+    }
+
+    @FXML
+    public void btnEditValidate() throws Exception {
+        if(tv_games.getSelectionModel().getSelectedItem() != null) {
+            AppData.setPreviousScene("games");
+            boolean maximize = AppData.getStage().isMaximized();
+            try (GameDAO gdao = new GameDAO()) {
+                AppData.setGame(gdao.find(tv_games.getSelectionModel().getSelectedItem().getTitle()));
+                App.setRoot("editgame");
+                if (maximize) {
+                    AppData.getStage().setMaximized(true);
+                } else {
+                    AppData.getStage().setWidth(AppData.getWidth());
+                    AppData.getStage().setHeight(AppData.getHeight());
+                }
+            }
+        }
+    }
+
+    public void refresh(){
+        tv_games.setItems(AppData.getGames());
+    }
+
+    @FXML
+    public void btnDevsValidate(){
+
+    }
+
+    @FXML
+    public void btnRemoveValidate() throws Exception {
+        try (GameDAO gdao = new GameDAO()) {
+            AppData.setGame(gdao.find(tv_games.getSelectionModel().getSelectedItem().getTitle()));
+            AppData.setPreviousScene("games");
+            AppData.setConfirmationType("delete");
+            AppData.getStage().setWidth(350);
+            AppData.getStage().setHeight(180);
+            App.setRoot("confirmation");
         }
     }
 }

@@ -1,14 +1,14 @@
 package com.juanite.util;
 
 import com.juanite.model.domain.Tags;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -27,6 +27,10 @@ public class Utils {
          return Double.parseDouble(number);
     }
 
+    public static String convertDouble(double number) {
+        return Double.toString(number);
+    }
+
 
 
     /**
@@ -41,5 +45,42 @@ public class Utils {
             tags.add(Tags.valueOf(tag));
         }
         return tags;
+    }
+
+    /**
+     * Method that makes the conversion from a Set to a String, separating it by commas.
+     * @param tags , the Set of Tags to work with.
+     * @return a String built using the Set of Tags provided.
+     */
+    public static String convertTags(Set<Tags> tags) {
+        StringBuilder result = new StringBuilder();
+        for(Tags tag : tags){
+            result.append(tag.name()).append(",");
+        }
+        return result.toString();
+    }
+
+    /**
+     * Method that makes the conversion from a String to a Set, separating it by the commas.
+     * @param string , the String to work with.
+     * @return a List of String built using the string provided.
+     */
+    public static List<String> convertImages(String string) throws SQLException {
+        List<String> strings = new ArrayList<String>();
+        strings = Arrays.stream(string.split(",")).collect(Collectors.toList());
+        return strings;
+    }
+
+    /**
+     * Method that makes the conversion from a List to a String, separating it by commas.
+     * @param images , the Set of String to work with.
+     * @return a String built using the List of String provided.
+     */
+    public static String convertImages(List<String> images) {
+        StringBuilder result = new StringBuilder();
+        for(String image : images){
+            result.append(image).append(",");
+        }
+        return result.toString();
     }
 }
