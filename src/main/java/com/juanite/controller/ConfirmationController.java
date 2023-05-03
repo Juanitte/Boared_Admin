@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,13 +55,24 @@ public class ConfirmationController {
         if(AppData.getConfirmationType().equals("delete")){
             if(AppData.getPreviousScene().equals("games")){
                 AppData.getGame().remove();
-                boolean maximize = AppData.getStage().isMaximized();
-                App.setRoot(AppData.getPreviousScene());
-                if (maximize) {
-                    AppData.getStage().setMaximized(true);
+                if(AppData.getGame() == null) {
+                    Utils.switchToPreviousScreen();
+                }else{
+                    Utils.switchToErrorScreen("Deletion failed.");
+                }
+            }else if(AppData.getPreviousScene().equals("devs")) {
+                AppData.getDeveloper().remove();
+                if (AppData.getDeveloper() == null) {
+                    Utils.switchToPreviousScreen();
                 } else {
-                    AppData.getStage().setWidth(AppData.getWidth());
-                    AppData.getStage().setHeight(AppData.getHeight());
+                    Utils.switchToErrorScreen("Deletion failed.");
+                }
+            }else if(AppData.getPreviousScene().equals("users")) {
+                AppData.getUser().remove();
+                if(AppData.getUser() == null) {
+                    Utils.switchToPreviousScreen();
+                } else {
+                    Utils.switchToErrorScreen("Deletion failed.");
                 }
             }
         }
@@ -68,13 +80,6 @@ public class ConfirmationController {
 
     @FXML
     public void btnNoValidate() throws IOException {
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot(AppData.getPreviousScene());
-        if (maximize) {
-            AppData.getStage().setMaximized(true);
-        } else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToPreviousScreen();
     }
 }

@@ -1,7 +1,11 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.DAO.DeveloperDAO;
+import com.juanite.model.DAO.UserDAO;
 import com.juanite.model.domain.interfaces.iUser;
+import com.juanite.util.AppData;
 
+import java.sql.Date;
 import java.util.*;
 
 public class User extends Entity implements iUser {
@@ -13,6 +17,7 @@ public class User extends Entity implements iUser {
     private String address;
     private String phoneNumber;
     private String avatar;
+    private boolean banned;
     private Set<User> friends;
     private Map<User,Boolean> pendingFriends;
     //  User    = The other user involved in the request.
@@ -29,7 +34,8 @@ public class User extends Entity implements iUser {
         this.town = "";
         this.address = "";
         this.phoneNumber = "";
-        this.avatar = "basic_avatar.png";
+        this.avatar = "basic_avatar";
+        this.banned = false;
         this.games = new HashSet<Game>();
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
@@ -45,12 +51,13 @@ public class User extends Entity implements iUser {
         this.name = name;
         this.country = country;
         this.birthDate = birthDate;
-        this.avatar = "basic_avatar.png";
+        this.avatar = "basic_avatar";
+        this.banned = false;
         this.games = new HashSet<Game>();
         this.friends = new HashSet<User>();
         this.pendingFriends = new HashMap<User,Boolean>();
     }
-    public User(String username, String password, String email, String name, String surname, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar, Set<Game> games, Set<User> friends, Map<User,Boolean> pendingFriends) {
+    public User(String username, String password, String email, String name, String surname, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar, boolean banned, Set<Game> games, Set<User> friends, Map<User,Boolean> pendingFriends) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -61,6 +68,7 @@ public class User extends Entity implements iUser {
         this.friends = friends;
         this.name = name;
         this.avatar = avatar;
+        this.banned = banned;
         this.games = games;
         this.country = country;
         this.birthDate = birthDate;
@@ -187,6 +195,14 @@ public class User extends Entity implements iUser {
         this.pendingFriends = pendingFriends;
     }
 
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -202,31 +218,31 @@ public class User extends Entity implements iUser {
 
 
     @Override
-    public User create() {
-
-
+    public User create() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            udao.save(this);
+        }
         return this;
     }
 
     @Override
-    public User update(String username, String password, String name, String surname, String email, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.country = country;
-        this.town = town;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.avatar = avatar;
-        return this;
+    public User update(User user) throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            if(udao.find(user.getUsername()) != null){
+                udao.save(user);
+            }else{
+                udao.save(user, this.getUsername());
+            }
+        }
+        return user;
     }
 
     @Override
-    public User remove() {
-        return this;
+    public void remove() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+                udao.delete(this);
+                AppData.setUser(null);
+        }
     }
 
     @Override

@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-public class MainController {
+public class ReviewController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -41,34 +41,19 @@ public class MainController {
     @FXML
     public Button btn_profile;
     @FXML
-    public ImageView img_iconBigInv;
-    @FXML
-    public ImageView img_iconBig;
-    @FXML
-    public Label lbl_slogan1;
-    @FXML
-    public Label lbl_slogan2;
-    @FXML
-    public Label lbl_slogan3;
-    @FXML
-    public Separator separator_1;
-    @FXML
-    public Label lbl_news;
-    @FXML
-    public Separator separator_2;
-    @FXML
-    public Label lbl_newsContent1;
-    @FXML
     public Button btn_logout;
     @FXML
     public Button btn_devs;
+    @FXML
+    public Label lbl_review;
+    @FXML
+    public Button btn_back;
 
     @FXML
     public void initialize(){
         img_resize.setOnMousePressed(this::resizeWindow);
-        AppData.setWidth(App.getStage().getWidth());
-        AppData.setHeight(App.getStage().getHeight());
         btn_profile.setText(AppData.getAdmin().getName());
+        lbl_review.setText(AppData.getReview().getReview());
     }
 
     @FXML
@@ -114,28 +99,28 @@ public class MainController {
 
     @FXML
     public void lblTitleValidate() throws IOException {
-        AppData.setPreviousScene("main");
+        AppData.setPreviousScene("reviews");
         AppData.getStage().setTitle("BOARED - Main");
         Utils.switchToScreen("main");
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
-        AppData.setPreviousScene("main");
+        AppData.setPreviousScene("reviews");
         AppData.getStage().setTitle("BOARED - Games");
         Utils.switchToScreen("games");
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
-        AppData.setPreviousScene("main");
+        AppData.setPreviousScene("reviews");
         AppData.getStage().setTitle("BOARED - Users");
         Utils.switchToScreen("users");
     }
 
     @FXML
     public void btnLogoutValidate() throws IOException {
-        AppData.setPreviousScene("main");
+        AppData.setPreviousScene("reviews");
         App.setRoot("login");
         AppData.getStage().setTitle("BOARED - Log in");
         AppData.getStage().setWidth(350);
@@ -144,8 +129,14 @@ public class MainController {
 
     @FXML
     public void btnDevsValidate() throws IOException {
-        AppData.setPreviousScene("main");
+        AppData.setPreviousScene("reviews");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnBackValidate() throws IOException {
+        AppData.setPreviousScene("reviews");
+        Utils.switchToScreen("reviews");
     }
 }

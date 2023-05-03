@@ -2,9 +2,12 @@ package com.juanite.model.domain;
 
 import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.domain.interfaces.iGame;
+import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.sql.Date;
 
@@ -164,6 +167,7 @@ public class Game implements iGame, Observable {
     public void remove() throws Exception {
         try (GameDAO gdao = new GameDAO()) {
             gdao.delete(this);
+            AppData.setGame(null);
         }
     }
 

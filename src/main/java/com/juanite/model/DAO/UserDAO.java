@@ -1,9 +1,14 @@
 package com.juanite.model.DAO;
 
+import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.DTO.UserDTO;
 import com.juanite.model.connections.ConnectionMySQL;
 import com.juanite.model.domain.Countries;
 import com.juanite.model.domain.User;
+import com.juanite.util.AppData;
+import com.juanite.util.PasswordAuthentication;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,15 +20,17 @@ import java.util.Set;
 public class UserDAO implements DAO {
 
     private final static String FINDALL = "SELECT * FROM user";
-    private final static String FINDALLDTO = "SELECT username, country, avatar FROM user";
+    private final static String FINDALLDTO = "SELECT username, country, avatar, banned FROM user";
     private final static String FINDBYUSERNAME = "SELECT * FROM user WHERE username=?";
     private final static String FINDBYEMAIL = "SELECT * FROM user WHERE email=?";
     private final static String FINDBYID = "SELECT * FROM user WHERE id=?";
-    private final static String FINDBYUSERNAMEDTO = "SELECT username, country, avatar FROM user WHERE username=?";
-    private final static String FINDBYEMAILDTO = "SELECT username, country, avatar FROM user WHERE email=?";
-    private final static String FINDBYIDDTO = "SELECT username, country, avatar FROM user WHERE id=?";
-    private final static String INSERT = "INSERT INTO user (username,password,name,surname,email,country,town,address,birth_date,phone_number,avatar) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-    private final static String UPDATE = "UPDATE user SET username=?, password=?, name=?, surname=?, email=?, country=?, town=?, address=?, birth_date=?, phone_number=?, avatar=? WHERE id=?";
+    private final static String FINDBYUSERNAMEDTO = "SELECT username, country, avatar, banned FROM user WHERE username=?";
+    private final static String FINDBYEMAILDTO = "SELECT username, country, avatar, banned FROM user WHERE email=?";
+    private final static String FINDBYIDDTO = "SELECT username, country, avatar, banned FROM user WHERE id=?";
+    private final static String FINDCONTAININGNAMESDTO = "SELECT username, country, avatar, banned FROM user WHERE username LIKE ?";
+    private final static String INSERT = "INSERT INTO user (username,password,name,surname,email,country,town,address,birth_date,phone_number,avatar, banned) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    private final static String UPDATE = "UPDATE user SET username=?, password=?, name=?, surname=?, email=?, country=?, town=?, address=?, birth_date=?, phone_number=?, avatar=?, banned=? WHERE id=?";
+    private final static String UPDATEBANSTATUS = "UPDATE user SET banned=? WHERE id=?";
     private final static String DELETE = "DELETE FROM user WHERE id=?";
     private final static String GETID = "SELECT id FROM user WHERE email=?";
 
@@ -58,6 +65,7 @@ public class UserDAO implements DAO {
                     u.setBirthDate(res.getDate("birth_date"));
                     u.setPhoneNumber(res.getString("phone_number"));
                     u.setAvatar(res.getString("avatar"));
+                    u.setBanned(res.getBoolean("banned"));
                     result.add(u);
                 }
             }
@@ -75,7 +83,30 @@ public class UserDAO implements DAO {
         try(PreparedStatement pst = this.conn.prepareStatement(FINDALLDTO)) {
             try (ResultSet res = pst.executeQuery()) {
                 while (res.next()) {
-                    UserDTO u = new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"));
+                    UserDTO u = new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"), res.getBoolean("banned"));
+                    result.add(u);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Method that finds all coincidences in game titles stored at the database.
+     * @param searchInput , a String provided by the user at the searchbar.
+     * @return an ObservableList of GameDTOs containing all games whose title contains the provided String.
+     */
+    public ObservableList<UserDTO> findContainingNames(String searchInput) throws Exception {
+        ObservableList<UserDTO> result = FXCollections.observableArrayList();
+        try(PreparedStatement pst = this.conn.prepareStatement(FINDCONTAININGNAMESDTO)) {
+            pst.setString(1, "%" + searchInput + "%");
+            try (ResultSet res = pst.executeQuery()) {
+                while (res.next()) {
+                    UserDTO u = new UserDTO();
+                    u.setUsername(res.getString("username"));
+                    u.setCountry(Countries.valueOf(res.getString("country")));
+                    u.setAvatar(res.getString("avatar"));
+                    u.setBanned(res.getBoolean("banned"));
                     result.add(u);
                 }
             }
@@ -107,6 +138,7 @@ public class UserDAO implements DAO {
                         result.setBirthDate(res.getDate("birth_date"));
                         result.setPhoneNumber(res.getString("phone_number"));
                         result.setAvatar(res.getString("avatar"));
+                        result.setBanned(res.getBoolean("banned"));
                         return result;
                     }
                 }
@@ -127,6 +159,7 @@ public class UserDAO implements DAO {
                         result.setBirthDate(res.getDate("birth_date"));
                         result.setPhoneNumber(res.getString("phone_number"));
                         result.setAvatar(res.getString("avatar"));
+                        result.setBanned(res.getBoolean("banned"));
                         return result;
                     }
                 }
@@ -147,7 +180,7 @@ public class UserDAO implements DAO {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"));
+                        return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"), res.getBoolean("banned"));
                     }
                 }
             }
@@ -156,7 +189,7 @@ public class UserDAO implements DAO {
                 pst.setString(1, param);
                 try (ResultSet res = pst.executeQuery()) {
                     if (res.next()) {
-                        return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"));
+                        return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"), res.getBoolean("banned"));
                     }
                 }
             }
@@ -187,6 +220,7 @@ public class UserDAO implements DAO {
                     result.setBirthDate(res.getDate("birth_date"));
                     result.setPhoneNumber(res.getString("phone_number"));
                     result.setAvatar(res.getString("avatar"));
+                    result.setBanned(res.getBoolean("banned"));
                     return result;
                 }
             }
@@ -205,7 +239,7 @@ public class UserDAO implements DAO {
             pst.setInt(1, id);
             try (ResultSet res = pst.executeQuery()) {
                 if (res.next()) {
-                    return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"));
+                    return new UserDTO(res.getString("username"), Countries.valueOf(res.getString("country")), res.getString("avatar"), res.getBoolean("banned"));
                 }
             }
         }
@@ -221,38 +255,66 @@ public class UserDAO implements DAO {
     public User save(Object entity) throws SQLException {
         User u = find(((User)entity).getUsername());
 
-        if(u.getUsername().equals("")){
+        if(u == null){
             try(PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
                 pst.setString(1, ((User)entity).getUsername());
-                pst.setString(2, ((User)entity).getPassword());
+                pst.setString(2, AppData.getPa().hash(((User)entity).getPassword()));
                 pst.setString(3, ((User)entity).getName());
                 pst.setString(4, ((User)entity).getSurname());
                 pst.setString(5, ((User)entity).getEmail());
                 pst.setString(6, ((User)entity).getCountry().name());
                 pst.setString(7, ((User)entity).getTown());
                 pst.setString(8, ((User)entity).getAddress());
-                pst.setDate(9, (java.sql.Date)(((User)entity).getBirthDate()));
+                pst.setDate(9, ((User)entity).getBirthDate());
                 pst.setString(10, ((User)entity).getPhoneNumber());
                 pst.setString(11, ((User)entity).getAvatar());
+                pst.setBoolean(12, ((User) entity).isBanned());
                 pst.executeUpdate();
             }
         }else{
             try(PreparedStatement pst = this.conn.prepareStatement(UPDATE)){
                 pst.setString(1, ((User)entity).getUsername());
-                pst.setString(2, ((User)entity).getPassword());
+                pst.setString(2, AppData.getPa().hash(((User)entity).getPassword()));
                 pst.setString(3, ((User)entity).getName());
                 pst.setString(4, ((User)entity).getSurname());
                 pst.setString(5, ((User)entity).getEmail());
                 pst.setString(6, ((User)entity).getCountry().name());
                 pst.setString(7, ((User)entity).getTown());
                 pst.setString(8, ((User)entity).getAddress());
-                pst.setDate(9, (java.sql.Date)(((User)entity).getBirthDate()));
+                pst.setDate(9, ((User)entity).getBirthDate());
                 pst.setString(10, ((User)entity).getPhoneNumber());
                 pst.setString(11, ((User)entity).getAvatar());
-                pst.setInt(12, getId((User)entity));
+                pst.setBoolean(12, ((User) entity).isBanned());
+                pst.setInt(13, getId((User)entity));
                 pst.executeUpdate();
             }
         }
+
+        return (User)entity;
+    }
+
+    /**
+     * Method that stores/updates a User at the database.
+     * @param entity , the User to save.
+     * @return the stored/updated User.
+     */
+    public User save(Object entity, String oldUsername) throws SQLException {
+            try(PreparedStatement pst = this.conn.prepareStatement(UPDATE)){
+                pst.setString(1, ((User)entity).getUsername());
+                pst.setString(2, AppData.getPa().hash(((User)entity).getPassword()));
+                pst.setString(3, ((User)entity).getName());
+                pst.setString(4, ((User)entity).getSurname());
+                pst.setString(5, ((User)entity).getEmail());
+                pst.setString(6, ((User)entity).getCountry().name());
+                pst.setString(7, ((User)entity).getTown());
+                pst.setString(8, ((User)entity).getAddress());
+                pst.setDate(9, ((User)entity).getBirthDate());
+                pst.setString(10, ((User)entity).getPhoneNumber());
+                pst.setString(11, ((User)entity).getAvatar());
+                pst.setBoolean(12, ((User) entity).isBanned());
+                pst.setInt(13, getId(find(oldUsername)));
+                pst.executeUpdate();
+            }
 
         return (User)entity;
     }
@@ -282,7 +344,7 @@ public class UserDAO implements DAO {
         if(user != null){
             if(!user.getUsername().equals("")){
                 try(PreparedStatement pst = this.conn.prepareStatement(GETID)){
-                    pst.setString(1, user.getUsername());
+                    pst.setString(1, user.getEmail());
                     try(ResultSet res = pst.executeQuery()){
                         if(res.next()){
                             return res.getInt("id");
@@ -292,6 +354,16 @@ public class UserDAO implements DAO {
             }
         }
         return -1;
+    }
+
+    public void updateBanStatus(User user) throws SQLException {
+        if(user != null){
+            try (PreparedStatement pst = this.conn.prepareStatement(UPDATEBANSTATUS)) {
+                pst.setBoolean(1, !user.isBanned());
+                pst.setInt(2, getId(find(user.getUsername())));
+                pst.executeUpdate();
+            }
+        }
     }
 
     @Override

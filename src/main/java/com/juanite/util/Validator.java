@@ -19,7 +19,7 @@ public class Validator {
      * @return true if it matches the regex or false if it doesn't.
      */
     public static boolean validatePassword(String password) {
-        return password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{8,50}$");
+        return password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{8,25}$");
     }
 
     /**
@@ -74,4 +74,12 @@ public class Validator {
         return price.matches("^\\d{1,4}(\\.\\d{2})?$");
     }
 
+    /**
+     * Method that validates a phone number.
+     * @param phoneNumber , the string to validate.
+     * @return true if it matches the regex or false if it doesn't.
+     */
+    public static boolean validatePhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("^\\+(?:[0-9] ?){6,14}[0-9]$");
+    }
 }

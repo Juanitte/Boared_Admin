@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -91,43 +92,22 @@ public class ProfileController {
     @FXML
     public void lblTitleValidate() throws IOException {
         AppData.setPreviousScene("profile");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("main");
         AppData.getStage().setTitle("BOARED - Main");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("main");
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
         AppData.setPreviousScene("profile");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("games");
         AppData.getStage().setTitle("BOARED - Games");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("games");
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
         AppData.setPreviousScene("profile");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("users");
         AppData.getStage().setTitle("BOARED - Users");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("users");
     }
 
     @FXML

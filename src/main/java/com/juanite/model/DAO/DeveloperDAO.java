@@ -1,11 +1,9 @@
 package com.juanite.model.DAO;
 
 import com.juanite.model.DTO.DeveloperDTO;
-import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.connections.ConnectionMySQL;
 import com.juanite.model.domain.Countries;
 import com.juanite.model.domain.Developer;
-import com.juanite.model.domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,7 +24,7 @@ public class DeveloperDAO implements DAO {
     private final static String UPDATE = "UPDATE developer SET name=?, description=?, country=?, birth_date=?, logo=? WHERE id=?";
     private final static String DELETE = "DELETE FROM developer WHERE id=?";
     private final static String GETID = "SELECT id FROM developer WHERE name=?";
-    private final static String GETDEVGAMES = "SELECT code FROM games WHERE dev_id=?";
+    private final static String GETDEVGAMES = "SELECT code FROM game WHERE dev_id=?";
 
     private Connection conn;
 
@@ -184,7 +182,7 @@ public class DeveloperDAO implements DAO {
                 pst.setString(1, ((Developer)entity).getName());
                 pst.setString(2, ((Developer)entity).getDescription());
                 pst.setString(3, ((Developer)entity).getCountry().name());
-                pst.setDate(4, (Date) ((Developer)entity).getBirthDate());
+                pst.setDate(4, ((Developer)entity).getBirthDate());
                 pst.setString(5, ((Developer)entity).getLogo());
                 pst.executeUpdate();
             }
@@ -193,11 +191,30 @@ public class DeveloperDAO implements DAO {
                 pst.setString(1, ((Developer)entity).getName());
                 pst.setString(2, ((Developer)entity).getDescription());
                 pst.setString(3, ((Developer)entity).getCountry().name());
-                pst.setDate(4, (Date) ((Developer)entity).getBirthDate());
+                pst.setDate(4, ((Developer)entity).getBirthDate());
                 pst.setString(5, ((Developer)entity).getLogo());
                 pst.setInt(6, getId((Developer) entity));
                 pst.executeUpdate();
             }
+        }
+        return (Developer) entity;
+    }
+
+    /**
+     * Method that stores/updates a Developer at the database.
+     * @param entity , the Developer to save.
+     * @param oldName , the Developer's old name.
+     * @return the updated Developer.
+     */
+    public Developer save(Object entity, String oldName) throws SQLException {
+        try(PreparedStatement pst = this.conn.prepareStatement(UPDATE)){
+            pst.setString(1, ((Developer)entity).getName());
+            pst.setString(2, ((Developer)entity).getDescription());
+            pst.setString(3, ((Developer)entity).getCountry().name());
+            pst.setDate(4, ((Developer)entity).getBirthDate());
+            pst.setString(5, ((Developer)entity).getLogo());
+            pst.setInt(6, getId(find(oldName)));
+            pst.executeUpdate();
         }
         return (Developer) entity;
     }

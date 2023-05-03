@@ -7,14 +7,16 @@ public class UserDTO {
     private String username;
     private Countries country;
     private String avatar;
+    private boolean banned;
 
     public UserDTO(){
-        this("", Countries.NONE, "");
+        this("", Countries.NONE, "", false);
     }
-    public UserDTO(String username, Countries country, String avatar) {
+    public UserDTO(String username, Countries country, String avatar, boolean banned) {
         this.username = username;
         this.country = country;
         this.avatar = avatar;
+        this.banned = banned;
     }
 
     public String getUsername() {
@@ -39,5 +41,13 @@ public class UserDTO {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 }

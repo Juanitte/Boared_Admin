@@ -5,17 +5,26 @@ import com.juanite.model.DAO.DeveloperDAO;
 import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.DTO.GameDTO;
+import com.juanite.model.domain.Countries;
+import com.juanite.model.domain.Developer;
+import com.juanite.model.domain.Game;
+import com.juanite.model.domain.Tags;
 import com.juanite.util.AppData;
 import com.juanite.util.Utils;
+import com.juanite.util.Validator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class DevsController {
+public class EditDevController {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -43,39 +52,45 @@ public class DevsController {
     @FXML
     public Button btn_profile;
     @FXML
-    public TableView<DeveloperDTO> tv_devs;
-    @FXML
-    public TextField txtfld_search;
-    @FXML
-    public Button btn_search;
-    @FXML
     public Button btn_logout;
     @FXML
-    public Button btn_add;
+    public Button btn_submit;
     @FXML
-    public Button btn_edit;
+    public Label lbl_description;
     @FXML
-    public Button btn_remove;
+    public Button btn_cancel;
     @FXML
-    public TableColumn<DeveloperDTO, String> tc_name;
+    public Label lbl_logo;
+    @FXML
+    public TextArea txtfld_description;
+    @FXML
+    public TextField txtfld_logo;
     @FXML
     public Button btn_devs;
+    @FXML
+    public Label lbl_name;
+    @FXML
+    public TextField txtfld_name;
+    @FXML
+    public Label lbl_birthDate;
+    @FXML
+    public TextField txtfld_birthDate;
+    @FXML
+    public Label lbl_country;
+    @FXML
+    public ChoiceBox<Countries> cb_country;
 
 
     @FXML
-    public void initialize() throws Exception {
+    public void initialize() {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
-        tc_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-        try (DeveloperDAO ddao = new DeveloperDAO()) {
-            if(AppData.getDevelopers().isEmpty()) {
-                AppData.getDevelopers().addAll(ddao.findAllDTO());
-            }else{
-                AppData.getDevelopers().clear();
-                AppData.getDevelopers().addAll(ddao.findAllDTO());
-            }
-            refresh();
-        }
+        cb_country.getItems().addAll(Countries.values());
+        txtfld_name.setText(AppData.getDeveloper().getName());
+        txtfld_description.setText(AppData.getDeveloper().getDescription());
+        txtfld_birthDate.setText(Utils.convertDate(AppData.getDeveloper().getBirthDate()));
+        txtfld_logo.setText(AppData.getDeveloper().getLogo());
+        cb_country.setValue(AppData.getDeveloper().getCountry());
     }
 
     @FXML
@@ -150,60 +165,51 @@ public class DevsController {
     }
 
     @FXML
-    public void btnAddValidate() throws IOException {
+    public void btnSubmitValidate() throws Exception {
         AppData.setPreviousScene("devs");
-        Utils.switchToScreen("adddev");
+                if(Validator.validateDate(txtfld_birthDate.getText())){
+                    Developer developer = new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(txtfld_birthDate.getText()), txtfld_logo.getText());
+                    if(txtfld_name.getText().equals("")){
+                        developer.setName(AppData.getDeveloper().getName());
+                    }
+                    if(txtfld_description.getText().equals("")){
+                        developer.setDescription(AppData.getDeveloper().getDescription());
+                    }
+                    if(cb_country.getValue() == null){
+                        developer.setCountry(AppData.getDeveloper().getCountry());
+                    }
+                    if(txtfld_birthDate.getText().equals("")){
+                        developer.setBirthDate(AppData.getDeveloper().getBirthDate());
+                    }
+                    if(txtfld_logo.getText().equals("")){
+                        developer.setLogo(AppData.getDeveloper().getLogo());
+                    }
+                    if(txtfld_name.getText().length() <= 50 && txtfld_description.getText().length() <= 500 && txtfld_logo.getText().length() <= 50) {
+                        AppData.getDeveloper().update(developer);
+                        ObservableList<DeveloperDTO> devs = FXCollections.observableArrayList();
+                        try (DeveloperDAO ddao = new DeveloperDAO()) {
+                            devs.addAll(ddao.findAllDTO());
+                            AppData.setDevelopers(devs);
+                            btnDevsValidate();
+                        }
+                    }else {
+                        Utils.switchToErrorScreen("Too much text.");
+                    }
+                }else{
+                    Utils.switchToErrorScreen("Invalid Date.");
+                }
 
     }
 
     @FXML
-    public void btnSearchValidate() throws Exception {
-        if(!txtfld_search.getText().equals("")) {
-            AppData.setPreviousScene("devs");
-            try (DeveloperDAO ddao = new DeveloperDAO()) {
-                AppData.setDevelopers(ddao.findContainingNames(txtfld_search.getText()));
-                tv_devs.setItems(AppData.getDevelopers());
-            }
-        }
-    }
-
-    @FXML
-    public void btnEditValidate() throws Exception {
-        if(tv_devs.getSelectionModel().getSelectedItem() != null) {
-            AppData.setPreviousScene("devs");
-            try (DeveloperDAO ddao = new DeveloperDAO()) {
-                AppData.setDeveloper(ddao.find(tv_devs.getSelectionModel().getSelectedItem().getName()));
-                Utils.switchToScreen("editdev");
-            }
-        }
-    }
-
-    public void refresh(){
-        tv_devs.setItems(AppData.getDevelopers());
+    public void btnCancelValidate() throws IOException {
+        btnDevsValidate();
     }
 
     @FXML
     public void btnDevsValidate() throws IOException {
-        AppData.setPreviousScene("devs");
+        AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
-    }
-
-    @FXML
-    public void btnRemoveValidate() throws Exception {
-        try (DeveloperDAO ddao = new DeveloperDAO()) {
-            AppData.setDeveloper(ddao.find(tv_devs.getSelectionModel().getSelectedItem().getName()));
-            if(AppData.getDeveloper() != null) {
-                if (!ddao.hasGames(AppData.getDeveloper())) {
-                    AppData.setPreviousScene("devs");
-                    AppData.setConfirmationType("delete");
-                    AppData.getStage().setWidth(350);
-                    AppData.getStage().setHeight(180);
-                    App.setRoot("confirmation");
-                } else {
-                    Utils.switchToErrorScreen("Developer must have no games\nbefore removing.");
-                }
-            }
-        }
     }
 }
