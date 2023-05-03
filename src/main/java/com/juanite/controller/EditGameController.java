@@ -148,43 +148,22 @@ public class EditGameController {
     @FXML
     public void lblTitleValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("main");
         AppData.getStage().setTitle("BOARED - Main");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("main");
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("games");
         AppData.getStage().setTitle("BOARED - Games");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("games");
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("users");
         AppData.getStage().setTitle("BOARED - Users");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("users");
     }
 
     @FXML
@@ -228,25 +207,26 @@ public class EditGameController {
                             if(txtfld_developer.getText().equals("")){
                                 game.setDeveloper(AppData.getGame().getDeveloper());
                             }
-                            AppData.getGame().update(game);
-                            ObservableList<GameDTO> games = FXCollections.observableArrayList();
-                            try (GameDAO gdao = new GameDAO()) {
-                                games.addAll(gdao.findAllDTO());
-                                AppData.setGames(games);
-                                btnGamesValidate();
+                            if(txtfld_title.getText().length()<= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
+                                AppData.getGame().update(game);
+                                ObservableList<GameDTO> games = FXCollections.observableArrayList();
+                                try (GameDAO gdao = new GameDAO()) {
+                                    games.addAll(gdao.findAllDTO());
+                                    AppData.setGames(games);
+                                    btnGamesValidate();
+                                }
+                            }else{
+                                Utils.switchToErrorScreen("Too much text.");
                             }
                         }else{
-                            AppData.setErrorMsg("Developer not found.");
-                            switchToErrorScreen();
+                            Utils.switchToErrorScreen("Developer not found.");
                         }
                     }
                 }else{
-                    AppData.setErrorMsg("Invalid Date.");
-                    switchToErrorScreen();
+                    Utils.switchToErrorScreen("Invalid Date.");
                 }
             }else{
-                AppData.setErrorMsg("Invalid Tag/s.");
-                switchToErrorScreen();
+                Utils.switchToErrorScreen("Invalid Tag/s.");
             }
 
     }
@@ -254,12 +234,6 @@ public class EditGameController {
     @FXML
     public void btnCancelValidate() throws IOException {
         btnGamesValidate();
-    }
-
-    public void switchToErrorScreen() throws IOException {
-        AppData.getStage().setWidth(350);
-        AppData.getStage().setHeight(180);
-        App.setRoot("error");
     }
 
     public boolean validTags(String tags){
@@ -285,14 +259,7 @@ public class EditGameController {
     @FXML
     public void btnDevsValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("devs");
         AppData.getStage().setTitle("BOARED - Devs");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("devs");
     }
 }

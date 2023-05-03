@@ -4,6 +4,7 @@ import com.juanite.App;
 import com.juanite.model.DAO.AdminDAO;
 import com.juanite.model.domain.Admin;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import com.juanite.util.Validator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -113,20 +114,16 @@ public class LoginController {
                                 AppData.getStage().setTitle("BOARED - Main");
                             }
                         }else{
-                            AppData.setErrorMsg("Wrong password.");
-                            switchToErrorScreen();
+                            Utils.switchToErrorScreen("Wrong password.");
                         }
                     }else{
-                        AppData.setErrorMsg("Wrong email/username.");
-                        switchToErrorScreen();
+                        Utils.switchToErrorScreen("Wrong email/username.");
                     }
                 }else{
-                    AppData.setErrorMsg("Password must include a lowercase letter,\nan uppercase letter and a number,\nand have 8 characters at least.");
-                    switchToErrorScreen();
+                    Utils.switchToErrorScreen("Password must include a lowercase letter,\nan uppercase letter and a number,\nand have 8 characters at least.");
                 }
             }else{
-                AppData.setErrorMsg("Email must be from our company (@boared.com)\nUsername can include letters and numbers only,\nand must have between 3 and 25 characters.");
-                switchToErrorScreen();
+                Utils.switchToErrorScreen("Email must be from our company (@boared.com)\nUsername can include letters and numbers only,\nand must have between 3 and 25 characters.");
             }
         }
     }
@@ -138,11 +135,5 @@ public class LoginController {
         AppData.getStage().setTitle("BOARED - Sign up");
         AppData.getStage().setWidth(350);
         AppData.getStage().setHeight(400);
-    }
-
-    public void switchToErrorScreen() throws IOException {
-        AppData.getStage().setWidth(350);
-        AppData.getStage().setHeight(180);
-        App.setRoot("error");
     }
 }

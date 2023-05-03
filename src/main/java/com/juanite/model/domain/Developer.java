@@ -1,13 +1,19 @@
 package com.juanite.model.domain;
 
+import com.juanite.model.DAO.DeveloperDAO;
 import com.juanite.model.domain.interfaces.iDeveloper;
+import com.juanite.util.AppData;
+import com.juanite.util.Utils;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Developer extends Entity implements iDeveloper {
+public class Developer extends Entity implements iDeveloper, Observable {
     private String description;
     private String logo;
 
@@ -108,24 +114,34 @@ public class Developer extends Entity implements iDeveloper {
 
 
     @Override
-    public Developer create() {
+    public Developer create() throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            ddao.save(this);
+        }
         return this;
     }
 
     @Override
-    public Developer update(String name, String description, Date birthDate, Countries country, String logo) {
-        this.name = name;
-        this.description = description;
-        this.birthDate = birthDate;
-        this.country = country;
-        this.logo = logo;
+    public Developer update(Developer developer) throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(ddao.find(developer.getName()) != null){
+                ddao.save(developer);
+            }else{
+                ddao.save(developer, this.getName());
+            }
+        }
 
-        return this;
+        return developer;
     }
 
     @Override
-    public Developer remove() {
-        return this;
+    public void remove() throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(!ddao.hasGames(this)){
+                ddao.delete(this);
+                AppData.setDeveloper(null);
+            }
+        }
     }
 
     @Override
@@ -138,4 +154,13 @@ public class Developer extends Entity implements iDeveloper {
         return this.games.remove(game);
     }
 
+    @Override
+    public void addListener(InvalidationListener invalidationListener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener invalidationListener) {
+
+    }
 }

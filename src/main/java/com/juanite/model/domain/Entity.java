@@ -1,6 +1,6 @@
 package com.juanite.model.domain;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Set;
 
 public abstract class Entity {
@@ -18,6 +18,6 @@ public abstract class Entity {
     public abstract void setGames(Set<Game> games);
     public abstract Countries getCountry();
     public abstract void setCountry(Countries country);
-    public abstract Entity create();
-    public abstract Entity remove();
+    public abstract Entity create() throws Exception;
+    public abstract void remove() throws Exception;
 }

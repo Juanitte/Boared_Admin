@@ -47,6 +47,17 @@ TextArea * {
     -fx-background-radius: 10;
 }
 
+ChoiceBox {
+    -fx-background-color: #c1c1c1;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #515151;
+    -fx-font-family: "ROG Fonts v1.6";
+    -fx-font-size: 13;
+}
+
 PasswordField{
     -fx-background-color: #c1c1c1;
     -fx-border-style: solid;

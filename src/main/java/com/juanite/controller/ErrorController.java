@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,14 +55,7 @@ public class ErrorController {
             AppData.getStage().setHeight(400);
             App.setRoot(AppData.getPreviousScene());
         }else {
-            boolean maximize = AppData.getStage().isMaximized();
-            App.setRoot(AppData.getPreviousScene());
-            if (maximize) {
-                AppData.getStage().setMaximized(true);
-            } else {
-                AppData.getStage().setWidth(AppData.getWidth());
-                AppData.getStage().setHeight(AppData.getHeight());
-            }
+            Utils.switchToPreviousScreen();
         }
     }
 }

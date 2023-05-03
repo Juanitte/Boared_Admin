@@ -1,9 +1,13 @@
 package com.juanite.util;
 
+import com.juanite.App;
+import com.juanite.model.DAO.GameDAO;
+import com.juanite.model.DAO.UserDAO;
+import com.juanite.model.DTO.ReviewDTO;
+import com.juanite.model.domain.Review;
 import com.juanite.model.domain.Tags;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -82,5 +86,70 @@ public class Utils {
             result.append(image).append(",");
         }
         return result.toString();
+    }
+
+    /**
+     * Method that switch to an error screen that shows the given message.
+     * @param errorMsg , message to show on error screen
+     */
+    public static void switchToErrorScreen(String errorMsg) throws IOException {
+        AppData.setErrorMsg(errorMsg);
+        AppData.getStage().setWidth(350);
+        AppData.getStage().setHeight(180);
+        App.setRoot("error");
+    }
+
+    /**
+     * Method that switch to the last visited screen.
+     */
+    public static void switchToPreviousScreen() throws IOException {
+        boolean maximize = AppData.getStage().isMaximized();
+        App.setRoot(AppData.getPreviousScene());
+        if (maximize) {
+            AppData.getStage().setMaximized(true);
+        } else {
+            AppData.getStage().setWidth(AppData.getWidth());
+            AppData.getStage().setHeight(AppData.getHeight());
+        }
+    }
+
+    /**
+     * Method that switch to the given screen.
+     * @param screen , the name of the target screen.
+     */
+    public static void switchToScreen(String screen) throws IOException {
+        boolean maximize = AppData.getStage().isMaximized();
+        App.setRoot(screen);
+        if (maximize) {
+            AppData.getStage().setMaximized(true);
+        } else {
+            AppData.getStage().setWidth(AppData.getWidth());
+            AppData.getStage().setHeight(AppData.getHeight());
+        }
+    }
+
+    /**
+     * Method that insert a "\n" every "x" characters into a given String.
+     * @param str , the String to modify.
+     * @param x , number of characters until "\n" insert.
+     * @return the modified String.
+     */
+    public static String insertNewlines(String str, int x) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str.length(); i += x) {
+            String part = str.substring(i, Math.min(i + x, str.length()));
+            sb.append(part);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Method that removes the "\n" contained by a given String.
+     * @param str , the String to modify.
+     * @return the modified String.
+     */
+    public static String removeNewlines(String str) {
+        return str.replaceAll("\\n", "");
     }
 }

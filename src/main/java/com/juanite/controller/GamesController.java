@@ -4,6 +4,7 @@ import com.juanite.App;
 import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.DTO.GameDTO;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -128,43 +129,22 @@ public class GamesController {
     @FXML
     public void lblTitleValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("main");
         AppData.getStage().setTitle("BOARED - Main");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("main");
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("games");
         AppData.getStage().setTitle("BOARED - Games");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("games");
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("users");
         AppData.getStage().setTitle("BOARED - Users");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("users");
     }
 
     @FXML
@@ -179,14 +159,7 @@ public class GamesController {
     @FXML
     public void btnAddValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("addgame");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("addgame");
     }
 
     @FXML
@@ -204,15 +177,10 @@ public class GamesController {
     public void btnEditValidate() throws Exception {
         if(tv_games.getSelectionModel().getSelectedItem() != null) {
             AppData.setPreviousScene("games");
-            boolean maximize = AppData.getStage().isMaximized();
             try (GameDAO gdao = new GameDAO()) {
                 AppData.setGame(gdao.find(tv_games.getSelectionModel().getSelectedItem().getTitle()));
-                App.setRoot("editgame");
-                if (maximize) {
-                    AppData.getStage().setMaximized(true);
-                } else {
-                    AppData.getStage().setWidth(AppData.getWidth());
-                    AppData.getStage().setHeight(AppData.getHeight());
+                if(AppData.getGame() != null) {
+                    Utils.switchToScreen("editgame");
                 }
             }
         }
@@ -225,26 +193,21 @@ public class GamesController {
     @FXML
     public void btnDevsValidate() throws IOException {
         AppData.setPreviousScene("games");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("devs");
         AppData.getStage().setTitle("BOARED - Devs");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("devs");
     }
 
     @FXML
     public void btnRemoveValidate() throws Exception {
         try (GameDAO gdao = new GameDAO()) {
             AppData.setGame(gdao.find(tv_games.getSelectionModel().getSelectedItem().getTitle()));
-            AppData.setPreviousScene("games");
-            AppData.setConfirmationType("delete");
-            AppData.getStage().setWidth(350);
-            AppData.getStage().setHeight(180);
-            App.setRoot("confirmation");
+            if (AppData.getDeveloper() != null) {
+                AppData.setPreviousScene("games");
+                AppData.setConfirmationType("delete");
+                AppData.getStage().setWidth(350);
+                AppData.getStage().setHeight(180);
+                App.setRoot("confirmation");
+            }
         }
     }
 }

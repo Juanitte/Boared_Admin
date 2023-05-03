@@ -1,10 +1,17 @@
 package com.juanite.controller;
 
 import com.juanite.App;
+import com.juanite.model.DAO.GameDAO;
+import com.juanite.model.DAO.ReviewDAO;
+import com.juanite.model.DAO.UserDAO;
+import com.juanite.model.DTO.GameDTO;
+import com.juanite.model.DTO.UserDTO;
 import com.juanite.model.domain.User;
 import com.juanite.util.AppData;
+import com.juanite.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
@@ -32,9 +39,11 @@ public class UsersController {
     @FXML
     public ImageView img_resize;
     @FXML
-    public Button btn_profile;
+    public Button btn_games;
     @FXML
-    public ListView<User> lv_users;
+    public Button btn_users;
+    @FXML
+    public Button btn_profile;
     @FXML
     public TextField txtfld_search;
     @FXML
@@ -42,20 +51,35 @@ public class UsersController {
     @FXML
     public Button btn_logout;
     @FXML
-    public Button btn_games;
-    @FXML
-    public Button btn_users;
-    @FXML
     public Button btn_add;
     @FXML
     public Button btn_edit;
     @FXML
     public Button btn_remove;
+    @FXML
+    public TableView<UserDTO> tv_users;
+    @FXML
+    public TableColumn<UserDTO, String> tc_username;
+    @FXML
+    public TableColumn<UserDTO, String> tc_country;
+    @FXML
+    public Button btn_devs;
+    @FXML
+    public TableColumn<UserDTO, Boolean> tc_banned;
+    @FXML
+    public Button btn_ban;
+    @FXML
+    public Button btn_reviews;
+
 
     @FXML
-    public void initialize(){
+    public void initialize() throws Exception {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
+        tc_username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        tc_country.setCellValueFactory(new PropertyValueFactory<>("country"));
+        tc_banned.setCellValueFactory(new PropertyValueFactory<>("banned"));
+        refresh();
     }
 
     @FXML
@@ -102,43 +126,22 @@ public class UsersController {
     @FXML
     public void lblTitleValidate() throws IOException {
         AppData.setPreviousScene("users");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("main");
         AppData.getStage().setTitle("BOARED - Main");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("main");
     }
 
     @FXML
     public void btnGamesValidate() throws IOException {
         AppData.setPreviousScene("users");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("games");
         AppData.getStage().setTitle("BOARED - Games");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("games");
     }
 
     @FXML
     public void btnUsersValidate() throws IOException {
         AppData.setPreviousScene("users");
-        boolean maximize = AppData.getStage().isMaximized();
-        App.setRoot("users");
         AppData.getStage().setTitle("BOARED - Users");
-        if(maximize){
-            AppData.getStage().setMaximized(true);
-        }else {
-            AppData.getStage().setWidth(AppData.getWidth());
-            AppData.getStage().setHeight(AppData.getHeight());
-        }
+        Utils.switchToScreen("users");
     }
 
     @FXML
@@ -148,5 +151,86 @@ public class UsersController {
         AppData.getStage().setTitle("BOARED - Log in");
         AppData.getStage().setWidth(350);
         AppData.getStage().setHeight(400);
+    }
+
+    @FXML
+    public void btnAddValidate() throws IOException {
+        AppData.setPreviousScene("users");
+        Utils.switchToScreen("adduser");
+    }
+
+    @FXML
+    public void btnSearchValidate() throws Exception {
+        if(!txtfld_search.getText().equals("")) {
+            AppData.setPreviousScene("users");
+            try (UserDAO udao = new UserDAO()) {
+                AppData.setUsers(udao.findContainingNames(txtfld_search.getText()));
+                tv_users.setItems(AppData.getUsers());
+            }
+        }
+    }
+
+    @FXML
+    public void btnEditValidate() throws Exception {
+        if(tv_users.getSelectionModel().getSelectedItem() != null) {
+            AppData.setPreviousScene("users");
+            try (UserDAO udao = new UserDAO()) {
+                AppData.setUser(udao.find(tv_users.getSelectionModel().getSelectedItem().getUsername()));
+                if(AppData.getUser() != null) {
+                    Utils.switchToScreen("edituser");
+                }
+            }
+        }
+    }
+
+    public void refresh() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            if (AppData.getUsers().isEmpty()) {
+                AppData.getUsers().addAll(udao.findAllDTO());
+            } else {
+                AppData.getUsers().clear();
+                AppData.getUsers().addAll(udao.findAllDTO());
+            }
+            tv_users.setItems(AppData.getUsers());
+        }
+    }
+
+    @FXML
+    public void btnDevsValidate() throws IOException {
+        AppData.setPreviousScene("users");
+        AppData.getStage().setTitle("BOARED - Devs");
+        Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnRemoveValidate() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            AppData.setUser(udao.find(tv_users.getSelectionModel().getSelectedItem().getUsername()));
+            if (AppData.getUser() != null) {
+                AppData.setPreviousScene("users");
+                AppData.setConfirmationType("delete");
+                AppData.getStage().setWidth(350);
+                AppData.getStage().setHeight(180);
+                App.setRoot("confirmation");
+            }
+        }
+    }
+
+    @FXML
+    public void btnBanValidate() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            AppData.setUser(udao.find(tv_users.getSelectionModel().getSelectedItem().getUsername()));
+            if(AppData.getUser() != null) {
+                udao.updateBanStatus(AppData.getUser());
+                AppData.setUser(null);
+                refresh();
+            }
+        }
+    }
+
+    @FXML
+    public void btnReviewsValidate() throws Exception {
+        AppData.setPreviousScene("users");
+        Utils.switchToScreen("reviews");
     }
 }

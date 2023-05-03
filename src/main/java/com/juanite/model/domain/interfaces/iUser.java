@@ -8,9 +8,9 @@ import java.util.Date;
 
 public interface iUser {
 
-    User create();
-    User update(String username, String password, String name, String surname, String email, Date birthDate, Countries country, String town, String address, String phoneNumber, String avatar);
-    User remove();
+    User create() throws Exception;
+    User update(User user) throws Exception;
+    void remove() throws Exception;
     boolean addGame(Game game);
     boolean removeGame(Game game);
     boolean addFriend(User user);
