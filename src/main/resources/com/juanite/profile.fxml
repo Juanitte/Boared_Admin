@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -32,6 +31,14 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
+      <Button id="btn_shop" fx:id="btn_devs" alignment="CENTER" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#btnDevsValidate" style="-fx-background-color: transparent;" text="DEVS" textFill="#e1e1e1">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
         <Button id="btn_library" fx:id="btn_users" alignment="CENTER" layoutX="196.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnUsersValidate" style="-fx-background-color: transparent;" text="USERS" textFill="#e1e1e1">
             <font>
                 <Font size="18.0" />
@@ -40,7 +47,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
+        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnProfileValidate" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
             <font>
                 <Font size="18.0" />
             </font>
@@ -76,68 +83,43 @@
         </cursor>
         <Image url="@resize.png" />
     </ImageView>
-    <Button fx:id="btn_search11" alignment="CENTER" layoutX="361.0" layoutY="540.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="EDIT" textFill="#c1c1c1" AnchorPane.bottomAnchor="32.8" AnchorPane.leftAnchor="361.0">
+      <Label fx:id="lbl_username" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="287.0" prefHeight="27.0" prefWidth="320.0" text="USERNAME : " textFill="#c1c1c1" AnchorPane.leftAnchor="24.0">
+          <font>
+              <Font size="18.0" />
+          </font>
+      </Label>
+      <Label fx:id="lbl_resetPassword" layoutX="326.0" layoutY="390.0" onMouseClicked="#lblResetPasswordValidate" text="RESET PASSWORD" textFill="#c1c1c1" AnchorPane.leftAnchor="326.0">
+          <font>
+              <Font size="18.0" />
+          </font>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+      </Label>
+      <Label fx:id="lbl_email" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="170.0" prefHeight="27.0" prefWidth="320.0" text="EMAIL : " textFill="#c1c1c1" AnchorPane.leftAnchor="24.0">
+          <font>
+              <Font size="18.0" />
+          </font>
+      </Label>
+   <Label fx:id="lbl_emailContent" layoutX="400.0" layoutY="170.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label fx:id="lbl_usernameContent" layoutX="400.0" layoutY="287.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label fx:id="lbl_password" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="475.0" prefHeight="27.0" prefWidth="320.0" text="OLD PASSWORD : " textFill="#c1c1c1" visible="false" AnchorPane.leftAnchor="24.0">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <PasswordField fx:id="txtfld_password" layoutX="400.0" layoutY="476.0" prefHeight="25.0" prefWidth="320.0" visible="false" AnchorPane.leftAnchor="400.0" />
+    <Button fx:id="btn_resetPassword" alignment="CENTER" layoutX="337.0" layoutY="541.0" mnemonicParsing="false" onMouseClicked="#btnResetPasswordValidate" prefHeight="27.0" prefWidth="127.0" style="-fx-background-color: #414141; -fx-background-radius: 7; -fx-border-style: solid; -fx-border-radius: 7; -fx-border-color: #515151;" text="RESET PASSWORD" textFill="#c1c1c1" visible="false" AnchorPane.leftAnchor="337.0">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
     </Button>
-    <VBox layoutX="257.0" layoutY="90.0" prefHeight="419.0" prefWidth="285.0">
-        <children>
-            <Label text="Username : " textFill="#c1c1c1">
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" top="10.0" />
-                </VBox.margin>
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Label>
-            <Label layoutX="20.0" layoutY="10.0" text="Reset password" textFill="#c1c1c1">
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Label>
-            <Label layoutX="20.0" layoutY="58.0" text="Email : " textFill="#c1c1c1">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-            </Label>
-            <Label layoutX="20.0" layoutY="96.0" text="Country : " textFill="#c1c1c1">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-            </Label>
-            <Label layoutX="10.0" layoutY="133.0" text="Town : " textFill="#c1c1c1">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-            </Label>
-            <Label layoutX="20.0" layoutY="171.0" text="Address : " textFill="#c1c1c1">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-            </Label>
-            <Label layoutX="20.0" layoutY="208.0" text=" : " textFill="#c1c1c1">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" />
-                </VBox.margin>
-            </Label>
-        </children></VBox>
 </AnchorPane>

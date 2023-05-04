@@ -1,6 +1,5 @@
 package com.juanite;
 
-import com.juanite.util.AppData;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

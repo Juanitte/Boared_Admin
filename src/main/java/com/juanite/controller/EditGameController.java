@@ -3,6 +3,7 @@ package com.juanite.controller;
 import com.juanite.App;
 import com.juanite.model.DAO.DeveloperDAO;
 import com.juanite.model.DAO.GameDAO;
+import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.DTO.GameDTO;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
@@ -83,15 +84,15 @@ public class EditGameController {
     @FXML
     public TextField txtfld_images;
     @FXML
-    public TextField txtfld_developer;
-    @FXML
     public Button btn_devs;
     @FXML
     public DatePicker dp_releaseDate;
+    @FXML
+    public ComboBox<DeveloperDTO> cb_developer;
 
 
     @FXML
-    public void initialize() {
+    public void initialize() throws Exception {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
         txtfld_title.setText(AppData.getGame().getTitle());
@@ -101,7 +102,16 @@ public class EditGameController {
         txtfld_price.setText(Utils.convertDouble(AppData.getGame().getPrice()));
         txtfld_logo.setText(AppData.getGame().getLogo());
         txtfld_images.setText(Utils.convertImages(AppData.getGame().getImages()));
-        txtfld_developer.setText(AppData.getGame().getDeveloper().getName());
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(AppData.getDevelopers().isEmpty()) {
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }else{
+                AppData.getDevelopers().clear();
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }
+            cb_developer.setItems(AppData.getDevelopers());
+            cb_developer.setValue(ddao.findDTO(AppData.getGame().getDeveloper().getName()));
+        }
     }
 
     @FXML
@@ -181,33 +191,33 @@ public class EditGameController {
             if(validTags(txtfld_tags.getText())){
                 if(Validator.validateDate(dp_releaseDate.getValue().toString())){
                     try (DeveloperDAO ddao = new DeveloperDAO()) {
-                        if(ddao.find(txtfld_developer.getText()) != null || txtfld_developer.getText().equals("")){
-                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
-                            if(txtfld_title.getText().equals("")){
+                        if(ddao.find(cb_developer.getValue().getName()) != null) {
+                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
+                            if (txtfld_title.getText().equals("")) {
                                 game.setTitle(AppData.getGame().getTitle());
                             }
-                            if(txtfld_description.getText().equals("")){
+                            if (txtfld_description.getText().equals("")) {
                                 game.setDescription(AppData.getGame().getDescription());
                             }
-                            if(txtfld_tags.getText().equals("")){
+                            if (txtfld_tags.getText().equals("")) {
                                 game.setTags(AppData.getGame().getTags());
                             }
-                            if(dp_releaseDate.getValue() == null){
+                            if (dp_releaseDate.getValue() == null) {
                                 game.setReleaseDate(AppData.getGame().getReleaseDate());
                             }
-                            if(!Validator.validatePrice(txtfld_price.getText())){
+                            if (!Validator.validatePrice(txtfld_price.getText())) {
                                 game.setPrice(AppData.getGame().getPrice());
                             }
-                            if(txtfld_logo.getText().equals("")){
+                            if (txtfld_logo.getText().equals("")) {
                                 game.setLogo(AppData.getGame().getLogo());
                             }
-                            if(txtfld_images.getText().equals("")){
+                            if (txtfld_images.getText().equals("")) {
                                 game.setImages(AppData.getGame().getImages());
                             }
-                            if(txtfld_developer.getText().equals("")){
+                            if (cb_developer.getValue() == null) {
                                 game.setDeveloper(AppData.getGame().getDeveloper());
                             }
-                            if(txtfld_title.getText().length()<= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
+                            if (txtfld_title.getText().length() <= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
                                 AppData.getGame().update(game);
                                 ObservableList<GameDTO> games = FXCollections.observableArrayList();
                                 try (GameDAO gdao = new GameDAO()) {
@@ -215,11 +225,11 @@ public class EditGameController {
                                     AppData.setGames(games);
                                     btnGamesValidate();
                                 }
-                            }else{
+                            } else {
                                 Utils.switchToErrorScreen("Too much text.");
                             }
                         }else{
-                            Utils.switchToErrorScreen("Developer not found.");
+                            Utils.switchToErrorScreen("Invalid developer.");
                         }
                     }
                 }else{
@@ -261,5 +271,12 @@ public class EditGameController {
         AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("games");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }

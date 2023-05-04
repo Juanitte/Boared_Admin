@@ -1,11 +1,14 @@
 package com.juanite.controller;
 
 import com.juanite.App;
+import com.juanite.model.DAO.AdminDAO;
 import com.juanite.util.AppData;
 import com.juanite.util.Utils;
+import com.juanite.util.Validator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -41,11 +44,31 @@ public class ProfileController {
     public Button btn_profile;
     @FXML
     public Button btn_logout;
+    @FXML
+    public Label lbl_resetPassword;
+    @FXML
+    public Label lbl_emailContent;
+    @FXML
+    public Label lbl_usernameContent;
+    @FXML
+    public Label lbl_username;
+    @FXML
+    public Label lbl_email;
+    @FXML
+    public Label lbl_password;
+    @FXML
+    public PasswordField txtfld_password;
+    @FXML
+    public Button btn_devs;
+    @FXML
+    public Button btn_resetPassword;
 
     @FXML
     public void initialize(){
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
+        lbl_emailContent.setText(AppData.getAdmin().getEmail());
+        lbl_usernameContent.setText(AppData.getAdmin().getName());
     }
 
     @FXML
@@ -117,5 +140,66 @@ public class ProfileController {
         AppData.getStage().setTitle("BOARED - Log in");
         AppData.getStage().setWidth(350);
         AppData.getStage().setHeight(400);
+    }
+
+    @FXML
+    public void btnDevsValidate() throws IOException {
+        AppData.setPreviousScene("profile");
+        AppData.getStage().setTitle("BOARED - Devs");
+        Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("profile");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
+    }
+
+    @FXML
+    public void lblResetPasswordValidate() {
+        AppData.setPreviousScene("profile");
+        if(lbl_password.isVisible()){
+            lbl_password.setVisible(false);
+            txtfld_password.setVisible(false);
+            btn_resetPassword.setVisible(false);
+        }else{
+            lbl_password.setText("OLD PASSWORD :");
+            txtfld_password.setText("");
+            btn_resetPassword.setText("SUBMIT");
+            lbl_password.setVisible(true);
+            txtfld_password.setVisible(true);
+            btn_resetPassword.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void btnResetPasswordValidate() throws Exception {
+        AppData.setPreviousScene("profile");
+        if(btn_resetPassword.getText().equals("SUBMIT")) {
+            if(Validator.validatePassword(txtfld_password.getText())) {
+                if (AppData.getPa().authenticate(txtfld_password.getText(), AppData.getAdmin().getPassword())) {
+                    lbl_password.setText("NEW PASSWORD :");
+                    txtfld_password.setText("");
+                    btn_resetPassword.setText("RESET PASSWORD");
+                }else{
+                    Utils.switchToErrorScreen("Wrong password.");
+                }
+            }else{
+                Utils.switchToErrorScreen("Invalid password.");
+            }
+        }else{
+            if(Validator.validatePassword(txtfld_password.getText())) {
+                AppData.getAdmin().setPassword(txtfld_password.getText());
+                try (AdminDAO adao = new AdminDAO()) {
+                    adao.save(AppData.getAdmin());
+                }
+                lbl_password.setVisible(false);
+                txtfld_password.setVisible(false);
+                btn_resetPassword.setVisible(false);
+            }else{
+                Utils.switchToErrorScreen("Invalid password.");
+            }
+        }
     }
 }

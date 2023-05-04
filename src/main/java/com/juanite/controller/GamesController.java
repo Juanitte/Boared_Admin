@@ -210,4 +210,11 @@ public class GamesController {
             }
         }
     }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("games");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
+    }
 }

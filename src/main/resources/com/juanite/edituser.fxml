@@ -47,7 +47,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
+        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnProfileValidate" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
             <font>
                 <Font size="18.0" />
             </font>
@@ -122,7 +122,6 @@
          <Font size="18.0" />
       </font>
    </Label>
-      <TextField fx:id="txtfld_birthDate" layoutX="369.0" layoutY="281.0" prefHeight="25.0" prefWidth="373.0" AnchorPane.leftAnchor="369.0" AnchorPane.rightAnchor="57.0" />
       <Label fx:id="lbl_country" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="321.0" prefHeight="32.0" prefWidth="329.0" text="COUNTRY" textFill="#c1c1c1" AnchorPane.leftAnchor="26.0">
       <font>
          <Font size="18.0" />
@@ -147,4 +146,5 @@
       </font>
    </Label>
    <TextField fx:id="txtfld_phoneNumber" layoutX="369.0" layoutY="459.0" prefHeight="25.0" prefWidth="373.0" />
+   <DatePicker fx:id="dp_birthDate" layoutX="369.0" layoutY="285.0" AnchorPane.leftAnchor="369.0" />
 </AnchorPane>

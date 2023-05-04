@@ -47,7 +47,7 @@ TextArea * {
     -fx-background-radius: 10;
 }
 
-ChoiceBox {
+ChoiceBox , ComboBox{
     -fx-background-color: #c1c1c1;
     -fx-border-style: solid;
     -fx-border-width: 2;

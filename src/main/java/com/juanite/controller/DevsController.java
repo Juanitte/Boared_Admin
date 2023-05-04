@@ -206,4 +206,11 @@ public class DevsController {
             }
         }
     }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("devs");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
+    }
 }
