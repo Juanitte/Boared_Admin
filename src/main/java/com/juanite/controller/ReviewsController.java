@@ -209,4 +209,11 @@ public class ReviewsController {
         AppData.setPreviousScene("reviews");
         Utils.switchToScreen("users");
     }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("reviews");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
+    }
 }

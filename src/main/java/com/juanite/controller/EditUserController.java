@@ -62,8 +62,6 @@ public class EditUserController {
     @FXML
     public Label lbl_birthDate;
     @FXML
-    public TextField txtfld_birthDate;
-    @FXML
     public Label lbl_country;
     @FXML
     public ChoiceBox<Countries> cb_country;
@@ -91,6 +89,8 @@ public class EditUserController {
     public Label lbl_phoneNumber;
     @FXML
     public TextField txtfld_phoneNumber;
+    @FXML
+    public DatePicker dp_birthDate;
 
 
     @FXML
@@ -102,7 +102,7 @@ public class EditUserController {
         txtfld_email.setText(AppData.getUser().getEmail());
         txtfld_name.setText(AppData.getUser().getName());
         txtfld_surname.setText(AppData.getUser().getSurname());
-        txtfld_birthDate.setText(Utils.convertDate(AppData.getUser().getBirthDate()));
+        dp_birthDate.setValue(AppData.getUser().getBirthDate().toLocalDate());
         cb_country.setValue(AppData.getUser().getCountry());
         txtfld_town.setText(AppData.getUser().getTown());
         txtfld_address.setText(AppData.getUser().getAddress());
@@ -183,7 +183,7 @@ public class EditUserController {
     @FXML
     public void btnSubmitValidate() throws Exception {
         AppData.setPreviousScene("users");
-                if(Validator.validateDate(txtfld_birthDate.getText())){
+                if(Validator.validateDate(dp_birthDate.getValue().toString())){
                     if(Validator.validateUsername(txtfld_username.getText())) {
                         if(Validator.validateEmail(txtfld_email.getText())) {
                             if(Validator.validateName(txtfld_name.getText())) {
@@ -211,10 +211,10 @@ public class EditUserController {
                                         } else {
                                             user.setEmail(txtfld_email.getText());
                                         }
-                                        if (txtfld_birthDate.getText().equals("")) {
+                                        if (dp_birthDate.getValue() == null) {
                                             user.setBirthDate(AppData.getUser().getBirthDate());
                                         } else {
-                                            user.setBirthDate(Utils.convertDate(txtfld_birthDate.getText()));
+                                            user.setBirthDate(Utils.convertDate(dp_birthDate.getValue().toString()));
                                         }
                                         if (cb_country.getValue() == null) {
                                             user.setCountry(AppData.getUser().getCountry());
@@ -281,5 +281,12 @@ public class EditUserController {
         AppData.setPreviousScene("users");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("users");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("users");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }

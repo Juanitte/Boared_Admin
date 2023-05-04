@@ -57,8 +57,6 @@ public class AddUserController {
     @FXML
     public Label lbl_birthDate;
     @FXML
-    public TextField txtfld_birthDate;
-    @FXML
     public Label lbl_country;
     @FXML
     public ChoiceBox<Countries> cb_country;
@@ -90,6 +88,8 @@ public class AddUserController {
     public Label lbl_phoneNumber;
     @FXML
     public TextField txtfld_phoneNumber;
+    @FXML
+    public DatePicker dp_birthDate;
 
 
     @FXML
@@ -175,10 +175,10 @@ public class AddUserController {
         AppData.setPreviousScene("users");
         if(!txtfld_username.getText().equals("") && !txtfld_password.getText().equals("")
         && !txtfld_email.getText().equals("") && !txtfld_name.getText().equals("")
-        && !txtfld_surname.getText().equals("") && !txtfld_birthDate.getText().equals("")
+        && !txtfld_surname.getText().equals("") && dp_birthDate.getValue() != null
         && cb_country.getValue() != null && !txtfld_town.getText().equals("")
         && !txtfld_address.getText().equals("") && !txtfld_phoneNumber.getText().equals("")) {
-                if(Validator.validateDate(txtfld_birthDate.getText())){
+                if(Validator.validateDate(dp_birthDate.getValue().toString())){
                     if(Validator.validatePassword(txtfld_password.getText())) {
                         if(Validator.validateEmail(txtfld_email.getText())) {
                             if(Validator.validateName(txtfld_name.getText())) {
@@ -189,7 +189,7 @@ public class AddUserController {
                                                 && txtfld_surname.getText().length() <= 50 && txtfld_town.getText().length() <= 100
                                                 && txtfld_address.getText().length() <= 100 && txtfld_phoneNumber.getText().length() <= 50) {
                                             AppData.setUser(new User(txtfld_username.getText(), txtfld_password.getText(), txtfld_email.getText(),
-                                                    txtfld_name.getText(), txtfld_surname.getText(), Utils.convertDate(txtfld_birthDate.getText()),
+                                                    txtfld_name.getText(), txtfld_surname.getText(), Utils.convertDate(dp_birthDate.getValue().toString()),
                                                     cb_country.getValue(), txtfld_town.getText(), txtfld_address.getText(), txtfld_phoneNumber.getText()));
                                             AppData.getUser().create();
                                             btnUsersValidate();
@@ -229,5 +229,12 @@ public class AddUserController {
         AppData.setPreviousScene("users");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("users");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }

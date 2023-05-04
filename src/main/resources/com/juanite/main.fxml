@@ -47,7 +47,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
+        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnProfileValidate" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
             <font>
                 <Font size="18.0" />
             </font>

@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.model.DAO.DeveloperDAO;
+import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
 import com.juanite.util.AppData;
@@ -77,19 +78,28 @@ public class AddGameController {
     @FXML
     public TextField txtfld_images;
     @FXML
-    public TextField txtfld_developer;
-    @FXML
     public Button btn_devs;
     @FXML
     public DatePicker dp_releaseDate;
     @FXML
     public Label lbl_releaseDate;
+    @FXML
+    public ChoiceBox<DeveloperDTO> cb_developer;
 
 
     @FXML
-    public void initialize() {
+    public void initialize() throws Exception {
         img_resize.setOnMousePressed(this::resizeWindow);
         btn_profile.setText(AppData.getAdmin().getName());
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(AppData.getDevelopers().isEmpty()) {
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }else{
+                AppData.getDevelopers().clear();
+                AppData.getDevelopers().addAll(ddao.findAllDTO());
+            }
+            cb_developer.setItems(AppData.getDevelopers());
+        }
     }
 
     @FXML
@@ -169,14 +179,14 @@ public class AddGameController {
         if(!txtfld_title.getText().equals("") && !txtfld_description.getText().equals("") &&
         !txtfld_tags.getText().equals("") && dp_releaseDate.getValue() != null &&
         !txtfld_price.getText().equals("") && !txtfld_images.getText().equals("") &&
-        !txtfld_developer.getText().equals("") && !txtfld_logo.getText().equals("")){
+        cb_developer.getValue() != null && !txtfld_logo.getText().equals("")){
             if(validTags(txtfld_tags.getText())){
                 if(Validator.validateDate(dp_releaseDate.getValue().toString())){
                     if(Validator.validatePrice(txtfld_price.getText())) {
                         try (DeveloperDAO ddao = new DeveloperDAO()) {
-                            if (ddao.find(txtfld_developer.getText()) != null) {
+                            if (ddao.find(cb_developer.getValue().getName()) != null) {
                                 if(txtfld_title.getText().length()<= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
-                                    Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
+                                    Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
                                     game.create();
                                     btnGamesValidate();
                                 }else{
@@ -230,5 +240,12 @@ public class AddGameController {
         AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("games");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }

@@ -148,4 +148,11 @@ public class MainController {
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
     }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("main");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
+    }
 }

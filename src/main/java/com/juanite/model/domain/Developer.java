@@ -163,4 +163,9 @@ public class Developer extends Entity implements iDeveloper, Observable {
     public void removeListener(InvalidationListener invalidationListener) {
 
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

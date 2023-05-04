@@ -70,11 +70,11 @@ public class AddDevController {
     @FXML
     public Label lbl_birthDate;
     @FXML
-    public TextField txtfld_birthDate;
-    @FXML
     public Label lbl_country;
     @FXML
     public ChoiceBox<Countries> cb_country;
+    @FXML
+    public DatePicker dp_birthDate;
 
 
     @FXML
@@ -159,12 +159,12 @@ public class AddDevController {
     public void btnAddValidate() throws Exception {
         AppData.setPreviousScene("devs");
         if(!txtfld_name.getText().equals("") && !txtfld_description.getText().equals("") &&
-        !txtfld_birthDate.getText().equals("") && cb_country.getValue() != null && !txtfld_logo.getText().equals("")){
-                if(Validator.validateDate(txtfld_birthDate.getText())){
+        dp_birthDate.getValue() != null && cb_country.getValue() != null && !txtfld_logo.getText().equals("")){
+                if(Validator.validateDate(dp_birthDate.getValue().toString())){
                         try (DeveloperDAO ddao = new DeveloperDAO()) {
                             if(ddao.find(txtfld_name.getText()) == null) {
                                 if(txtfld_name.getText().length() <= 50 && txtfld_description.getText().length() <= 500 && txtfld_logo.getText().length() <= 50) {
-                                    AppData.setDeveloper(new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(txtfld_birthDate.getText()), txtfld_logo.getText()));
+                                    AppData.setDeveloper(new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(dp_birthDate.getValue().toString()), txtfld_logo.getText()));
                                     AppData.getDeveloper().create();
                                     btnDevsValidate();
                                 }else{
@@ -192,5 +192,12 @@ public class AddDevController {
         AppData.setPreviousScene("devs");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("devs");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }

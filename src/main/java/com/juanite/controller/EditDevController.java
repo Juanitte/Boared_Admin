@@ -74,11 +74,11 @@ public class EditDevController {
     @FXML
     public Label lbl_birthDate;
     @FXML
-    public TextField txtfld_birthDate;
-    @FXML
     public Label lbl_country;
     @FXML
     public ChoiceBox<Countries> cb_country;
+    @FXML
+    public DatePicker dp_birthDate;
 
 
     @FXML
@@ -88,7 +88,7 @@ public class EditDevController {
         cb_country.getItems().addAll(Countries.values());
         txtfld_name.setText(AppData.getDeveloper().getName());
         txtfld_description.setText(AppData.getDeveloper().getDescription());
-        txtfld_birthDate.setText(Utils.convertDate(AppData.getDeveloper().getBirthDate()));
+        dp_birthDate.setValue(AppData.getDeveloper().getBirthDate().toLocalDate());
         txtfld_logo.setText(AppData.getDeveloper().getLogo());
         cb_country.setValue(AppData.getDeveloper().getCountry());
     }
@@ -167,8 +167,8 @@ public class EditDevController {
     @FXML
     public void btnSubmitValidate() throws Exception {
         AppData.setPreviousScene("devs");
-                if(Validator.validateDate(txtfld_birthDate.getText())){
-                    Developer developer = new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(txtfld_birthDate.getText()), txtfld_logo.getText());
+                if(Validator.validateDate(dp_birthDate.getValue().toString())){
+                    Developer developer = new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(dp_birthDate.getValue().toString()), txtfld_logo.getText());
                     if(txtfld_name.getText().equals("")){
                         developer.setName(AppData.getDeveloper().getName());
                     }
@@ -178,7 +178,7 @@ public class EditDevController {
                     if(cb_country.getValue() == null){
                         developer.setCountry(AppData.getDeveloper().getCountry());
                     }
-                    if(txtfld_birthDate.getText().equals("")){
+                    if(dp_birthDate.getValue() == null){
                         developer.setBirthDate(AppData.getDeveloper().getBirthDate());
                     }
                     if(txtfld_logo.getText().equals("")){
@@ -211,5 +211,12 @@ public class EditDevController {
         AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - Devs");
         Utils.switchToScreen("devs");
+    }
+
+    @FXML
+    public void btnProfileValidate() throws IOException {
+        AppData.setPreviousScene("games");
+        AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
+        Utils.switchToScreen("profile");
     }
 }
