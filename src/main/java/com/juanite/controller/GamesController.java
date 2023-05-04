@@ -201,7 +201,7 @@ public class GamesController {
     public void btnRemoveValidate() throws Exception {
         try (GameDAO gdao = new GameDAO()) {
             AppData.setGame(gdao.find(tv_games.getSelectionModel().getSelectedItem().getTitle()));
-            if (AppData.getDeveloper() != null) {
+            if (AppData.getGame() != null) {
                 AppData.setPreviousScene("games");
                 AppData.setConfirmationType("delete");
                 AppData.getStage().setWidth(350);
