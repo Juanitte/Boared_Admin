@@ -57,8 +57,6 @@ public class AddGameController {
     @FXML
     public Label lbl_tags;
     @FXML
-    public Label lbl_releaseDate;
-    @FXML
     public Label lbl_price;
     @FXML
     public Label lbl_logo;
@@ -73,8 +71,6 @@ public class AddGameController {
     @FXML
     public TextField txtfld_tags;
     @FXML
-    public TextField txtfld_releaseDate;
-    @FXML
     public TextField txtfld_price;
     @FXML
     public TextField txtfld_logo;
@@ -84,6 +80,10 @@ public class AddGameController {
     public TextField txtfld_developer;
     @FXML
     public Button btn_devs;
+    @FXML
+    public DatePicker dp_releaseDate;
+    @FXML
+    public Label lbl_releaseDate;
 
 
     @FXML
@@ -167,16 +167,16 @@ public class AddGameController {
     public void btnAddValidate() throws Exception {
         AppData.setPreviousScene("games");
         if(!txtfld_title.getText().equals("") && !txtfld_description.getText().equals("") &&
-        !txtfld_tags.getText().equals("") && !txtfld_releaseDate.getText().equals("") &&
+        !txtfld_tags.getText().equals("") && dp_releaseDate.getValue() != null &&
         !txtfld_price.getText().equals("") && !txtfld_images.getText().equals("") &&
         !txtfld_developer.getText().equals("") && !txtfld_logo.getText().equals("")){
             if(validTags(txtfld_tags.getText())){
-                if(Validator.validateDate(txtfld_releaseDate.getText())){
+                if(Validator.validateDate(dp_releaseDate.getValue().toString())){
                     if(Validator.validatePrice(txtfld_price.getText())) {
                         try (DeveloperDAO ddao = new DeveloperDAO()) {
                             if (ddao.find(txtfld_developer.getText()) != null) {
                                 if(txtfld_title.getText().length()<= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
-                                    Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(txtfld_releaseDate.getText()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
+                                    Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
                                     game.create();
                                     btnGamesValidate();
                                 }else{

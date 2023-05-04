@@ -77,8 +77,6 @@ public class EditGameController {
     @FXML
     public TextField txtfld_tags;
     @FXML
-    public TextField txtfld_releaseDate;
-    @FXML
     public TextField txtfld_price;
     @FXML
     public TextField txtfld_logo;
@@ -88,6 +86,8 @@ public class EditGameController {
     public TextField txtfld_developer;
     @FXML
     public Button btn_devs;
+    @FXML
+    public DatePicker dp_releaseDate;
 
 
     @FXML
@@ -97,7 +97,7 @@ public class EditGameController {
         txtfld_title.setText(AppData.getGame().getTitle());
         txtfld_description.setText(AppData.getGame().getDescription());
         txtfld_tags.setText(Utils.convertTags(AppData.getGame().getTags()));
-        txtfld_releaseDate.setText(Utils.convertDate(AppData.getGame().getReleaseDate()));
+        dp_releaseDate.setValue(AppData.getGame().getReleaseDate().toLocalDate());
         txtfld_price.setText(Utils.convertDouble(AppData.getGame().getPrice()));
         txtfld_logo.setText(AppData.getGame().getLogo());
         txtfld_images.setText(Utils.convertImages(AppData.getGame().getImages()));
@@ -179,10 +179,10 @@ public class EditGameController {
     public void btnEditValidate() throws Exception {
         AppData.setPreviousScene("games");
             if(validTags(txtfld_tags.getText())){
-                if(Validator.validateDate(txtfld_releaseDate.getText())){
+                if(Validator.validateDate(dp_releaseDate.getValue().toString())){
                     try (DeveloperDAO ddao = new DeveloperDAO()) {
                         if(ddao.find(txtfld_developer.getText()) != null || txtfld_developer.getText().equals("")){
-                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(txtfld_releaseDate.getText()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
+                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(txtfld_developer.getText()));
                             if(txtfld_title.getText().equals("")){
                                 game.setTitle(AppData.getGame().getTitle());
                             }
@@ -192,7 +192,7 @@ public class EditGameController {
                             if(txtfld_tags.getText().equals("")){
                                 game.setTags(AppData.getGame().getTags());
                             }
-                            if(txtfld_releaseDate.getText().equals("")){
+                            if(dp_releaseDate.getValue() == null){
                                 game.setReleaseDate(AppData.getGame().getReleaseDate());
                             }
                             if(!Validator.validatePrice(txtfld_price.getText())){
