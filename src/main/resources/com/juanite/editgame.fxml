@@ -116,7 +116,6 @@
          <Font size="18.0" />
       </font>
    </Label>
-      <TextField fx:id="txtfld_releaseDate" layoutX="362.0" layoutY="304.0" prefHeight="25.0" prefWidth="373.0" AnchorPane.leftAnchor="362.0" AnchorPane.rightAnchor="65.0" />
       <Label fx:id="lbl_price" alignment="CENTER_RIGHT" layoutX="18.0" layoutY="354.0" prefHeight="32.0" prefWidth="329.0" text="PRICE" textFill="#c1c1c1" AnchorPane.leftAnchor="19.0">
       <font>
          <Font size="18.0" />
@@ -141,4 +140,5 @@
             </font>
    </Label>
       <TextField fx:id="txtfld_developer" layoutX="362.0" layoutY="511.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="362.0" AnchorPane.rightAnchor="64.0" />
+   <DatePicker fx:id="dp_releaseDate" layoutX="362.0" layoutY="300.0" />
 </AnchorPane>

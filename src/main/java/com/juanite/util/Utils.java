@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,6 @@ public class Utils {
     public static String convertDouble(double number) {
         return Double.toString(number);
     }
-
-
 
     /**
      * Method that makes the conversion from a String to a Set, separating it by the commas.
@@ -151,5 +150,32 @@ public class Utils {
      */
     public static String removeNewlines(String str) {
         return str.replaceAll("\\n", "");
+    }
+
+    public static Set<String> getDays(){
+        Set<String> days = new HashSet<String>();
+        for(int i = 1; i <= 31; i++) {
+            days.add(String.valueOf(i));
+        }
+        return days;
+    }
+
+    public static  Set<String> getMonths(){
+        Set<String> months = new HashSet<String>();
+        for(int i = 1; i <= 12; i++) {
+            months.add(String.valueOf(i));
+        }
+        return months;
+    }
+
+    public static Set<String> getYears() {
+        LocalDateTime ldt = LocalDateTime.now();
+        String dateTimeString = ldt.toString();
+        String yearString = dateTimeString.substring(0, 4);
+        Set<String> years = new HashSet<String>();
+        for(int i = 1900; i <= Integer.parseInt(yearString); i++) {
+            years.add(String.valueOf(i));
+        }
+        return years;
     }
 }
