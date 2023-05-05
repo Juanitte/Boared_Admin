@@ -216,7 +216,10 @@ public class User extends Entity implements iUser {
         return Objects.hash(email);
     }
 
-
+    /**
+     * Method that stores a new User at the database.
+     * @return the stored User.
+     */
     @Override
     public User create() throws Exception {
         try (UserDAO udao = new UserDAO()) {
@@ -225,6 +228,11 @@ public class User extends Entity implements iUser {
         return this;
     }
 
+    /**
+     * Method that updates a User stored at the database.
+     * @param user , the new User.
+     * @return the updated User.
+     */
     @Override
     public User update(User user) throws Exception {
         try (UserDAO udao = new UserDAO()) {
@@ -237,6 +245,9 @@ public class User extends Entity implements iUser {
         return user;
     }
 
+    /**
+     * Method that removes a User from the database.
+     */
     @Override
     public void remove() throws Exception {
         try (UserDAO udao = new UserDAO()) {
@@ -245,32 +256,62 @@ public class User extends Entity implements iUser {
         }
     }
 
+    /**
+     * Method that adds a Game to this User's Games List.
+     * @param game , the Game to be added.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean addGame(Game game) {
         return this.games.add(game);
     }
 
-
+    /**
+     * Method that removes a Game from this User's Games List.
+     * @param game , the Game to be removed.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean removeGame(Game game) {
         return this.games.remove(game);
     }
 
+    /**
+     * Method that adds a User to this User's friends List.
+     * @param user , the User to be added.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean addFriend(User user) {
         return this.friends.add(user);
     }
 
+    /**
+     * Method that removes a User from this User's friends List.
+     * @param user , the User to be removed.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean removeFriend(User user) {
         return this.friends.remove(user);
     }
 
+    /**
+     * Method that adds a request to this User's friend requests List.
+     * @param user , the User to be added.
+     * @param isSender , a boolean true if YOU are the sender or false if YOU are the receiver.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean addFriendRequest(User user, boolean isSender) {
         return Boolean.TRUE.equals(this.pendingFriends.put(user, isSender));
     }
 
+    /**
+     * Method that removes a request from this User's friend requests List.
+     * @param user , the User to remove.
+     * @return true if it was successful or false if it wasn't.
+     */
     @Override
     public boolean removeFriendRequest(User user) {
         return this.pendingFriends.remove(user);

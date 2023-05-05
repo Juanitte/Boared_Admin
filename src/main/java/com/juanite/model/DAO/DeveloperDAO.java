@@ -256,6 +256,11 @@ public class DeveloperDAO implements DAO {
         return -1;
     }
 
+    /**
+     * Method that check if the given developer has games attached to it.
+     * @param developer , the developer to check.
+     * @return true if it has games or false if it hasn't.
+     */
     public boolean hasGames(Developer developer) throws SQLException {
 
         if(!developer.getName().equals("")){

@@ -58,7 +58,13 @@ public class Admin implements iAdmin {
         return Objects.hash(email);
     }
 
-
+    /**
+     * Method that creates an Admin and stores it at the database.
+     * @param email , the provided email.
+     * @param name , the provided name.
+     * @param password , the provided password.
+     * @return the created Admin.
+     */
     @Override
     public Admin create(String email, String name, String password) throws Exception {
         Admin admin = new Admin(email, name, password);
@@ -72,6 +78,13 @@ public class Admin implements iAdmin {
             return null;
     }
 
+    /**
+     * Method that updates an Admin and stores it at the database.
+     * @param email , the provided email.
+     * @param name , the provided name.
+     * @param password , the provided password.
+     * @return the updated Admin.
+     */
     @Override
     public Admin update(String email, String name, String password) throws Exception {
         try (AdminDAO adao = new AdminDAO()) {
@@ -95,6 +108,10 @@ public class Admin implements iAdmin {
         return null;
     }
 
+    /**
+     * Method that removes an Admin from the database.
+     * @return the removed Admin.
+     */
     @Override
     public Admin remove() throws Exception {
         try (AdminDAO adao = new AdminDAO()) {
@@ -107,6 +124,10 @@ public class Admin implements iAdmin {
         return null;
     }
 
+    /**
+     * Method that saves an Admin in the database.
+     * @return the saved Admin.
+     */
     @Override
     public Admin save() throws Exception {
         try (AdminDAO adao = new AdminDAO()) {

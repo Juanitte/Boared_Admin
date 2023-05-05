@@ -3,12 +3,10 @@ package com.juanite.model.domain;
 import com.juanite.model.DAO.DeveloperDAO;
 import com.juanite.model.domain.interfaces.iDeveloper;
 import com.juanite.util.AppData;
-import com.juanite.util.Utils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -112,7 +110,10 @@ public class Developer extends Entity implements iDeveloper, Observable {
     }
 
 
-
+    /**
+     * Method that store a new Developer at the database.
+     * @return The stored Developer.
+     */
     @Override
     public Developer create() throws Exception {
         try (DeveloperDAO ddao = new DeveloperDAO()) {
@@ -121,6 +122,11 @@ public class Developer extends Entity implements iDeveloper, Observable {
         return this;
     }
 
+    /**
+     * Method that updates a Developer stored at the database.
+     * @param developer , the new Developer.
+     * @return the updated Developer.
+     */
     @Override
     public Developer update(Developer developer) throws Exception {
         try (DeveloperDAO ddao = new DeveloperDAO()) {
@@ -134,6 +140,9 @@ public class Developer extends Entity implements iDeveloper, Observable {
         return developer;
     }
 
+    /**
+     * Method that remove a Developer from the database.
+     */
     @Override
     public void remove() throws Exception {
         try (DeveloperDAO ddao = new DeveloperDAO()) {
@@ -144,11 +153,21 @@ public class Developer extends Entity implements iDeveloper, Observable {
         }
     }
 
+    /**
+     * Method that adds a Game to this Developer's game list.
+     * @param game , the Game to add.
+     * @return false if there was a problem and true if there wasn't.
+     */
     @Override
     public boolean addGame(Game game) {
         return this.games.add(game);
     }
 
+    /**
+     * Method that removes a Game from this Developer's game list.
+     * @param game , the Game to remove.
+     * @return false if there was a problem and true if there wasn't.
+     */
     @Override
     public boolean removeGame(Game game) {
         return this.games.remove(game);
