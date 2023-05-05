@@ -88,7 +88,7 @@
               <Font size="18.0" />
           </font>
       </Label>
-      <Label fx:id="lbl_resetPassword" layoutX="326.0" layoutY="390.0" onMouseClicked="#lblResetPasswordValidate" text="RESET PASSWORD" textFill="#c1c1c1" AnchorPane.leftAnchor="326.0">
+      <Label fx:id="lbl_resetPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="326.0" layoutY="390.0" onMouseClicked="#lblResetPasswordValidate" text="RESET PASSWORD" textAlignment="CENTER" textFill="#c1c1c1" AnchorPane.leftAnchor="326.0">
           <font>
               <Font size="18.0" />
           </font>
@@ -101,14 +101,14 @@
               <Font size="18.0" />
           </font>
       </Label>
-   <Label fx:id="lbl_emailContent" layoutX="400.0" layoutY="170.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
+   <Label id="email_label" fx:id="lbl_emailContent" layoutX="400.0" layoutY="170.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
       <font>
-         <Font size="18.0" />
+         <Font name="Agency FB" size="18.0" />
       </font>
    </Label>
-   <Label fx:id="lbl_usernameContent" layoutX="400.0" layoutY="287.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
+   <Label id="username_label" fx:id="lbl_usernameContent" layoutX="400.0" layoutY="287.0" prefHeight="27.0" prefWidth="320.0" textFill="#c1c1c1" AnchorPane.leftAnchor="400.0">
       <font>
-         <Font size="18.0" />
+         <Font name="Agency FB" size="18.0" />
       </font>
    </Label>
    <Label fx:id="lbl_password" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="475.0" prefHeight="27.0" prefWidth="320.0" text="OLD PASSWORD : " textFill="#c1c1c1" visible="false" AnchorPane.leftAnchor="24.0">
@@ -122,4 +122,14 @@
             <Cursor fx:constant="HAND" />
         </cursor>
     </Button>
+    <Label fx:id="lbl_profileName" alignment="CENTER_RIGHT" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+        <font>
+            <Font name="ROGFonts-Regular" size="27.0" />
+        </font>
+    </Label>
+   <Label fx:id="lbl_profile" layoutX="264.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text=" PROFILE" textFill="#e1e1e1" AnchorPane.leftAnchor="264.0">
+      <font>
+         <Font name="ROGFonts-Regular" size="27.0" />
+      </font>
+   </Label>
 </AnchorPane>

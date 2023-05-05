@@ -147,4 +147,9 @@
    </Label>
    <TextField fx:id="txtfld_phoneNumber" layoutX="369.0" layoutY="459.0" prefHeight="25.0" prefWidth="373.0" />
    <DatePicker fx:id="dp_birthDate" layoutX="369.0" layoutY="285.0" AnchorPane.leftAnchor="369.0" />
+    <Label fx:id="lbl_editUser" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text="EDIT USER" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+        <font>
+            <Font name="ROGFonts-Regular" size="27.0" />
+        </font>
+    </Label>
 </AnchorPane>

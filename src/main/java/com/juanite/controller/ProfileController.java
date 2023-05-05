@@ -62,6 +62,10 @@ public class ProfileController {
     public Button btn_devs;
     @FXML
     public Button btn_resetPassword;
+    @FXML
+    public Label lbl_profile;
+    @FXML
+    public Label lbl_profileName;
 
     @FXML
     public void initialize(){
@@ -69,6 +73,7 @@ public class ProfileController {
         btn_profile.setText(AppData.getAdmin().getName());
         lbl_emailContent.setText(AppData.getAdmin().getEmail());
         lbl_usernameContent.setText(AppData.getAdmin().getName());
+        lbl_profileName.setText(AppData.getAdmin().getName());
     }
 
     @FXML
@@ -163,6 +168,7 @@ public class ProfileController {
             lbl_password.setVisible(false);
             txtfld_password.setVisible(false);
             btn_resetPassword.setVisible(false);
+            lbl_resetPassword.setText("RESET PASSWORD");
         }else{
             lbl_password.setText("OLD PASSWORD :");
             txtfld_password.setText("");
@@ -170,6 +176,7 @@ public class ProfileController {
             lbl_password.setVisible(true);
             txtfld_password.setVisible(true);
             btn_resetPassword.setVisible(true);
+            lbl_resetPassword.setText("CLOSE");
         }
     }
 

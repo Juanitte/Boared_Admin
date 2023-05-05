@@ -141,4 +141,9 @@
    </Label>
    <DatePicker fx:id="dp_releaseDate" layoutX="362.0" layoutY="300.0" />
    <ComboBox fx:id="cb_developer" layoutX="363.0" layoutY="509.0" prefHeight="25.0" prefWidth="374.0" AnchorPane.leftAnchor="363.0" AnchorPane.rightAnchor="63.0" />
+    <Label fx:id="lbl_editGame" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text="EDIT GAME" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+        <font>
+            <Font name="ROGFonts-Regular" size="27.0" />
+        </font>
+    </Label>
 </AnchorPane>
