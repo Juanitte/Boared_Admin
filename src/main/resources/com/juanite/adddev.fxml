@@ -123,4 +123,9 @@
    </Label>
       <TextField fx:id="txtfld_logo" layoutX="362.0" layoutY="464.0" prefHeight="25.0" prefWidth="249.0" AnchorPane.leftAnchor="362.0" AnchorPane.rightAnchor="64.0" />
    <DatePicker fx:id="dp_birthDate" layoutX="363.0" layoutY="296.0" AnchorPane.leftAnchor="363.0" />
+    <Label fx:id="lbl_addDev" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text="ADD DEVELOPER" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+        <font>
+            <Font name="ROGFonts-Regular" size="27.0" />
+        </font>
+    </Label>
 </AnchorPane>

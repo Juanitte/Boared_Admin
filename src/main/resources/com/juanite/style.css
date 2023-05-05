@@ -83,6 +83,10 @@ PasswordField{
     -fx-font-size: 22;
 }
 
+#email_label , #username_label {
+    -fx-font-family: "Agency FB";
+}
+
 #btn_search{
     -fx-font-size: 13;
 }

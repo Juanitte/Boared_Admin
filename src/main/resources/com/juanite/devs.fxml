@@ -112,4 +112,9 @@
        <TableColumn fx:id="tc_name" editable="false" prefWidth="719.0" text="NAME" />
      </columns>
    </TableView>
+   <Label fx:id="lbl_developers" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text="DEVELOPERS" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+      <font>
+         <Font name="ROGFonts-Regular" size="27.0" />
+      </font>
+   </Label>
 </AnchorPane>

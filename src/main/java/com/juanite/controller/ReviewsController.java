@@ -51,8 +51,6 @@ public class ReviewsController {
     @FXML
     public Button btn_logout;
     @FXML
-    public Button btn_add;
-    @FXML
     public Button btn_remove;
     @FXML
     public TableView<ReviewDTO> tv_reviews;
@@ -64,6 +62,12 @@ public class ReviewsController {
     public Button btn_devs;
     @FXML
     public TableColumn<ReviewDTO, Double> tc_score;
+    @FXML
+    public Button btn_show;
+    @FXML
+    public Button btn_back;
+    @FXML
+    public Label lbl_reviews;
 
 
     @FXML
@@ -160,15 +164,12 @@ public class ReviewsController {
 
     public void refresh() throws Exception {
         try (ReviewDAO rdao = new ReviewDAO()) {
-            try (UserDAO udao = new UserDAO()) {
-                if (AppData.getReviews().isEmpty()) {
-                    AppData.getReviews().addAll(rdao.findByUser(AppData.getUser()));
-                } else {
-                    AppData.getReviews().clear();
-                    AppData.getReviews().addAll(rdao.findByUser(AppData.getUser()));
-                }
-                tv_reviews.setItems(AppData.getReviews());
-            }
+            if (AppData.getReviews().isEmpty()) {
+                AppData.getReviews().addAll(rdao.findByUser(AppData.getUser()));
+            } else {
+                AppData.getReviews().clear();
+                AppData.getReviews().addAll(rdao.findByUser(AppData.getUser()));
+            }tv_reviews.setItems(AppData.getReviews());
         }
     }
 

@@ -231,7 +231,12 @@ public class UsersController {
     @FXML
     public void btnReviewsValidate() throws Exception {
         AppData.setPreviousScene("users");
-        Utils.switchToScreen("reviews");
+        if(tv_users.getSelectionModel().getSelectedItem() != null) {
+            try (UserDAO udao = new UserDAO()) {
+                AppData.setUser(udao.find(tv_users.getSelectionModel().getSelectedItem().getUsername()));
+                Utils.switchToScreen("reviews");
+            }
+        }
     }
 
     @FXML

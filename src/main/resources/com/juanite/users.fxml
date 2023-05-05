@@ -47,7 +47,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
+        <Button id="btn_profile" fx:id="btn_profile" alignment="CENTER" layoutX="278.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#btnProfileValidate" style="-fx-background-color: transparent;" text="PROFILE" textFill="#e1e1e1">
             <font>
                 <Font size="18.0" />
             </font>
@@ -124,4 +124,9 @@
          <TableColumn fx:id="tc_banned" editable="false" minWidth="0.0" prefWidth="122.0" text="BANNED" />
      </columns>
    </TableView>
+    <Label fx:id="lbl_users" layoutX="39.0" layoutY="61.0" prefHeight="39.0" prefWidth="225.0" text="USERS" textFill="#e1e1e1" AnchorPane.leftAnchor="39.0">
+        <font>
+            <Font name="ROGFonts-Regular" size="27.0" />
+        </font>
+    </Label>
 </AnchorPane>

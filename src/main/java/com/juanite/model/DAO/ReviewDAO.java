@@ -21,7 +21,7 @@ public class ReviewDAO implements AutoCloseable{
     private final static String FINDBYUSER = "SELECT * FROM user_games WHERE user_id=?";
     private final static String FINDBYGAME = "SELECT * FROM user_games WHERE game_code=?";
     private final static String FIND = "SELECT * FROM user_games WHERE user_id=? AND game_code=?";
-    private final static String FINDCONTAININGNAMESDTO = "SELECT user_id, game_code, review, score FROM user_games WHERE user_id=(SELECT id FROM user WHERE username LIKE ?)";
+    private final static String FINDCONTAININGNAMESDTO = "SELECT user_id, game_code, review, score FROM user_games WHERE game_code=(SELECT code FROM game WHERE title LIKE ?)";
     private final static String UPDATE = "UPDATE user_games SET review=?, score=? WHERE user_id=? AND game_code=?";
     private final static String DELETE = "UPDATE user_games SET review=?, score=? WHERE user_id=? AND game_code=?";
 
