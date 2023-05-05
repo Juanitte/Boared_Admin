@@ -138,6 +138,10 @@ public class Game implements iGame, Observable {
         return Objects.hash(title);
     }
 
+    /**
+     * Method that store a new Game at the database.
+     * @return the stored Game.
+     */
     @Override
     public Game create() throws Exception {
         if (this.developer != null) {
@@ -150,6 +154,11 @@ public class Game implements iGame, Observable {
         return this;
     }
 
+    /**
+     * Method that update a Game stored at the database.
+     * @param game , the new Game.
+     * @return the update Game.
+     */
     @Override
     public Game update(Game game) throws Exception {
         try (GameDAO gdao = new GameDAO()) {
@@ -163,6 +172,9 @@ public class Game implements iGame, Observable {
         return game;
     }
 
+    /**
+     * Method that remove a Game from the database.
+     */
     @Override
     public void remove() throws Exception {
         try (GameDAO gdao = new GameDAO()) {
@@ -171,16 +183,31 @@ public class Game implements iGame, Observable {
         }
     }
 
+    /**
+     * Method that add a Tags to this Game's Tags List.
+     * @param tag , the Tags to be added.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean addTag(Tags tag) {
         return this.tags.add(tag);
     }
 
+    /**
+     * Method that removes a Tags from this Game's Tags List.
+     * @param tag , the Tags to be removed.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean removeTag(Tags tag) {
         return this.tags.remove(tag);
     }
 
+    /**
+     * Method that add an Image to this Game's Images List.
+     * @param image , the Image to be added.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean addImage(String image) {
         if(!this.images.contains(image)) {
@@ -189,16 +216,31 @@ public class Game implements iGame, Observable {
         return false;
     }
 
+    /**
+     * Method that removes an Image from this Game's Tags List.
+     * @param image , the Image to be removed.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean removeImage(String image) {
         return this.images.remove(image);
     }
 
+    /**
+     * Method that add a User to this Game's players List.
+     * @param user , the User to be added.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean addPlayer(User user) {
         return this.players.add(user);
     }
 
+    /**
+     * Method that removes a User from this Game's players List.
+     * @param user , the User to be removed.
+     * @return true if it was successful and false if it wasn't.
+     */
     @Override
     public boolean removePlayer(User user) {
         return this.players.remove(user);

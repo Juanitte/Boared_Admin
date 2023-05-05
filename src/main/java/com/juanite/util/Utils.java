@@ -18,20 +18,40 @@ import java.util.stream.Collectors;
 
 public class Utils {
 
+    /**
+     * Method that converts a String to a sql.Date.
+     * @param date , the String to convert.
+     * @return the sql.Date resulting from the conversion.
+     */
     public static Date convertDate(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return new java.sql.Date(format.parse(date).getTime());
     }
 
+    /**
+     * Method that converts a sql.Date to a String.
+     * @param date , the sql.Date to convert.
+     * @return the String resulting from the conversion.
+     */
     public static String convertDate(Date date) {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         return formato.format(date);
     }
 
+    /**
+     * Method that converts a String to a double.
+     * @param number , the String to convert.
+     * @return the double resulting from the conversion.
+     */
     public static double convertDouble(String number) {
          return Double.parseDouble(number);
     }
 
+    /**
+     * Method that converts a double to a String.
+     * @param number , the double to convert.
+     * @return the String resulting from the conversion.
+     */
     public static String convertDouble(double number) {
         return Double.toString(number);
     }
@@ -152,30 +172,4 @@ public class Utils {
         return str.replaceAll("\\n", "");
     }
 
-    public static Set<String> getDays(){
-        Set<String> days = new HashSet<String>();
-        for(int i = 1; i <= 31; i++) {
-            days.add(String.valueOf(i));
-        }
-        return days;
-    }
-
-    public static  Set<String> getMonths(){
-        Set<String> months = new HashSet<String>();
-        for(int i = 1; i <= 12; i++) {
-            months.add(String.valueOf(i));
-        }
-        return months;
-    }
-
-    public static Set<String> getYears() {
-        LocalDateTime ldt = LocalDateTime.now();
-        String dateTimeString = ldt.toString();
-        String yearString = dateTimeString.substring(0, 4);
-        Set<String> years = new HashSet<String>();
-        for(int i = 1900; i <= Integer.parseInt(yearString); i++) {
-            years.add(String.valueOf(i));
-        }
-        return years;
-    }
 }

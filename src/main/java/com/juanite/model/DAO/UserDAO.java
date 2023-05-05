@@ -356,6 +356,10 @@ public class UserDAO implements DAO {
         return -1;
     }
 
+    /**
+     * Method that updates the ban status from a user.
+     * @param user , the user to ban/unban.
+     */
     public void updateBanStatus(User user) throws SQLException {
         if(user != null){
             try (PreparedStatement pst = this.conn.prepareStatement(UPDATEBANSTATUS)) {
