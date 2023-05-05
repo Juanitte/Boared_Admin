@@ -190,47 +190,16 @@ public class EditGameController {
         AppData.setPreviousScene("games");
             if(validTags(txtfld_tags.getText())){
                 if(Validator.validateDate(dp_releaseDate.getValue().toString())){
-                    try (DeveloperDAO ddao = new DeveloperDAO()) {
-                        if(ddao.find(cb_developer.getValue().getName()) != null) {
-                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
-                            if (txtfld_title.getText().equals("")) {
-                                game.setTitle(AppData.getGame().getTitle());
+                    if(!txtfld_title.getText().equals(AppData.getGame().getTitle())) {
+                        try (GameDAO gdao = new GameDAO()) {
+                            if(gdao.find(txtfld_title.getText()) == null) {
+                                editGame();
+                            }else{
+                                Utils.switchToErrorScreen("Game title already in use.");
                             }
-                            if (txtfld_description.getText().equals("")) {
-                                game.setDescription(AppData.getGame().getDescription());
-                            }
-                            if (txtfld_tags.getText().equals("")) {
-                                game.setTags(AppData.getGame().getTags());
-                            }
-                            if (dp_releaseDate.getValue() == null) {
-                                game.setReleaseDate(AppData.getGame().getReleaseDate());
-                            }
-                            if (!Validator.validatePrice(txtfld_price.getText())) {
-                                game.setPrice(AppData.getGame().getPrice());
-                            }
-                            if (txtfld_logo.getText().equals("")) {
-                                game.setLogo(AppData.getGame().getLogo());
-                            }
-                            if (txtfld_images.getText().equals("")) {
-                                game.setImages(AppData.getGame().getImages());
-                            }
-                            if (cb_developer.getValue() == null) {
-                                game.setDeveloper(AppData.getGame().getDeveloper());
-                            }
-                            if (txtfld_title.getText().length() <= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
-                                AppData.getGame().update(game);
-                                ObservableList<GameDTO> games = FXCollections.observableArrayList();
-                                try (GameDAO gdao = new GameDAO()) {
-                                    games.addAll(gdao.findAllDTO());
-                                    AppData.setGames(games);
-                                    btnGamesValidate();
-                                }
-                            } else {
-                                Utils.switchToErrorScreen("Too much text.");
-                            }
-                        }else{
-                            Utils.switchToErrorScreen("Invalid developer.");
                         }
+                    }else{
+                        editGame();
                     }
                 }else{
                     Utils.switchToErrorScreen("Invalid Date.");
@@ -278,5 +247,50 @@ public class EditGameController {
         AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
         Utils.switchToScreen("profile");
+    }
+
+    public void editGame() throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            if(ddao.find(cb_developer.getValue().getName()) != null) {
+                Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
+                if (txtfld_title.getText().equals("")) {
+                    game.setTitle(AppData.getGame().getTitle());
+                }
+                if (txtfld_description.getText().equals("")) {
+                    game.setDescription(AppData.getGame().getDescription());
+                }
+                if (txtfld_tags.getText().equals("")) {
+                    game.setTags(AppData.getGame().getTags());
+                }
+                if (dp_releaseDate.getValue() == null) {
+                    game.setReleaseDate(AppData.getGame().getReleaseDate());
+                }
+                if (!Validator.validatePrice(txtfld_price.getText())) {
+                    game.setPrice(AppData.getGame().getPrice());
+                }
+                if (txtfld_logo.getText().equals("")) {
+                    game.setLogo(AppData.getGame().getLogo());
+                }
+                if (txtfld_images.getText().equals("")) {
+                    game.setImages(AppData.getGame().getImages());
+                }
+                if (cb_developer.getValue() == null) {
+                    game.setDeveloper(AppData.getGame().getDeveloper());
+                }
+                if (txtfld_title.getText().length() <= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
+                    AppData.getGame().update(game);
+                    ObservableList<GameDTO> games = FXCollections.observableArrayList();
+                    try (GameDAO gdao = new GameDAO()) {
+                        games.addAll(gdao.findAllDTO());
+                        AppData.setGames(games);
+                        btnGamesValidate();
+                    }
+                } else {
+                    Utils.switchToErrorScreen("Too much text.");
+                }
+            }else{
+                Utils.switchToErrorScreen("Invalid developer.");
+            }
+        }
     }
 }

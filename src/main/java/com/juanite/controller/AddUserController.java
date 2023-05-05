@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.model.DAO.DeveloperDAO;
+import com.juanite.model.DAO.UserDAO;
 import com.juanite.model.domain.Countries;
 import com.juanite.model.domain.Developer;
 import com.juanite.model.domain.User;
@@ -184,17 +185,27 @@ public class AddUserController {
                             if(Validator.validateName(txtfld_name.getText())) {
                                 if(Validator.validateName(txtfld_surname.getText())) {
                                     if(Validator.validatePhoneNumber(txtfld_phoneNumber.getText())) {
-                                        if (txtfld_username.getText().length() <= 50 && txtfld_password.getText().length() <= 25
-                                                && txtfld_email.getText().length() <= 50 && txtfld_name.getText().length() <= 50
-                                                && txtfld_surname.getText().length() <= 50 && txtfld_town.getText().length() <= 100
-                                                && txtfld_address.getText().length() <= 100 && txtfld_phoneNumber.getText().length() <= 50) {
-                                            AppData.setUser(new User(txtfld_username.getText(), txtfld_password.getText(), txtfld_email.getText(),
-                                                    txtfld_name.getText(), txtfld_surname.getText(), Utils.convertDate(dp_birthDate.getValue().toString()),
-                                                    cb_country.getValue(), txtfld_town.getText(), txtfld_address.getText(), txtfld_phoneNumber.getText()));
-                                            AppData.getUser().create();
-                                            btnUsersValidate();
-                                        } else {
-                                            Utils.switchToErrorScreen("Too much text.");
+                                        try (UserDAO udao = new UserDAO()) {
+                                            if (!udao.emailAlreadyExists(txtfld_email.getText())) {
+                                                if (!udao.usernameAlreadyExists(txtfld_username.getText())) {
+                                                    if (txtfld_username.getText().length() <= 50 && txtfld_password.getText().length() <= 25
+                                                            && txtfld_email.getText().length() <= 50 && txtfld_name.getText().length() <= 50
+                                                            && txtfld_surname.getText().length() <= 50 && txtfld_town.getText().length() <= 100
+                                                            && txtfld_address.getText().length() <= 100 && txtfld_phoneNumber.getText().length() <= 50) {
+                                                        AppData.setUser(new User(txtfld_username.getText(), txtfld_password.getText(), txtfld_email.getText(),
+                                                                txtfld_name.getText(), txtfld_surname.getText(), Utils.convertDate(dp_birthDate.getValue().toString()),
+                                                                cb_country.getValue(), txtfld_town.getText(), txtfld_address.getText(), txtfld_phoneNumber.getText()));
+                                                        AppData.getUser().create();
+                                                        btnUsersValidate();
+                                                    } else {
+                                                        Utils.switchToErrorScreen("Too much text.");
+                                                    }
+                                                }else{
+                                                    Utils.switchToErrorScreen("Username already in use.");
+                                                }
+                                            }else{
+                                                Utils.switchToErrorScreen("Email already in use.");
+                                            }
                                         }
                                     }else{
                                         Utils.switchToErrorScreen("Invalid phone number.");
