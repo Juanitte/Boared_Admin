@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 public class EditUserController {
 
@@ -189,67 +190,7 @@ public class EditUserController {
                             if(Validator.validateName(txtfld_name.getText())) {
                                 if(Validator.validateName(txtfld_surname.getText())) {
                                     if(Validator.validatePhoneNumber(txtfld_phoneNumber.getText())) {
-                                        User user = new User();
-                                        if (txtfld_username.getText().equals("")) {
-                                            user.setUsername(AppData.getUser().getUsername());
-                                        } else {
-                                            user.setUsername(txtfld_username.getText());
-                                        }
-                                        user.setPassword(AppData.getUser().getPassword());
-                                        if (txtfld_name.getText().equals("")) {
-                                            user.setName(AppData.getUser().getName());
-                                        } else {
-                                            user.setName(txtfld_name.getText());
-                                        }
-                                        if(txtfld_surname.getText().equals("")){
-                                            user.setSurname(AppData.getUser().getSurname());
-                                        }else{
-                                            user.setSurname(txtfld_surname.getText());
-                                        }
-                                        if (txtfld_email.getText().equals("")) {
-                                            user.setEmail(AppData.getUser().getEmail());
-                                        } else {
-                                            user.setEmail(txtfld_email.getText());
-                                        }
-                                        if (dp_birthDate.getValue() == null) {
-                                            user.setBirthDate(AppData.getUser().getBirthDate());
-                                        } else {
-                                            user.setBirthDate(Utils.convertDate(dp_birthDate.getValue().toString()));
-                                        }
-                                        if (cb_country.getValue() == null) {
-                                            user.setCountry(AppData.getUser().getCountry());
-                                        } else {
-                                            user.setCountry(cb_country.getValue());
-                                        }
-                                        if (txtfld_town.getText().equals("")) {
-                                            user.setTown(AppData.getUser().getTown());
-                                        } else {
-                                            user.setTown(txtfld_town.getText());
-                                        }
-                                        if (txtfld_address.getText().equals("")) {
-                                            user.setAddress(AppData.getUser().getAddress());
-                                        } else {
-                                            user.setAddress(txtfld_address.getText());
-                                        }
-                                        if (txtfld_phoneNumber.getText().equals("")) {
-                                            user.setPhoneNumber(AppData.getUser().getPhoneNumber());
-                                        } else {
-                                            user.setPhoneNumber(txtfld_phoneNumber.getText());
-                                        }
-                                        if (txtfld_username.getText().length() <= 50 && txtfld_email.getText().length() <= 50 &&
-                                                txtfld_name.getText().length() <= 50 && txtfld_surname.getText().length() <= 50 &&
-                                                txtfld_town.getText().length() <= 100 && txtfld_address.getText().length() <= 100 &&
-                                                txtfld_phoneNumber.getText().length() <= 50) {
-                                            AppData.getUser().update(user);
-                                            ObservableList<UserDTO> users = FXCollections.observableArrayList();
-                                            try (UserDAO udao = new UserDAO()) {
-                                                users.addAll(udao.findAllDTO());
-                                                AppData.setUsers(users);
-                                                btnUsersValidate();
-                                            }
-                                        } else {
-                                            Utils.switchToErrorScreen("Too much text.");
-                                        }
+                                        editUser();
                                     }else{
                                         Utils.switchToErrorScreen("Invalid phone number.");
                                     }
@@ -288,5 +229,69 @@ public class EditUserController {
         AppData.setPreviousScene("users");
         AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
         Utils.switchToScreen("profile");
+    }
+
+    public void editUser() throws Exception {
+        try (UserDAO udao = new UserDAO()) {
+            User user = new User();
+            if (txtfld_username.getText().equals("") || udao.usernameAlreadyExists(txtfld_username.getText())) {
+                user.setUsername(AppData.getUser().getUsername());
+            } else {
+                user.setUsername(txtfld_username.getText());
+            }
+            user.setPassword(AppData.getUser().getPassword());
+            if (txtfld_name.getText().equals("")) {
+                user.setName(AppData.getUser().getName());
+            } else {
+                user.setName(txtfld_name.getText());
+            }
+            if (txtfld_surname.getText().equals("")) {
+                user.setSurname(AppData.getUser().getSurname());
+            } else {
+                user.setSurname(txtfld_surname.getText());
+            }
+            if (txtfld_email.getText().equals("") || udao.emailAlreadyExists(txtfld_email.getText())) {
+                user.setEmail(AppData.getUser().getEmail());
+            } else {
+                user.setEmail(txtfld_email.getText());
+            }
+            if (dp_birthDate.getValue() == null) {
+                user.setBirthDate(AppData.getUser().getBirthDate());
+            } else {
+                user.setBirthDate(Utils.convertDate(dp_birthDate.getValue().toString()));
+            }
+            if (cb_country.getValue() == null) {
+                user.setCountry(AppData.getUser().getCountry());
+            } else {
+                user.setCountry(cb_country.getValue());
+            }
+            if (txtfld_town.getText().equals("")) {
+                user.setTown(AppData.getUser().getTown());
+            } else {
+                user.setTown(txtfld_town.getText());
+            }
+            if (txtfld_address.getText().equals("")) {
+                user.setAddress(AppData.getUser().getAddress());
+            } else {
+                user.setAddress(txtfld_address.getText());
+            }
+            if (txtfld_phoneNumber.getText().equals("")) {
+                user.setPhoneNumber(AppData.getUser().getPhoneNumber());
+            } else {
+                user.setPhoneNumber(txtfld_phoneNumber.getText());
+            }
+            if (txtfld_username.getText().length() <= 50 && txtfld_email.getText().length() <= 50 &&
+                    txtfld_name.getText().length() <= 50 && txtfld_surname.getText().length() <= 50 &&
+                    txtfld_town.getText().length() <= 100 && txtfld_address.getText().length() <= 100 &&
+                    txtfld_phoneNumber.getText().length() <= 50) {
+                AppData.getUser().update(user);
+                ObservableList<UserDTO> users = FXCollections.observableArrayList();
+                users.addAll(udao.findAllDTO());
+                AppData.setUsers(users);
+                btnUsersValidate();
+            } else {
+                Utils.switchToErrorScreen("Too much text.");
+            }
+        }
     }
 }

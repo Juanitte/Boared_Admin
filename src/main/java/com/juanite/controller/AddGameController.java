@@ -2,6 +2,7 @@ package com.juanite.controller;
 
 import com.juanite.App;
 import com.juanite.model.DAO.DeveloperDAO;
+import com.juanite.model.DAO.GameDAO;
 import com.juanite.model.DTO.DeveloperDTO;
 import com.juanite.model.domain.Game;
 import com.juanite.model.domain.Tags;
@@ -185,12 +186,18 @@ public class AddGameController {
                     if(Validator.validatePrice(txtfld_price.getText())) {
                         try (DeveloperDAO ddao = new DeveloperDAO()) {
                             if (ddao.find(cb_developer.getValue().getName()) != null) {
-                                if(txtfld_title.getText().length()<= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
-                                    Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
-                                    game.create();
-                                    btnGamesValidate();
-                                }else{
-                                    Utils.switchToErrorScreen("Too much text.");
+                                try (GameDAO gdao = new GameDAO()) {
+                                    if(gdao.find(txtfld_title.getText()) == null) {
+                                        if (txtfld_title.getText().length() <= 100 && txtfld_description.getText().length() <= 500 && txtfld_tags.getText().length() <= 250 && txtfld_logo.getText().length() <= 50 && txtfld_images.getText().length() <= 250) {
+                                            Game game = new Game(txtfld_title.getText(), txtfld_description.getText(), Utils.convertTags(txtfld_tags.getText()), Utils.convertDate(dp_releaseDate.getValue().toString()), Utils.convertDouble(txtfld_price.getText()), txtfld_logo.getText(), Utils.convertImages(txtfld_images.getText()), ddao.find(cb_developer.getValue().getName()));
+                                            game.create();
+                                            btnGamesValidate();
+                                        } else {
+                                            Utils.switchToErrorScreen("Too much text.");
+                                        }
+                                    }else{
+                                        Utils.switchToErrorScreen("Game already exists.");
+                                    }
                                 }
                             } else {
                                 Utils.switchToErrorScreen("Developer not found.");

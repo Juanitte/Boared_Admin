@@ -167,38 +167,21 @@ public class EditDevController {
     @FXML
     public void btnSubmitValidate() throws Exception {
         AppData.setPreviousScene("devs");
-                if(Validator.validateDate(dp_birthDate.getValue().toString())){
-                    Developer developer = new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(dp_birthDate.getValue().toString()), txtfld_logo.getText());
-                    if(txtfld_name.getText().equals("")){
-                        developer.setName(AppData.getDeveloper().getName());
+        if(Validator.validateDate(dp_birthDate.getValue().toString())) {
+            if (!txtfld_name.getText().equals(AppData.getDeveloper().getName())) {
+                try (DeveloperDAO ddao = new DeveloperDAO()) {
+                    if (ddao.find(txtfld_name.getText()) == null) {
+                        editDev();
+                    }else{
+                        Utils.switchToErrorScreen("New developer name already exists.");
                     }
-                    if(txtfld_description.getText().equals("")){
-                        developer.setDescription(AppData.getDeveloper().getDescription());
-                    }
-                    if(cb_country.getValue() == null){
-                        developer.setCountry(AppData.getDeveloper().getCountry());
-                    }
-                    if(dp_birthDate.getValue() == null){
-                        developer.setBirthDate(AppData.getDeveloper().getBirthDate());
-                    }
-                    if(txtfld_logo.getText().equals("")){
-                        developer.setLogo(AppData.getDeveloper().getLogo());
-                    }
-                    if(txtfld_name.getText().length() <= 50 && txtfld_description.getText().length() <= 500 && txtfld_logo.getText().length() <= 50) {
-                        AppData.getDeveloper().update(developer);
-                        ObservableList<DeveloperDTO> devs = FXCollections.observableArrayList();
-                        try (DeveloperDAO ddao = new DeveloperDAO()) {
-                            devs.addAll(ddao.findAllDTO());
-                            AppData.setDevelopers(devs);
-                            btnDevsValidate();
-                        }
-                    }else {
-                        Utils.switchToErrorScreen("Too much text.");
-                    }
-                }else{
-                    Utils.switchToErrorScreen("Invalid Date.");
                 }
-
+            }else{
+                editDev();
+            }
+        } else {
+            Utils.switchToErrorScreen("Invalid Date.");
+        }
     }
 
     @FXML
@@ -218,5 +201,35 @@ public class EditDevController {
         AppData.setPreviousScene("games");
         AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
         Utils.switchToScreen("profile");
+    }
+
+    public void editDev() throws Exception {
+        try (DeveloperDAO ddao = new DeveloperDAO()) {
+            Developer developer = new Developer(txtfld_name.getText(), txtfld_description.getText(), cb_country.getValue(), Utils.convertDate(dp_birthDate.getValue().toString()), txtfld_logo.getText());
+            if (txtfld_name.getText().equals("")) {
+                developer.setName(AppData.getDeveloper().getName());
+            }
+            if (txtfld_description.getText().equals("")) {
+                developer.setDescription(AppData.getDeveloper().getDescription());
+            }
+            if (cb_country.getValue() == null) {
+                developer.setCountry(AppData.getDeveloper().getCountry());
+            }
+            if (dp_birthDate.getValue() == null) {
+                developer.setBirthDate(AppData.getDeveloper().getBirthDate());
+            }
+            if (txtfld_logo.getText().equals("")) {
+                developer.setLogo(AppData.getDeveloper().getLogo());
+            }
+            if (txtfld_name.getText().length() <= 50 && txtfld_description.getText().length() <= 500 && txtfld_logo.getText().length() <= 50) {
+                AppData.getDeveloper().update(developer);
+                ObservableList<DeveloperDTO> devs = FXCollections.observableArrayList();
+                devs.addAll(ddao.findAllDTO());
+                AppData.setDevelopers(devs);
+                btnDevsValidate();
+            } else {
+                Utils.switchToErrorScreen("Too much text.");
+            }
+        }
     }
 }

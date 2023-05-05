@@ -33,6 +33,8 @@ public class UserDAO implements DAO {
     private final static String UPDATEBANSTATUS = "UPDATE user SET banned=? WHERE id=?";
     private final static String DELETE = "DELETE FROM user WHERE id=?";
     private final static String GETID = "SELECT id FROM user WHERE email=?";
+    private final static String GETEMAIL = "SELECT email FROM user WHERE email=?";
+    private final static String GETUSERNAME = "SELECT username FROM user WHERE username=?";
 
     private Connection conn;
 
@@ -368,6 +370,44 @@ public class UserDAO implements DAO {
                 pst.executeUpdate();
             }
         }
+    }
+
+    /**
+     * Method that check if there is a user with the provided username stored at the database.
+     * @param username , the username to find.
+     * @return true if the username already exists or false if it doesn't.
+     */
+    public boolean usernameAlreadyExists(String username) throws SQLException {
+        if(!username.equals("")) {
+            try (PreparedStatement pst = this.conn.prepareStatement(GETUSERNAME)) {
+                pst.setString(1, username);
+                try (ResultSet res = pst.executeQuery()) {
+                    if(res.next()) {
+                        return username.equals(res.getString("username"));
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method that check if there is a user with the provided email stored at the database.
+     * @param email , the email to find.
+     * @return true if the username already exists or false if it doesn't.
+     */
+    public boolean emailAlreadyExists(String email) throws SQLException {
+        if(!email.equals("")) {
+            try (PreparedStatement pst = this.conn.prepareStatement(GETEMAIL)) {
+                pst.setString(1, email);
+                try (ResultSet res = pst.executeQuery()) {
+                    if(res.next()) {
+                        return email.equals(res.getString("email"));
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
