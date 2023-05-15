@@ -91,6 +91,20 @@ public class AddUserController {
     public TextField txtfld_phoneNumber;
     @FXML
     public DatePicker dp_birthDate;
+    @FXML
+    public Label lbl_addUser;
+    @FXML
+    public ImageView img_tickEmail;
+    @FXML
+    public ImageView img_crossEmail;
+    @FXML
+    public ImageView img_tickPassword;
+    @FXML
+    public ImageView img_crossPassword;
+    @FXML
+    public ImageView img_tickUsername;
+    @FXML
+    public ImageView img_crossUsername;
 
 
     @FXML
@@ -247,5 +261,67 @@ public class AddUserController {
         AppData.setPreviousScene("users");
         AppData.getStage().setTitle("BOARED - " + AppData.getAdmin().getName());
         Utils.switchToScreen("profile");
+    }
+
+    @FXML
+    public void isUsernameValid() throws Exception {
+        if(!txtfld_username.getText().equals("")) {
+            if (Validator.validateUsername(txtfld_username.getText())) {
+                try (UserDAO udao = new UserDAO()) {
+                    if(udao.usernameAlreadyExists(txtfld_username.getText())) {
+                        img_crossUsername.setVisible(true);
+                        img_tickUsername.setVisible(false);
+                    }else{
+                        img_tickUsername.setVisible(true);
+                        img_crossUsername.setVisible(false);
+                    }
+                }
+            } else {
+                img_crossUsername.setVisible(true);
+                img_tickUsername.setVisible(false);
+            }
+        }else{
+            img_tickUsername.setVisible(false);
+            img_crossUsername.setVisible(false);
+        }
+    }
+
+    @FXML
+    public void isPasswordValid() {
+        if(!txtfld_password.getText().equals("")) {
+            if (Validator.validatePassword(txtfld_password.getText())) {
+                img_tickPassword.setVisible(true);
+                img_crossPassword.setVisible(false);
+            } else {
+                img_crossPassword.setVisible(true);
+                img_tickPassword.setVisible(false);
+            }
+        }else{
+            img_tickPassword.setVisible(false);
+            img_crossPassword.setVisible(false);
+        }
+    }
+
+    @FXML
+    public void isEmailValid() throws Exception {
+        if(!txtfld_email.getText().equals("")) {
+            if (Validator.validateEmail(txtfld_email.getText())) {
+                try (UserDAO udao = new UserDAO()) {
+                    if(udao.emailAlreadyExists(txtfld_email.getText())) {
+                        img_crossEmail.setVisible(true);
+                        img_tickEmail.setVisible(false);
+                    }else{
+                        img_tickEmail.setVisible(true);
+                        img_crossEmail.setVisible(false);
+                    }
+                }
+            } else {
+                img_crossEmail.setVisible(true);
+                img_tickEmail.setVisible(false);
+            }
+        }else{
+            img_tickEmail.setVisible(false);
+            img_crossEmail.setVisible(false);
+        }
     }
 }
