@@ -115,13 +115,13 @@
          <Font size="18.0" />
       </font>
    </Label>
-   <TextField fx:id="txtfld_username" layoutX="362.0" layoutY="73.0" prefHeight="25.0" prefWidth="373.0" />
+   <TextField fx:id="txtfld_username" layoutX="362.0" layoutY="73.0" onKeyTyped="#isUsernameValid" prefHeight="25.0" prefWidth="373.0" />
    <Label fx:id="lbl_password" alignment="CENTER_RIGHT" layoutX="19.0" layoutY="115.0" prefHeight="32.0" prefWidth="329.0" text="PASSWORD" textFill="#c1c1c1">
       <font>
          <Font size="18.0" />
       </font>
    </Label>
-   <PasswordField fx:id="txtfld_password" layoutX="362.0" layoutY="115.0" prefHeight="25.0" prefWidth="373.0" />
+   <PasswordField fx:id="txtfld_password" layoutX="362.0" layoutY="115.0" onKeyTyped="#isPasswordValid" prefHeight="25.0" prefWidth="373.0" />
    <Label fx:id="lbl_surname" alignment="CENTER_RIGHT" layoutX="19.0" layoutY="199.0" prefHeight="32.0" prefWidth="329.0" text="SURNAME" textFill="#c1c1c1">
       <font>
          <Font size="18.0" />
@@ -133,7 +133,7 @@
          <Font size="18.0" />
       </font>
    </Label>
-   <TextField fx:id="txtfld_email" layoutX="362.0" layoutY="240.0" prefHeight="25.0" prefWidth="373.0" />
+   <TextField fx:id="txtfld_email" layoutX="362.0" layoutY="240.0" onKeyTyped="#isEmailValid" prefHeight="25.0" prefWidth="373.0" />
    <Label fx:id="lbl_town" alignment="CENTER_RIGHT" layoutX="19.0" layoutY="374.0" prefHeight="32.0" prefWidth="329.0" text="TOWN" textFill="#c1c1c1">
       <font>
          <Font size="18.0" />
@@ -158,4 +158,22 @@
             <Font name="ROGFonts-Regular" size="27.0" />
         </font>
     </Label>
+    <ImageView fx:id="img_tickEmail" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@tick.png" />
+    </ImageView>
+    <ImageView fx:id="img_crossEmail" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@cross.png" />
+    </ImageView>
+    <ImageView fx:id="img_tickPassword" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@tick.png" />
+    </ImageView>
+    <ImageView fx:id="img_crossPassword" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@cross.png" />
+    </ImageView>
+    <ImageView fx:id="img_tickUsername" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@tick.png" />
+    </ImageView>
+    <ImageView fx:id="img_crossUsername" fitHeight="24.0" fitWidth="24.0" layoutX="743.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0">
+        <Image url="@cross.png" />
+    </ImageView>
 </AnchorPane>
