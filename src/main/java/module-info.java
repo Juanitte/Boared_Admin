@@ -4,6 +4,7 @@ module com.juanite {
     requires java.xml.bind;
     requires java.sql;
     requires javafx.base;
+    requires org.junit.jupiter.api;
 
     opens com.juanite to javafx.fxml;
     exports com.juanite;
@@ -12,4 +13,5 @@ module com.juanite {
     exports com.juanite.model.domain.interfaces;
     exports com.juanite.model.DTO;
     opens com.juanite.model.connections to java.xml.bind;
+    exports com.juanite.util;
 }
