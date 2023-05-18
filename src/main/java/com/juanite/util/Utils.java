@@ -29,16 +29,6 @@ public class Utils {
     }
 
     /**
-     * Method that converts a sql.Date to a String.
-     * @param date , the sql.Date to convert.
-     * @return the String resulting from the conversion.
-     */
-    public static String convertDate(Date date) {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        return formato.format(date);
-    }
-
-    /**
      * Method that converts a String to a double.
      * @param number , the String to convert.
      * @return the double resulting from the conversion.
@@ -61,7 +51,7 @@ public class Utils {
      * @param string , the String to work with.
      * @return a Set of Tags built using the string provided.
      */
-    public static Set<Tags> convertTags(String string) throws SQLException {
+    public static Set<Tags> convertTags(String string) {
         Set<Tags> tags = new HashSet<Tags>();
         Set<String> strings = Arrays.stream(string.split(",")).collect(Collectors.toSet());
         for(String tag : strings){
@@ -88,7 +78,7 @@ public class Utils {
      * @param string , the String to work with.
      * @return a List of String built using the string provided.
      */
-    public static List<String> convertImages(String string) throws SQLException {
+    public static List<String> convertImages(String string) {
         List<String> strings = new ArrayList<String>();
         strings = Arrays.stream(string.split(",")).collect(Collectors.toList());
         return strings;
@@ -146,30 +136,4 @@ public class Utils {
             AppData.getStage().setHeight(AppData.getHeight());
         }
     }
-
-    /**
-     * Method that insert a "\n" every "x" characters into a given String.
-     * @param str , the String to modify.
-     * @param x , number of characters until "\n" insert.
-     * @return the modified String.
-     */
-    public static String insertNewlines(String str, int x) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < str.length(); i += x) {
-            String part = str.substring(i, Math.min(i + x, str.length()));
-            sb.append(part);
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Method that removes the "\n" contained by a given String.
-     * @param str , the String to modify.
-     * @return the modified String.
-     */
-    public static String removeNewlines(String str) {
-        return str.replaceAll("\\n", "");
-    }
-
 }
