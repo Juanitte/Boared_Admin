@@ -44,7 +44,7 @@ class UtilsTest {
         assertEquals(tags, Utils.convertTags("ADVENTURE,INDIE,ROGUELIKE"));
 
         //To String
-        assertEquals("ADVENTURE,INDIE,ROGUELIKE,", Utils.convertTags(tags));
+        assertEquals("INDIE,ADVENTURE,ROGUELIKE,", Utils.convertTags(tags));
     }
 
     @Test
