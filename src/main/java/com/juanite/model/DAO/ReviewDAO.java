@@ -9,6 +9,7 @@ import com.juanite.model.domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +31,7 @@ public class ReviewDAO implements AutoCloseable{
     public ReviewDAO(Connection conn){
         this.conn = conn;
     }
-    public ReviewDAO(){
+    public ReviewDAO() {
         this.conn = ConnectionMySQL.getConnect();
     }
 

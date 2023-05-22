@@ -10,6 +10,7 @@ import com.juanite.util.PasswordAuthentication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +42,7 @@ public class UserDAO implements DAO {
     public UserDAO(Connection conn){
         this.conn = conn;
     }
-    public UserDAO(){
+    public UserDAO() {
         this.conn = ConnectionMySQL.getConnect();
     }
 
