@@ -7,6 +7,7 @@ import com.juanite.model.domain.Developer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
